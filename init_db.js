@@ -49,9 +49,10 @@ async function insertStartup() {
         }
     } catch (err) {
         console.error('Erreur DB:', err.message || err);
-    } finally {
-        try { await client.close(); } catch (e) {}
     }
+    // finally {
+    //     try { await client.close(); } catch (e) {}
+    // }
 };
 
 async function getAllStartups() {
@@ -65,7 +66,8 @@ async function getAllStartups() {
     } catch (err) {
         console.error("Erreur DB:", err.message || err);
         return [];
-    } finally {
+    }
+    finally {
         try { await client.close(); } catch (e) {}
     }
 }
