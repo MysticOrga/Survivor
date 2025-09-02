@@ -1,5 +1,5 @@
-const client = require("./Src/Config/db");
-const DBClient = require("./Src/Config/db");
+const client = require("./Config/db");
+const DBClient = require("./Config/db");
 
 async function run() {
     try {
