@@ -6,6 +6,7 @@ import ProjectPage from "@/views/home/ProjectPage.vue";
 import NewsFeed from "@/views/home/NewsFeed.vue";
 import SearchFilter from "@/views/home/SearchFilter.vue";
 import EventsCalendar from "@/views/home/EventsCalendar.vue";
+import EventsPage from "@/views/home/EventsPage.vue"
 
 import AdminDashboard from "@/views/admin/AdminDashboard.vue";
 import ContentManagement from "@/views/admin/ContentManagement.vue";
@@ -23,6 +24,7 @@ const routes = [
   { path: "/home/news", name: "news", component: NewsFeed },
   { path: "/home/search", name: "search", component: SearchFilter },
   { path: "/home/events", name: "events", component: EventsCalendar },
+  { path: "/home/events/:id", name: "info", component: EventsPage},
 
   { path: "/admin/dashboard", name: "dashboard", component: AdminDashboard },
   { path: "/admin/projects", name: "admin-projects", component: ProjectManagement },
