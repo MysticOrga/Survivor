@@ -1,5 +1,5 @@
 <template>
-    <div class="feed">
+    <div class="news">
         <div
         v-for="newsc in news"
         :key="newsc.id"
@@ -20,7 +20,7 @@
 import news from '@/example/news.json'
 
 export default {
-    name: 'News',
+    name: 'NewsFeed',
     data() {
         return {
             news
