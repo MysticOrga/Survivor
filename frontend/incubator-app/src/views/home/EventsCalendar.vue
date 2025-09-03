@@ -7,8 +7,9 @@
         >
             <router-link :to="`/home/events/${event.id}`" class="event-link">
                 <div class="events">
-                    <h2>{{ event.title }}</h2>
-                    <p><strong>{{event.date}}:</strong> {{event.description}}</p>
+                    <h2>{{ event.name }}</h2>
+                    <p><strong>{{event.dates}}:</strong> {{event.description}}</p>
+                    <p><strong>Event type:</strong> {{ event.event_type }}</p>
                 </div>
             </router-link>
         </div>
@@ -17,13 +18,23 @@
 
 <script>
 import events from "@/example/events.json"
+import axios from 'axios'
 
 export default {
     name: 'EventsCalendar',
     data() {
         return {
-            events
+            events: []
         }
+    },
+    async created() {
+    try {
+        const response = await axios.get('http://localhost:8080/events');
+        this.events = response.data;
+        console.log('Events loaded:', this.events);
+      } catch (e) {
+        console.error('Error events', e);
+      }
     }
 }
 </script>
