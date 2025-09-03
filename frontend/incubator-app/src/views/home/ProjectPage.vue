@@ -2,34 +2,34 @@
   <section v-if="startup" class="project-page">
     <div class="info">
       <h2>{{ startup.name }}</h2>
-      <p><strong>Description:</strong> {{ startup.Description }}</p>
+      <!-- <p><strong>Description:</strong> {{ startup.Description }}</p> -->
       <p><strong>Email:</strong> {{ startup.email }}</p>
       <p><strong>Phone:</strong> {{ startup.phone }}</p>
       <p><strong>Address:</strong> {{ startup.address }}</p>
-      <p><strong>Legal status:</strong> {{ startup.Legal_status }}</p>
-      <p><strong>Founded:</strong> {{ startup.created_at }}</p>
+      <p><strong>Legal status:</strong> {{ startup.legal_status }}</p>
+      <!-- <p><strong>Founded:</strong> {{ startup.created_at }}</p> -->
       <p><strong>Sector:</strong> {{ startup.sector }}</p>
-      <p><strong>Maturity:</strong> {{ startup.Maturity }}</p>
-      <p><strong>Project status:</strong> {{ startup.Project_status }}</p>
-      <p><strong>Funding needs:</strong> {{ startup.needs }} €</p>
+      <p><strong>Maturity:</strong> {{ startup.maturity }}</p>
+      <!-- <p><strong>Project status:</strong> {{ startup.Project_status }}</p> -->
+      <!-- <p><strong>Funding needs:</strong> {{ startup.needs }} €</p> -->
 
-      <div class="links" v-if="startup.Ext_url && startup.Ext_url.length">
-        <strong>External links:</strong>
-        <ul>
-          <li v-for="url in startup.Ext_url" :key="url">
-            <a :href="url" target="_blank">{{ url }}</a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="funders" v-if="startup.funder && startup.funder.length">
-        <strong>Funders:</strong>
-        <ul>
-          <li v-for="f in startup.funder" :key="f.name">
-            {{ f.name }} ({{ f.role }}) : {{ f.amount }} €
-          </li>
-        </ul>
-      </div>
+      <!-- <div class="links" v-if="startup.Ext_url && startup.Ext_url.length"> -->
+        <!-- <strong>External links:</strong> -->
+        <!-- <ul> -->
+          <!-- <li v-for="url in startup.Ext_url" :key="url"> -->
+            <!-- <a :href="url" target="_blank">{{ url }}</a> -->
+          <!-- </li> -->
+        <!-- </ul> -->
+      <!-- </div> -->
+<!--  -->
+      <!-- <div class="funders" v-if="startup.funder && startup.funder.length"> -->
+        <!-- <strong>Funders:</strong> -->
+        <!-- <ul> -->
+          <!-- <li v-for="f in startup.funder" :key="f.name"> -->
+            <!-- {{ f.name }} ({{ f.role }}) : {{ f.amount }} € -->
+          <!-- </li> -->
+        <!-- </ul> -->
+      <!-- </div> -->
     </div>
 
     <div class="image">
@@ -43,18 +43,23 @@
 </template>
 
 <script>
-import startups from '@/example/startup.json'
-
+import axios from 'axios';
 export default {
   name: 'ProjectPage',
   data() {
     return {
-      startup: null
+      startup : this.$route.state?.startup || null
     }
   },
-  created() {
-    const id = Number(this.$route.params.id)
-    this.startup = startups.find(s => s.id === id)
+  async created() {
+    try {
+      const response = await axios.get('http://localhost:8080/startup/' + this.$route.params.id);
+      console.log('http://localhost:8080/startup/', this.$route.params.id);
+      this.startup = response.data[0];
+      console.log('Startup loaded:', this.startup);
+    } catch (e) {
+      console.error('Error startup', e);
+    }
   }
 }
 </script>
