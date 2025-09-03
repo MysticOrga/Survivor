@@ -8,8 +8,12 @@ router.get("/", async (req, res) => {
 })
 
 router.get("/:id", async (req, res) => {
-    const data = await Startup.getStartup()
-    res.json(data);
+    const data = await Startup.getStartup(req.params.id);
+
+    if (data.length != 0)
+        res.json(data);
+    else
+        res.send("startup not find")
 })
 
 router.post("/", async (req, res) => {

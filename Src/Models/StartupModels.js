@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const client = require("../Config/db");
 
 async function insertStartup(data) {
@@ -23,7 +24,7 @@ async function getStartup(id)
         const db = client.db("ClientDB");
         const col = db.collection("startup");
 
-        return await col.find({ _id : id}).toArray();
+        return await col.find({ _id : new ObjectId(id)}).toArray();
     } finally {
         await client.close()
     }
@@ -40,4 +41,4 @@ async function getAllStartups() {
     }
 }
 
-module.exports = { insertStartup, getAllStartups };
+module.exports = { insertStartup, getAllStartups, getStartup };
