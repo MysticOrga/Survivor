@@ -8,7 +8,7 @@ const NewsRoute = require("./Controllers/NewsController");
 const EventRoute = require("./Controllers/EventsController");
 
 app.use(cors());
-app.use("/startup", StartupRoute);
+app.use("/startups", StartupRoute);
 app.use("/news", NewsRoute);
 app.use("/events", EventRoute);
 
