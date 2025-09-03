@@ -121,7 +121,6 @@ export default {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive */
 @media (max-width: 900px) {
   .project-page {
     flex-direction: column;

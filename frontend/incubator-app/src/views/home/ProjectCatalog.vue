@@ -3,25 +3,54 @@
     <div v-for="startup in startups" :key="startup.id" class="card">
       <router-link :to="`/home/project/${startup.id}`" class="card-link">
         <h2>{{ startup.name }}</h2>
-        <p class="description">{{ startup.Description }}</p>
+        <!-- <p class="description">{{ startup.Description }}</p> -->
         <p><strong>Secteur:</strong> {{ startup.sector }}</p>
-        <p><strong>Besoin:</strong> {{ startup.needs }} €</p>
-        <a v-if="startup.Ext_url && startup.Ext_url.length" :href="startup.Ext_url[0]" target="_blank" class="ext-link">
-          🌐 Site web
-        </a>
+        <!-- <p><strong>Besoin:</strong> {{ startup.needs }} €</p> -->
+        <!-- <a v-if="startup.Ext_url && startup.Ext_url.length" :href="startup.Ext_url[0]" target="_blank" class="ext-link"> -->
+          <!-- Site web -->
+        <!-- </a> -->
       </router-link>
     </div>
   </div>
 </template>
 
+<!-- <script>
+export default {
+  name: 'ProjectCatalog',
+  data() {
+    return {
+      startups: []
+    }
+  },
+  async created() {
+    try {
+      const response = await fetch('http://localhost:8080/startup');
+      this.startups = await response.json();
+      console.log('Startups chargées:', this.startups);
+    } catch (e) {
+      console.error('Erreur chargement startups', e);
+    }
+  }
+}
+</script> -->
+
 <script>
-import startups from '@/example/startup.json'
+import axios from 'axios';
 
 export default {
   name: 'ProjectCatalog',
   data() {
     return {
-      startups
+      startups: []
+    }
+  },
+  async created() {
+    try {
+      const response = await axios.get('http://localhost:8080/startup');
+      this.startups = response.data;
+      console.log('Startups chargées:', this.startups);
+    } catch (e) {
+      console.error('Erreur chargement startups', e);
     }
   }
 }
