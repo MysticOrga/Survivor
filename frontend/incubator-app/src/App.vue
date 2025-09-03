@@ -16,7 +16,7 @@
         </nav>
         <div class="tools">
           <ul>
-            <li><a href="#">Login</a></li>
+            <li><router-link to="/login">Login</router-link></li>
           </ul>
         </div>
         <button class="burger" @click="isMenuOpen = !isMenuOpen">☰</button>
