@@ -3,7 +3,7 @@ const client = require("../Config/db");
 async function insertStartup(data) {
     try {
         await client.connect();
-        const db = client.db("Survivor");
+        const db = client.db("ClientDB");
         const col = db.collection("startup");
 
         if (Array.isArray(data)) {
@@ -19,7 +19,7 @@ async function insertStartup(data) {
 async function getAllStartups() {
     try {
         await client.connect();
-        const db = client.db("Survivor");
+        const db = client.db("ClientDB");
         const col = db.collection("startup");
         return await col.find({}).toArray();
     } finally {
