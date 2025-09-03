@@ -3,7 +3,6 @@ const client = require("../Config/db");
 
 async function insertStartup(data) {
     try {
-        await client.connect();
         const db = client.db("ClientDB");
         const col = db.collection("startup");
 
@@ -13,31 +12,29 @@ async function insertStartup(data) {
             return await col.insertOne(data);
         }
     } finally {
-        await client.close();
+        console.log("fini")
     }
 }
 
 async function getStartup(id)
 {
     try {
-        await client.connect();
         const db = client.db("ClientDB");
         const col = db.collection("startup");
 
         return await col.find({ _id : new ObjectId(id)}).toArray();
     } finally {
-        await client.close()
+        console.log("fini")
     }
 }
 
 async function getAllStartups() {
     try {
-        await client.connect();
         const db = client.db("ClientDB");
         const col = db.collection("startup");
         return await col.find({}).toArray();
     } finally {
-        await client.close();
+        console.log("fini")
     }
 }
 
