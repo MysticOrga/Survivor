@@ -1,0 +1,15 @@
+[
+    {
+        "id": 1,
+        "name": "Toto Corp.",
+        "founders": "ELLNQ",
+        "created": "1984",
+        "capital": "134K €",
+        "effectif": "5",
+        "sector": "web",
+        "project": "jeb incubator",
+        "located": "saint andré",
+        "SIRET": "0123456789",
+        "phone": "0262 974 700"
+    }
+]
