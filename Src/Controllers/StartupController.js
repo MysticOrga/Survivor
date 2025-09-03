@@ -7,6 +7,11 @@ router.get("/", async (req, res) => {
     res.json(data);
 })
 
+router.get("/:id", async (req, res) => {
+    const data = await Startup.getStartup()
+    res.json(data);
+})
+
 router.post("/", async (req, res) => {
     console.log(req);
     res.send("ouais oauis")

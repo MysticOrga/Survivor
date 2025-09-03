@@ -16,6 +16,19 @@ async function insertStartup(data) {
     }
 }
 
+async function getStartup(id)
+{
+    try {
+        await client.connect();
+        const db = client.db("ClientDB");
+        const col = db.collection("startup");
+
+        return await col.find({ _id : id}).toArray();
+    } finally {
+        await client.close()
+    }
+}
+
 async function getAllStartups() {
     try {
         await client.connect();
