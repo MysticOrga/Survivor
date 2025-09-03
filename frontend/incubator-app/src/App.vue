@@ -16,7 +16,6 @@
         </nav>
         <div class="tools">
           <ul>
-            <li><a href="#">Register</a></li>
             <li><a href="#">Login</a></li>
           </ul>
         </div>

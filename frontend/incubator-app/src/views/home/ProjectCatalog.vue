@@ -5,6 +5,7 @@
         <h2>{{ startup.name }}</h2>
         <p class="description">{{ startup.Description }}</p>
         <p><strong>Secteur:</strong> {{ startup.sector }}</p>
+        <p><strong>Address:</strong> {{ startup.address }}</p>
       </router-link>
     </div>
   </div>
