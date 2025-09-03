@@ -1,32 +1,37 @@
 <template>
-    <div class="news">
-        <div
-        v-for="newsc in news"
-        :key="newsc.id"
-        class="news-item"
-        >
-            <router-link :to="`/home/news/${newsc.id}`">
-                <div class="section">
-                    <h2>{{newsc.title}}</h2>
-                    <p>{{newsc.hook}}</p>
-                    <p>{{newsc.text}}</p>
-                </div>
-            </router-link>
+  <div class="news">
+    <div v-for="newsc in news" :key="newsc.id" class="news-item">
+      <router-link :to="`/home/news/${newsc.id}`">
+        <div class="section">
+          <h2>{{ newsc.title }}</h2>
+          <p>{{ newsc.hook }}</p>
+          <p>{{ newsc.text }}</p>
         </div>
+      </router-link>
     </div>
+  </div>
 </template>
 
 <script>
-import news from '@/example/news.json'
+import axios from "axios";
 
 export default {
-    name: 'NewsFeed',
-    data() {
-        return {
-            news
-        }
+  name: "NewsFeed",
+  data() {
+    return {
+      news: [],
+    };
+  },
+  async created() {
+    try {
+      const response = await axios.get("http://localhost:8080/news");
+      this.news = response.data;
+      console.log("News loaded:", this.news);
+    } catch (e) {
+      console.error("Error News", e);
     }
-}
+  },
+};
 </script>
 
 <style>
@@ -42,14 +47,15 @@ export default {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.35s ease, color 0.35s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.35s ease,
+    color 0.35s ease;
   border-top: 5px solid var(--purple3);
   color: #444;
 }
 
 .news-item:hover {
   transform: translateY(-6px);
-  background: #D5A8F2;
+  background: #d5a8f2;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
   color: #fff;
 }
