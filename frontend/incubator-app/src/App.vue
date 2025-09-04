@@ -170,6 +170,13 @@ const isMenuOpen = ref(false);
 }
 
 .main {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 16px;
+  width: 100%;
+  /* height: calc(100vh - 80px); */
+  overflow: hidden;
 }
 </style>

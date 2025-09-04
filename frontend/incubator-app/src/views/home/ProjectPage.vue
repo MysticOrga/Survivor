@@ -9,32 +9,8 @@
       <p><strong>Legal status:</strong> {{ startup.legal_status }}</p>
       <p><strong>Sector:</strong> {{ startup.sector }}</p>
       <p><strong>Maturity:</strong> {{ startup.maturity }}</p>
-      <!-- <p><strong>Founded:</strong> {{ startup.created_at }}</p> -->
-      <!-- <p><strong>Project status:</strong> {{ startup.Project_status }}</p> -->
-      <!-- <p><strong>Funding needs:</strong> {{ startup.needs }} €</p> -->
-
-      <!-- <div class="links" v-if="startup.Ext_url && startup.Ext_url.length"> -->
-        <!-- <strong>External links:</strong> -->
-        <!-- <ul> -->
-          <!-- <li v-for="url in startup.Ext_url" :key="url"> -->
-            <!-- <a :href="url" target="_blank">{{ url }}</a> -->
-          <!-- </li> -->
-        <!-- </ul> -->
-      <!-- </div> -->
-<!--  -->
-      <!-- <div class="funders" v-if="startup.funder && startup.funder.length"> -->
-        <!-- <strong>Funders:</strong> -->
-        <!-- <ul> -->
-          <!-- <li v-for="f in startup.funder" :key="f.name"> -->
-            <!-- {{ f.name }} ({{ f.role }}) : {{ f.amount }} € -->
-          <!-- </li> -->
-        <!-- </ul> -->
-      <!-- </div> -->
     </div>
 
-    <div class="image">
-      <img src="@/assets/pictures/placeholder.jpg" alt="Startup illustration" />
-    </div>
   </section>
 
   <section v-else class="not-found">

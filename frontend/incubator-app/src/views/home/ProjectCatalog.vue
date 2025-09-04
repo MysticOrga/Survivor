@@ -50,9 +50,65 @@ export default {
 <style scoped>
 .catalog {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
   padding: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+@media (min-width: 1200px) {
+  .catalog {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .catalog {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .catalog {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog {
+    grid-template-columns: 1fr;
+  }
+}
+
+.filtersResearch {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.filtersResearch button {
+  background: var(--pink2);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.filtersResearch button:hover {
+  background: var(--purple4);
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+.filtersResearch button:active {
+  background: var(--purple5);
+  transform: translateY(0);
 }
 
 .card {
@@ -118,4 +174,5 @@ export default {
   background: #fff;
   color: var(--purple5);
 }
+
 </style>
