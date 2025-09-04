@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "title": "Conférence Tech 2025",
+        "date": "2025-09-15",
+        "location": "Palais des Congrès, Paris",
+        "time": "10:00",
+        "description": "Une conférence dédiée aux nouvelles technologies, à l'intelligence artificielle et aux innovations durables."
+    },
+    {
+        "id": 2,
+        "title": "Festival de Musique",
+        "date": "2025-09-20",
+        "location": "Parc de la Villette, Paris",
+        "time": "18:00",
+        "description": "Un festival en plein air réunissant des artistes internationaux et locaux, avec une ambiance festive et conviviale."
+    },
+    {
+        "id": 3,
+        "title": "Exposition d'Art Moderne",
+        "date": "2025-10-01",
+        "location": "Musée d'Art Contemporain, Lyon",
+        "time": "09:30",
+        "description": "Une exposition regroupant des œuvres contemporaines mettant en avant les nouvelles tendances artistiques."
+    }
+]
