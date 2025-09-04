@@ -1,14 +1,7 @@
-const client = require("../Config/db");
+const MongoAPI = require("../Services/MongoService")
 
 async function getAllEvent(data) {
-    try {
-        await client.connect();
-        const db = client.db("ClientDB");
-        const col = db.collection("event");
-        return await col.find({}).toArray();
-    } finally {
-        await client.close();
-    }
+    return await MongoAPI.readDocuments("event", {});
 }
 
 module.exports = { getAllEvent };

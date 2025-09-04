@@ -1,5 +1,5 @@
 const { ObjectId } = require("mongodb");
-const client = require("../Config/db");
+const MongoAPI = require("../Services/MongoService")
 
 async function insertStartup(data) {
     try {
@@ -18,28 +18,6 @@ async function insertStartup(data) {
     }
 }
 
-// async function getStartup(id)
-// {
-//     try {
-//         const db = client.db("ClientDB");
-//         const col = db.collection("startup");
-
-//         return await col.find({ _id : new ObjectId(id)}).toArray();
-//     } finally {
-//         console.log("fini2")
-//     }
-// }
-
-async function getAllStartups() {
-    try {
-        const db = client.db("ClientDB");
-        const col = db.collection("startup");
-        return await col.find({}).toArray();
-    } finally {
-        console.log("fini3")
-    }
-}
-
 async function getStartup(id) {
     try {
         const db = client.db("ClientDB");
@@ -53,6 +31,10 @@ async function getStartup(id) {
     } finally {
         console.log("fini4");
     }
+}
+
+async function getAllStartups() {
+    return await MongoAPI.readDocuments("startup", {});
 }
 
 module.exports = { insertStartup, getAllStartups, getStartup };

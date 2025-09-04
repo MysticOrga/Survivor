@@ -1,14 +1,8 @@
-const client = require("../Config/db");
+const MongoAPI = require("../Services/MongoService")
+
 
 async function getAllNews(data) {
-    try {
-        await client.connect();
-        const db = client.db("ClientDB");
-        const col = db.collection("new");
-        return await col.find({}).toArray();
-    } finally {
-        client.close()
-    }
+    return await MongoAPI.readDocuments("new", {});
 }
 
 module.exports = { getAllNews };
