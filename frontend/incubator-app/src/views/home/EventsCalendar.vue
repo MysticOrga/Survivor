@@ -6,11 +6,12 @@
             class="card-block"
         >
             <router-link :to="`/home/events/${event.id}`" class="event-link">
-                <div class="events">
                     <h2>{{ event.name }}</h2>
-                    <p><strong>{{event.dates}}:</strong> {{event.description}}</p>
+                    <p>{{ event.description }}</p>
+                    <p><strong>Location: </strong>{{ event.location }}</p>
+                    <p><strong>Date:</strong> {{event.dates}}</p>
                     <p><strong>Event type:</strong> {{ event.event_type }}</p>
-                </div>
+                    <p><strong>Target audience: </strong> {{ event.target_audience }}</p>
             </router-link>
         </div>
     </div>
@@ -59,9 +60,9 @@ export default {
 
 .card-block:hover {
   transform: translateY(-6px);
-  background: #D5A8F2;
+  background: #EED5FB;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-  color: #fff;
+  color: #C174F2;
 }
 
 .card-block h2 {
@@ -84,10 +85,10 @@ export default {
 
 .card-block:hover h2,
 .card-block:hover p {
-  color: #fff;
+  color: #C174F2;
 }
 
-.card-block-link {
+.event-link {
   text-decoration: none;
   color: inherit;
   display: block;
