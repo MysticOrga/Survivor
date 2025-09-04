@@ -1,0 +1,250 @@
+[
+  {
+    "id": 1,
+    "name": "GreenTech Solutions",
+    "email": "contact@greentech.io",
+    "phone": "+33 612345678",
+    "address": "12 Rue de l'Innovation, 75010 Paris, France",
+    "Legal_status": "SAS",
+    "Description": "Startup spécialisée dans le recyclage intelligent via l'IA et l'IoT.",
+    "created_at": "2022-05-14",
+    "Ext_url": [
+      "https://greentech.io",
+      "https://linkedin.com/company/greentech-solutions"
+    ],
+    "Project_status": "Active",
+    "needs": 250000,
+    "sector": "Environnement & Énergie",
+    "Maturity": "Seed",
+    "funder": [
+      {
+        "name": "John Dupont",
+        "role": "Business Angel",
+        "amount": 100000
+      },
+      {
+        "name": "BPI France",
+        "role": "Institution",
+        "amount": 150000
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "MediConnect",
+    "email": "hello@mediconnect.fr",
+    "phone": "+33 698765432",
+    "address": "48 Avenue de la Santé, 69007 Lyon, France",
+    "Legal_status": "SARL",
+    "Description": "Application mobile de prise de rendez-vous et suivi médical avec dossier partagé.",
+    "created_at": "2021-11-02",
+    "Ext_url": [
+      "https://mediconnect.fr",
+      "https://twitter.com/mediconnect"
+    ],
+    "Project_status": "In_Progress",
+    "needs": 500000,
+    "sector": "Santé & Bien-être",
+    "Maturity": "Early Stage",
+    "funder": [
+      {
+        "name": "Sophie Martin",
+        "role": "Venture Capitalist",
+        "amount": 300000
+      },
+      {
+        "name": "Angel Health Fund",
+        "role": "Fonds privé",
+        "amount": 200000
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "AgriSmart",
+    "email": "info@agrismart.com",
+    "phone": "+33 601223344",
+    "address": "5 Rue des Champs, 31000 Toulouse, France",
+    "Legal_status": "SASU",
+    "Description": "Solution IoT pour l’agriculture de précision et la gestion durable des cultures.",
+    "created_at": "2020-08-30",
+    "Ext_url": [
+      "https://agrismart.com"
+    ],
+    "Project_status": "Prototype",
+    "needs": 120000,
+    "sector": "AgriTech",
+    "Maturity": "Prototype",
+    "funder": [
+      {
+        "name": "Occitanie Innovation",
+        "role": "Subvention régionale",
+        "amount": 70000
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Foodly",
+    "email": "team@foodly.fr",
+    "phone": "+33 711223344",
+    "address": "22 Cours Julien, 13006 Marseille, France",
+    "Legal_status": "SAS",
+    "Description": "Livraison de repas sains préparés par des chefs locaux.",
+    "created_at": "2023-02-10",
+    "Ext_url": [
+      "https://foodly.fr",
+      "https://instagram.com/foodlyapp"
+    ],
+    "Project_status": "Active",
+    "needs": 300000,
+    "sector": "FoodTech",
+    "Maturity": "Growth",
+    "funder": [
+      {
+        "name": "Local Angels",
+        "role": "Business Angels",
+        "amount": 150000
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "EduNova",
+    "email": "contact@edunova.com",
+    "phone": "+33 755667788",
+    "address": "15 Rue du Savoir, 44000 Nantes, France",
+    "Legal_status": "Association",
+    "Description": "Plateforme e-learning pour enfants avec IA adaptative.",
+    "created_at": "2019-09-17",
+    "Ext_url": [
+      "https://edunova.com"
+    ],
+    "Project_status": "Active",
+    "needs": 80000,
+    "sector": "EdTech",
+    "Maturity": "Scale-up",
+    "funder": [
+      {
+        "name": "Fondation pour l'Éducation",
+        "role": "Fondation",
+        "amount": 80000
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "FinTrack",
+    "email": "hello@fintrack.fr",
+    "phone": "+33 633112233",
+    "address": "78 Boulevard Haussmann, 75009 Paris, France",
+    "Legal_status": "SAS",
+    "Description": "Application de suivi budgétaire et d’investissement automatisé.",
+    "created_at": "2021-04-05",
+    "Ext_url": [
+      "https://fintrack.fr"
+    ],
+    "Project_status": "In_Progress",
+    "needs": 600000,
+    "sector": "FinTech",
+    "Maturity": "Early Stage",
+    "funder": [
+      {
+        "name": "Next Capital",
+        "role": "VC",
+        "amount": 400000
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Travelly",
+    "email": "contact@travelly.io",
+    "phone": "+33 622334455",
+    "address": "25 Rue du Port, 33000 Bordeaux, France",
+    "Legal_status": "SAS",
+    "Description": "Marketplace de voyages personnalisés avec recommandations IA.",
+    "created_at": "2022-07-22",
+    "Ext_url": [
+      "https://travelly.io",
+      "https://facebook.com/travelly"
+    ],
+    "Project_status": "Prototype",
+    "needs": 200000,
+    "sector": "Tourisme",
+    "Maturity": "Prototype",
+    "funder": []
+  },
+  {
+    "id": 8,
+    "name": "CyberSafe",
+    "email": "support@cybersafe.fr",
+    "phone": "+33 677889900",
+    "address": "9 Rue de la Défense, 92000 Nanterre, France",
+    "Legal_status": "SARL",
+    "Description": "Solution de cybersécurité pour PME et startups.",
+    "created_at": "2020-03-19",
+    "Ext_url": [
+      "https://cybersafe.fr"
+    ],
+    "Project_status": "Active",
+    "needs": 450000,
+    "sector": "CyberSecurity",
+    "Maturity": "Growth",
+    "funder": [
+      {
+        "name": "Axeleo Capital",
+        "role": "VC",
+        "amount": 450000
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "BioSkin",
+    "email": "info@bioskin.fr",
+    "phone": "+33 644556677",
+    "address": "67 Rue Nationale, 59000 Lille, France",
+    "Legal_status": "SASU",
+    "Description": "Cosmétiques bio et personnalisés selon l’analyse de peau.",
+    "created_at": "2021-01-15",
+    "Ext_url": [
+      "https://bioskin.fr"
+    ],
+    "Project_status": "In_Progress",
+    "needs": 120000,
+    "sector": "BeautyTech",
+    "Maturity": "Seed",
+    "funder": [
+      {
+        "name": "Nord Angels",
+        "role": "Business Angel",
+        "amount": 60000
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "UrbanMove",
+    "email": "hello@urbanmove.fr",
+    "phone": "+33 699887766",
+    "address": "102 Rue Voltaire, 93100 Montreuil, France",
+    "Legal_status": "SAS",
+    "Description": "Solution de mobilité urbaine électrique partagée.",
+    "created_at": "2018-06-08",
+    "Ext_url": [
+      "https://urbanmove.fr"
+    ],
+    "Project_status": "Active",
+    "needs": 1000000,
+    "sector": "Mobility",
+    "Maturity": "Scale-up",
+    "funder": [
+      {
+        "name": "Mobility Fund",
+        "role": "VC",
+        "amount": 1000000
+      }
+    ]
+  }
+]
