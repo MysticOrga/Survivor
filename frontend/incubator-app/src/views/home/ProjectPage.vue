@@ -11,6 +11,8 @@
       <p><strong>Maturity:</strong> {{ startup.maturity }}</p>
     </div>
 
+    <button @click="downloadJSON">Download Startup JSON</button>
+
   </section>
 
   <section v-else class="not-found">
@@ -36,7 +38,21 @@ export default {
     } catch (e) {
       console.error('Error startup', e);
     }
+  },
+  methods: {
+    downloadJSON() {
+    console.log("test blobl");
+    const json = JSON.stringify(this.startup);
+    const blob = new Blob([json], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    document.body.appendChild(link);
+    link.href = url;
+    link.download = `startup-${this.startup.id || "data"}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
   }
+  },
 }
 </script>
 

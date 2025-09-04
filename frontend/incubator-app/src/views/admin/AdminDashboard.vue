@@ -113,7 +113,7 @@
         </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in filteredData" :key="index">
+          <tr v-for="(item, id) in filteredData" :key="id">
             <td @click=focused(item) >{{ item.id }}</td>
             <td @click=focused(item) >{{ item.name }}</td>
             <td @click=focused(item) >{{ item.sector }}</td>
