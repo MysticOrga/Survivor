@@ -1,9 +1,13 @@
 <template>
+  <div class="filtersResearch">
+    <button @click="sortAlphaAsc">A → Z</button>
+    <button @click="sortAlphaDesc">Z → A</button>
+  </div>
   <div class="catalog">
     <div v-for="startup in startups" :key="startup.id" class="card">
       <router-link :to="{ name: 'project', params: { id: startup._id }, state: { startup } }" class="card-link">
         <h2>{{ startup.name }}</h2>
-        <p class="description">{{ startup.Description }}</p>
+        <p class="description">Description: {{ startup.description }}</p>
         <p><strong>Secteur:</strong> {{ startup.sector }}</p>
         <p><strong>Address:</strong> {{ startup.address }}</p>
       </router-link>
@@ -18,16 +22,26 @@ export default {
   name: 'ProjectCatalog',
   data() {
     return {
-      startups: []
+      startups: [],
+      originalStartups: []
     }
   },
   async created() {
     try {
-      const response = await axios.get('http://localhost:8080/startup');
+      const response = await axios.get('http://localhost:8080/startups');
       this.startups = response.data;
+      this.originalStartups = [...response.data];
       console.log('Startups loaded:', this.startups);
     } catch (e) {
       console.error('Error startups', e);
+    }
+  },
+  methods: {
+    sortAlphaAsc() {
+      this.startups = [...this.startups].sort((a, b) => a.name.localeCompare(b.name));
+    },
+    sortAlphaDesc() {
+      this.startups = [...this.startups].sort((a, b) => b.name.localeCompare(a.name));
     }
   }
 }

@@ -2,14 +2,14 @@
   <section v-if="startup" class="project-page">
     <div class="info">
       <h2>{{ startup.name }}</h2>
-      <!-- <p><strong>Description:</strong> {{ startup.Description }}</p> -->
+      <p><strong>Description:</strong> {{ startup.Description }}</p>
       <p><strong>Email:</strong> {{ startup.email }}</p>
       <p><strong>Phone:</strong> {{ startup.phone }}</p>
       <p><strong>Address:</strong> {{ startup.address }}</p>
       <p><strong>Legal status:</strong> {{ startup.legal_status }}</p>
-      <!-- <p><strong>Founded:</strong> {{ startup.created_at }}</p> -->
       <p><strong>Sector:</strong> {{ startup.sector }}</p>
       <p><strong>Maturity:</strong> {{ startup.maturity }}</p>
+      <!-- <p><strong>Founded:</strong> {{ startup.created_at }}</p> -->
       <!-- <p><strong>Project status:</strong> {{ startup.Project_status }}</p> -->
       <!-- <p><strong>Funding needs:</strong> {{ startup.needs }} €</p> -->
 
