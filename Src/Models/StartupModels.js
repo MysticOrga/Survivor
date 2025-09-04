@@ -1,4 +1,5 @@
 const { ObjectId } = require("mongodb");
+const client = require("../Config/db");
 const MongoAPI = require("../Services/MongoService")
 
 async function insertStartup(data) {
