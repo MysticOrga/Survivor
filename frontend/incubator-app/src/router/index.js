@@ -4,6 +4,7 @@ import HomePage from "@/views/home/HomePage.vue";
 import ProjectCatalog from "@/views/home/ProjectCatalog.vue";
 import ProjectPage from "@/views/home/ProjectPage.vue";
 import NewsFeed from "@/views/home/NewsFeed.vue";
+import NewsPage from "@/views/home/NewsPage.vue"
 import SearchFilter from "@/views/home/SearchFilter.vue";
 import EventsCalendar from "@/views/home/EventsCalendar.vue";
 import Login from "@/views/login/Login.vue"
@@ -22,6 +23,7 @@ const routes = [
   { path: "/home/catalog", name: "catalog", component: ProjectCatalog },
   { path: "/home/project/:id", name: "project", component: ProjectPage },
   { path: "/home/news", name: "news", component: NewsFeed },
+  { path: "/home/news/:id", name: "info", component: NewsPage},
   { path: "/home/search", name: "search", component: SearchFilter },
   { path: "/home/events", name: "events", component: EventsCalendar },
   { path: "/login", name: "login", component: Login},

@@ -1,0 +1,24 @@
+[
+    {
+      "id": 1,
+      "image": "https://example.com/images/news1.jpg",
+      "hook": "Un pas vers l’avenir",
+      "title": "Lancement d'une nouvelle technologie",
+      "text": "Une startup française révolutionne le marché en présentant un dispositif capable de réduire la consommation énergétique de 30%."
+    },
+    {
+      "id": 2,
+      "image": "https://example.com/images/news2.jpg",
+      "hook": "Cap sur l’innovation",
+      "title": "Un salon international attire des milliers de visiteurs",
+      "text": "Le Salon de l’innovation technologique a ouvert ses portes ce matin, réunissant plus de 500 exposants venus du monde entier."
+    },
+    {
+      "id": 3,
+      "image": "https://example.com/images/news3.jpg",
+      "hook": "Quand tradition et modernité se rencontrent",
+      "title": "Une ville met en avant son patrimoine culturel",
+      "text": "La municipalité organise une série d’événements pour promouvoir son histoire tout en intégrant les nouvelles technologies."
+    }
+]
+  
