@@ -172,7 +172,7 @@ const isMenuOpen = ref(false);
   }
 }
 
-.main {
+/* .main {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -180,5 +180,5 @@ const isMenuOpen = ref(false);
   padding: 20px 16px;
   width: 100%;
   overflow: hidden;
-}
+} */
 </style>
