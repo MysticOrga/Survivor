@@ -1,7 +1,7 @@
 <template>
   <div class="news">
     <div v-for="newsc in news" :key="newsc.id" class="news-item">
-      <router-link :to="`/home/news/${newsc.id}`" class="section">
+      <router-link :to="`/home/news/${newsc._id}`" class="section">
           <h2>{{ newsc.title }}</h2>
           <p><strong>Date: </strong>{{ newsc.news_date }}</p>
           <p><strong>Category: </strong>{{ newsc.category }}</p>

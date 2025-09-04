@@ -13,18 +13,24 @@
 </template>
 
 <script>
-import news from '@/example/news.json'
+import axios from 'axios'
 
 export default {
   name: 'NewsPage',
   data() {
     return {
-      newsc: null
+      newsc: this.$route.state?.news || null
     }
   },
-  created() {
-    const id = Number(this.$route.params.id)
-    this.newsc = news.find(s => s.id === id)
+  async created() {
+    try {
+      const response = await axios.get('http://localhost:8080/news/' + this.$route.params.id);
+      console.log('http://localhost:8080/news/', this.$route.params.id);
+      this.newsc = response.data[0];
+      console.log('News loaded: ', this.newsc);
+    } catch (e) {
+      console.error('Error news', e)
+    }
   }
 }
 </script>

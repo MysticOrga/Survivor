@@ -27,7 +27,7 @@ const routes = [
   { path: "/home/news/:id", name: "info", component: NewsPage},
   { path: "/home/search", name: "search", component: SearchFilter },
   { path: "/home/events", name: "events", component: EventsCalendar },
-  { path: "/home/events/:id", name: "info", component: EventsPage},
+  { path: "/home/events/:id", name: "event", component: EventsPage},
   { path: "/login", name: "login", component: Login},
 
   { path: "/admin/dashboard", name: "dashboard", component: AdminDashboard },
