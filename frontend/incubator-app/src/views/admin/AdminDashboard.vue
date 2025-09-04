@@ -1,6 +1,6 @@
 <script setup>
     import { RouterLink } from "vue-router"
-import { fakedata } from "../../data/admin.js"
+// import { fakedata } from "../../data/admin.js"
     import { ref, computed } from "vue"
 
     const data = ref(fakedata)
