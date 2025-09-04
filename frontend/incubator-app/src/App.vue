@@ -46,6 +46,8 @@ const isMenuOpen = ref(false);
 }
 
 .header {
+  position: sticky;
+  top: 0;
   background: linear-gradient(90deg, var(--pink2), var(--purple3));
   padding: 10px 25px;
   color: #fff;
@@ -123,6 +125,7 @@ const isMenuOpen = ref(false);
   border-radius: 8px;
   text-decoration: none;
   font-weight: 500;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .tools a:hover {
@@ -176,7 +179,6 @@ const isMenuOpen = ref(false);
   justify-content: flex-start;
   padding: 20px 16px;
   width: 100%;
-  /* height: calc(100vh - 80px); */
   overflow: hidden;
 }
 </style>
