@@ -46,11 +46,10 @@ const isMenuOpen = ref(false);
 }
 
 .header {
-  position: sticky;
-  top: 0;
   background: linear-gradient(90deg, var(--pink2), var(--purple3));
   padding: 10px 25px;
   color: #fff;
+  margin-bottom: 20px;
 }
 
 .headBar {
@@ -171,14 +170,4 @@ const isMenuOpen = ref(false);
     display: block;
   }
 }
-
-/* .main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 20px 16px;
-  width: 100%;
-  overflow: hidden;
-} */
 </style>
