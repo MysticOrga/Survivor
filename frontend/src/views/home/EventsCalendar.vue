@@ -30,7 +30,7 @@ export default {
     },
     async created() {
     try {
-        const response = await axios.get('http://localhost:8080/events');
+        const response = await axios.get('http://localhost:5001/events');
         this.events = response.data;
         console.log('Events loaded:', this.events);
       } catch (e) {

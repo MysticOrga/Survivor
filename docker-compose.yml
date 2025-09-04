@@ -1,0 +1,33 @@
+version: "3.0"
+services:
+  back:
+    container_name: "back_end"
+    restart: always
+    build: backend/
+    image: backend
+    environment:
+      - MONGO_URL=${MONGO_URL}
+      - PORT=${PORT}
+      - CLIENT_API_KEY=${CLIENT_API_KEY}
+      - DB_NAME=${DB_NAME}
+      - PASSWORD=${PASSWORD}
+      - SALTROUND=${SALTROUND}
+      - SECRET=${SECRET}
+    networks:
+      - back-tier
+    ports:
+      - "${PORT}:${PORT}"
+  front:
+    depends_on:
+      - back
+    container_name: "front_end"
+    restart: always
+    build: frontend/
+    image: frontend
+    networks:
+      - back-tier
+    ports:
+    - "5173:5173"
+networks:
+  back-tier:
+    driver: bridge
