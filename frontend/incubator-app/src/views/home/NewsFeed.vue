@@ -1,12 +1,11 @@
 <template>
   <div class="news">
     <div v-for="newsc in news" :key="newsc.id" class="news-item">
-      <router-link :to="`/home/news/${newsc.id}`">
-        <div class="section">
+      <router-link :to="`/home/news/${newsc.id}`" class="section">
           <h2>{{ newsc.title }}</h2>
-          <p>{{ newsc.hook }}</p>
-          <p>{{ newsc.text }}</p>
-        </div>
+          <p><strong>Date: </strong>{{ newsc.news_date }}</p>
+          <p><strong>Category: </strong>{{ newsc.category }}</p>
+          <p><strong>Location: </strong>{{ newsc.location }}</p>
       </router-link>
     </div>
   </div>
@@ -49,13 +48,13 @@ export default {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.35s ease,
     color 0.35s ease;
-  border-top: 5px solid var(--purple3);
-  color: #444;
+  border-top: 5px solid #F8CACF;
+  color: #F8CACF;
 }
 
 .news-item:hover {
   transform: translateY(-6px);
-  background: #d5a8f2;
+  background: #F8CACF;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
   color: #fff;
 }
@@ -63,7 +62,7 @@ export default {
 .news-item h2 {
   font-size: 20px;
   margin-bottom: 10px;
-  color: var(--purple5);
+  color: #F18585;
   transition: color 0.35s ease;
 }
 
@@ -71,6 +70,7 @@ export default {
   font-size: 14px;
   margin-bottom: 8px;
   transition: color 0.35s ease;
+  color: #584b4b;
 }
 
 .news-item .description {
@@ -83,7 +83,7 @@ export default {
   color: #fff;
 }
 
-.news-item-link {
+.section {
   text-decoration: none;
   color: inherit;
   display: block;
