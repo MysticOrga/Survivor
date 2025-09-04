@@ -1,36 +1,40 @@
 /* @import './base.css'; */
 @import './home/home.css';
-/* 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('@/assets/fonts/Montserrat/static/Montserrat-Regular.ttf') format('truetype');
   font-weight: normal;
+  font-style: normal;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+@font-face {
+  font-family: 'Open Sans';
+  src: url('@/assets/fonts/Open_Sans/static/Open_Sans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+* {
+  font-family: 'Open Sans', sans-serif;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
-} */
+:root {
+  --pink1: #f18585;
+  --pink2: #f49c9c;
+  --pink3: #f6aeae;
+  --pink4: #f8cacf;
+  --purple1: #eed5fb;
+  --purple2: #e4bef8;
+  --purple3: #d5a8f2;
+  --purple4: #cb90f1;
+  --purple5: #c174f2;
+}
