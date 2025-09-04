@@ -5,7 +5,7 @@
             :key="event.id"
             class="card-block"
         >
-            <router-link :to="`/home/events/${event.id}`" class="event-link">
+            <router-link :to="`/home/events/${event._id}`" class="event-link">
                     <h2>{{ event.name }}</h2>
                     <p>{{ event.description }}</p>
                     <p><strong>Location: </strong>{{ event.location }}</p>
