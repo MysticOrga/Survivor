@@ -53,9 +53,9 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get('http://localhost:8080/startup/' + this.$route.params.id);
-      console.log('http://localhost:8080/startup/', this.$route.params.id);
-      this.startup = response.data[0];
+      const response = await axios.get('http://localhost:8080/startups/' + this.$route.params.id);
+      console.log('http://localhost:8080/startups/', this.$route.params.id);
+      this.startup = response.data;
       console.log('Startup loaded:', this.startup);
     } catch (e) {
       console.error('Error startup', e);
