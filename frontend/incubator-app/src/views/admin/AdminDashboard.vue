@@ -1,9 +1,9 @@
 <script setup>
-    import { RouterLink } from "vue-router"
-// import { fakedata } from "../../data/admin.js"
-    import { ref, computed } from "vue"
+  import { RouterLink } from "vue-router"
+  import { ref, computed, onMounted } from "vue"
+  import axios from "axios"
 
-    const data = ref(fakedata)
+    const data = ref([])
 
     const search = ref("")
     const sortKey = ref(null)
@@ -21,8 +21,9 @@
     const filteredData = computed(() => {
         let term = search.value.toLowerCase()
         let result = data.value.filter(item =>
-            item.startup.toLowerCase().includes(term) ||
-            item.project.toLowerCase().includes(term) ||
+            item.name.toLowerCase().includes(term) ||
+            item.sector.toLowerCase().includes(term) ||
+            item.maturity.toLowerCase().includes(term) ||
             String(item.founders).toLowerCase().includes(term)
         )
 
@@ -37,11 +38,31 @@
     })
 
     const focus = ref(null)
+    focus.id = -1
 
     const focused = (item) => {
         focus.value = item
     }
 
+    const clearFocus = () => {
+      focus.value = ref(null)
+      focus.id = -1
+    }
+
+    const getData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/startups');
+        return response.data;
+      } catch (e) {
+        alert("Error Startup");
+        console.log("Error loading Startups");
+        return [];
+      }
+    }
+
+    onMounted( async () => {
+      data.value = await getData();
+    });
 
 </script>
 
@@ -52,14 +73,31 @@
       <div>
         <input v-model="search" type="text" placeholder="Search" required />
       </div>
-      <div id="search-icon">
-        <button type="submit">
-          <div id="search-icon-circle"></div>
-          <span></span>
-        </button>
-      </div>
     </div>
   </form>
+
+    <!-- Focused startup for management -->
+    <div v-if="focus">
+      <div v-if="focus .id> 0" class="focus-card">
+        <button class="close-btn" @click="clearFocus">x</button>
+        <router-link to="/">
+          <h2>Focused Project</h2>
+        </router-link>
+
+        <div class="focus-info">
+          <p><strong>ID :</strong> {{ focus.id }}</p>
+          <p><strong>Name :</strong> {{ focus.name }}</p>
+          <p><strong>Sector :</strong> {{ focus.sector }}</p>
+          <p><strong>Status :</strong> {{ focus.legal_status }}</p>
+          <p><strong>Address :</strong> {{ focus.address }}</p>
+          <p><strong>Email :</strong> {{ focus.email }}</p>
+          <p><strong>Phone :</strong> {{ focus.phone }}</p>
+          <p><strong>Maturity :</strong> {{ focus.maturity }}</p>
+          <p><strong>Views :</strong> {{ focus.views }}</p>
+        </div>
+
+      </div>
+    </div>
 
   <!-- Table for searches -->
   <h2>Admin Search Table</h2>
@@ -68,15 +106,19 @@
         <thead>
         <tr>
           <th @click="sortBy('id')">#</th>
-          <th @click="sortBy('startup')">Start-up</th>
-          <th @click="sortBy('project')">Project Name</th>
+          <th @click="sortBy('name')">Start-up</th>
+          <th @click="sortBy('sector')">Sector</th>
+          <th @click="sortBy('maturity')">Maturity</th>
+          <th @click="sortBy('views')">Views</th>
         </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in filteredData" :key="index">
             <td @click=focused(item) >{{ item.id }}</td>
-            <td @click=focused(item) >{{ item.startup }}</td>
-            <td @click=focused(item) >{{ item.project }}</td>
+            <td @click=focused(item) >{{ item.name }}</td>
+            <td @click=focused(item) >{{ item.sector }}</td>
+            <td @click=focused(item) >{{ item.maturity }}</td>
+            <td @click=focused(item) >{{ item.views }}</td>
           </tr>
       </tbody>
     </table>
@@ -104,22 +146,6 @@
         </table>
     </div> -->
 
-    <!-- Focused startup for management -->
-    <div v-if="focus" class="focus-card">
-      <router-link to="/">
-      <h2>Focused Project</h2>
-      </router-link>
-
-      <div class="focus-info">
-        <p><strong>ID :</strong> {{ focus.id }}</p>
-        <p><strong>Startup :</strong> {{ focus.startup }}</p>
-        <p><strong>Project :</strong> {{ focus.project }}</p>
-        <p><strong>Founders :</strong> {{ focus.founders }}</p>
-        <p><strong>Views :</strong> {{ focus.Views }}</p>
-        <p><strong>Objective :</strong> {{ focus.Objective }}</p>
-      </div>
-    </div>
-
 </template>
 
 <style scoped>
@@ -144,24 +170,22 @@ button {
 }
 
 form {
-  position: absolute;
-  top: 14%;
-  left: 75%;
-  right: 0;
-  width: 500px;
-  height: 70px;
-  padding: 35px;
-  margin: -83px auto 0 auto;
+  position: relative;
+  max-width: 600px;
+  width: 90%;
+  height: auto;
+  padding: 1rem;
+  margin: 1rem auto;
   background-color: var(--pink3);
   border-radius: 20px;
-  box-shadow: 0 10px 40px var(--pink1), 0 0 0 20px #ffffffeb;
-  transform: scale(0.45);
+  box-shadow: 0 10px 40px var(--pink1), 0 0 0 10px #ffffffeb;
 }
+
 
 input[type="text"] {
   width: 100%;
-  height: 80px;
-  font-size: 50px;
+  height: 3rem;
+  font-size: 1.2rem;
   line-height: 1;
 }
 
@@ -169,225 +193,174 @@ input[type="text"]::placeholder {
   color: var(--pink1);
 }
 
-button {
-  position: relative;
-  display: block;
-  width: 80px;
-  height: 80px;
-  cursor: pointer;
-}
-
-#search-icon-circle {
-  position: relative;
-  top: -8px;
-  left: 0;
-  width: 43px;
-  height: 43px;
-  margin-top: 0;
-  border-width: 15px;
-  border: 15px solid #fff;
-  background-color: transparent;
-  border-radius: 50%;
-  transition: 0.5s ease all;
-}
-
-button span {
-  position: absolute;
-  top: 68px;
-  left: 43px;
-  display: block;
-  width: 45px;
-  height: 15px;
-  background-color: transparent;
-  border-radius: 10px;
-  transform: rotateZ(52deg);
-  transition: 0.5s ease all;
-}
-
-button span:before,
-button span:after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 45px;
-  height: 15px;
-  background-color: #fff;
-  border-radius: 10px;
-  transform: rotateZ(0);
-  transition: 0.5s ease all;
-}
-
-#search-icon:hover #search-icon-circle {
-  top: -1px;
-  width: 67px;
-  height: 15px;
-  border-width: 0;
-  background-color: #fff;
-  border-radius: 20px;
-}
-
-#search-icon:hover span {
-  top: 50%;
-  left: 56px;
-  width: 25px;
-  margin-top: -9px;
-  transform: rotateZ(0);
-}
-
-#search-icon:hover button span:before {
-  bottom: 11px;
-  transform: rotateZ(52deg);
-}
-
-#search-icon:hover button span:after {
-  bottom: -11px;
-  transform: rotateZ(-52deg);
-}
-#search-icon:hover button span:before,
-#search-icon:hover button span:after {
-  right: -6px;
-  width: 40px;
-  background-color: #fff;
-}
-
-/* Table */
-.table-wrapper{
-    margin: 10px 70px 70px;
-    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+.table-wrapper {
+  margin: 10px auto;
+  padding: 0 1rem;
+  box-shadow: 0px 35px 50px rgba(0, 0, 0, 0.2);
+  overflow-x: auto; /* ✅ allows scroll on small screens */
 }
 
 .fl-table {
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: normal;
-    border: none;
-    border-collapse: collapse;
-    width: 100%;
-    max-width: 100%;
-    white-space: nowrap;
-    background-color: white;
+  border-radius: 5px;
+  font-size: 0.95rem; /* ✅ relative font size */
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+  background-color: white;
+  min-width: 600px; /* ✅ keeps it readable on large screens */
 }
 
-.fl-table td, .fl-table th {
-    text-align: center;
-    padding: 8px;
+.fl-table td,
+.fl-table th {
+  text-align: center;
+  padding: 0.75rem;
+  word-wrap: break-word;
 }
 
 .fl-table td {
-    border-right: 1px solid #f8f8f8;
-    font-size: 12px;
+  border-right: 1px solid #f8f8f8;
 }
 
 .fl-table thead th {
-    color: #ffffff;
-    background: var(--pink4);
+  color: #ffffff;
+  background: var(--pink4);
 }
 
-
 .fl-table thead th:nth-child(odd) {
-    color: #ffffff;
-    background: var(--pink3);
+  background: var(--pink3);
 }
 
 .fl-table tr:nth-child(even) {
-    background: var(--purple1);
+  background: var(--purple1);
 }
 
-/* Responsive */
-@media (max-width: 767px) {
-    .fl-table {
-        display: block;
-        width: 100%;
-    }
-    .table-wrapper:before{
-        content: "Scroll horizontally >";
-        display: block;
-        text-align: right;
-        font-size: 11px;
-        color: white;
-        padding: 0 0 10px;
-    }
-    .fl-table thead, .fl-table tbody, .fl-table thead th {
-        display: block;
-    }
-    .fl-table thead th:last-child{
-        border-bottom: none;
-    }
-    .fl-table thead {
-        float: left;
-    }
-    .fl-table tbody {
-        width: auto;
-        position: relative;
-        overflow-x: auto;
-    }
-    .fl-table td, .fl-table th {
-        padding: 20px .625em .625em .625em;
-        height: 60px;
-        vertical-align: middle;
-        box-sizing: border-box;
-        overflow-x: hidden;
-        overflow-y: auto;
-        width: 120px;
-        font-size: 13px;
-        text-overflow: ellipsis;
-    }
-    .fl-table thead th {
-        text-align: left;
-        border-bottom: 1px solid #f7f7f9;
-    }
-    .fl-table tbody tr {
-        display: table-cell;
-    }
-    .fl-table tbody tr:nth-child(odd) {
-        background: none;
-    }
-    .fl-table tr:nth-child(even) {
-        background: transparent;
-    }
-    .fl-table tr td:nth-child(odd) {
-        background: #F8F8F8;
-        border-right: 1px solid #E6E4E4;
-    }
-    .fl-table tr td:nth-child(even) {
-        border-right: 1px solid #E6E4E4;
-    }
-    .fl-table tbody td {
-        display: block;
-        text-align: center;
-    }
+/* 📱 Responsive for tablets and below */
+@media (max-width: 1024px) {
+  .fl-table {
+    font-size: 0.85rem;
+    min-width: 500px;
+  }
+  .fl-table td,
+  .fl-table th {
+    padding: 0.6rem;
+  }
 }
+
+/* 📱 Mobile */
+@media (max-width: 768px) {
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .fl-table {
+    font-size: 0.8rem;
+    min-width: 450px; /* ✅ allow scroll but keep readable */
+  }
+  .fl-table td,
+  .fl-table th {
+    padding: 0.5rem;
+  }
+}
+
+/* 📱 Extra small screens */
+@media (max-width: 480px) {
+  .fl-table {
+    font-size: 0.75rem;
+    min-width: 400px;
+  }
+}
+
 
 /* Focused Item */
-
 .focus-card {
+  position: relative;
   max-width: 500px;
-  margin: 20px auto;
-  padding: 20px 25px;
+  width: 90%;
+  margin: 2rem auto;
+  padding: 1.5rem;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  font-family: "Segoe UI", Roboto, sans-serif;
-  color: #333;
 }
 
-.focus-card {
-  margin-bottom: 15px;
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--pink1);
+.focus-card h2 {
+  margin: 0 0 1rem;
+  font-size: 1.3rem;
+  color: var(--pink3);
   text-align: center;
 }
 
-.focus-info {
-  margin: 8px 0;
+.focus-info p {
+  margin: 0.5rem 0;
   font-size: 1rem;
-  line-height: 1.4;
 }
 
-.focus-info strong {
-  color: #555;
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: #e91e63;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.close-btn:hover {
+  background: #d81b60;
+}
+
+/* ------------------ */
+/*  Responsive        */
+/* ------------------ */
+@media (max-width: 1024px) {
+  .fl-table {
+    font-size: 0.9rem;
+    min-width: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  form {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  input[type="text"] {
+    font-size: 0.9rem;
+    height: 2.5rem;
+  }
+  button {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .fl-table {
+    font-size: 0.85rem;
+    min-width: 450px;
+  }
+  .focus-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  input[type="text"] {
+    font-size: 0.8rem;
+    height: 2.2rem;
+  }
+  .fl-table {
+    font-size: 0.8rem;
+    min-width: 400px;
+  }
+  .focus-info p {
+    font-size: 0.9rem;
+  }
+}
 </style>

@@ -9,13 +9,10 @@
       </div>
 
       <section class="dashboard-startups">
-        <!-- Dashboard stats -->
         <div class="info">
           <p><strong>Total Startups:</strong> {{ totalStartups }}</p>
           <p><strong>Total Views:</strong> {{ totalViews }}</p>
         </div>
-
-        <!-- Most viewed startups -->
         <h3>Most Viewed Startups</h3>
         <ul class="bestStartups">
           <li v-for="startup in startups.slice(0, 3)" :key="startup.id">
@@ -130,12 +127,6 @@ export default {
   color: var(--pink1);
 }
 
-.dashboard-startups .info p:hover {
-  background: var(--pink2);
-  color: #fff;
-}
-
-/* Best startups grid */
 .dashboard-startups h3 {
   color: var(--pink1);
   font-size: 1.8rem;
