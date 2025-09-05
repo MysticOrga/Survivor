@@ -2,6 +2,7 @@
   <div class="filtersResearch">
     <button @click="sortAlphaAsc">A → Z</button>
     <button @click="sortAlphaDesc">Z → A</button>
+    <button @click="downloadJSON">Download Startup JSON</button>
   </div>
   <div class="catalog">
     <div v-for="startup in startups" :key="startup.id" class="card">
@@ -17,33 +18,37 @@
 
 <script>
 import axios from 'axios';
-
 export default {
-  name: 'ProjectCatalog',
+  name: 'ProjectPage',
   data() {
     return {
-      startups: [],
-      originalStartups: []
+      startup : this.$route.state?.startup || null
     }
   },
   async created() {
     try {
-      const response = await axios.get('http://localhost:8080/startups');
-      this.startups = response.data;
-      this.originalStartups = [...response.data];
-      console.log('Startups loaded:', this.startups);
+      const response = await axios.get('http://localhost:8080/startups/' + this.$route.params.id);
+      console.log('http://localhost:8080/startups/', this.$route.params.id);
+      this.startup = response.data;
+      console.log('Startup loaded:', this.startup);
     } catch (e) {
-      console.error('Error startups', e);
+      console.error('Error startup', e);
     }
   },
   methods: {
-    sortAlphaAsc() {
-      this.startups = [...this.startups].sort((a, b) => a.name.localeCompare(b.name));
-    },
-    sortAlphaDesc() {
-      this.startups = [...this.startups].sort((a, b) => b.name.localeCompare(a.name));
-    }
+    downloadJSON() {
+    console.log("test blobl");
+    const json = JSON.stringify(this.startup);
+    const blob = new Blob([json], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    document.body.appendChild(link);
+    link.href = url;
+    link.download = `startup-${this.startup.id || "data"}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
   }
+  },
 }
 </script>
 
