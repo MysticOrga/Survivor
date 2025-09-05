@@ -1,0 +1,47 @@
+/* @import './base.css'; */
+@import './home/home.css';
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('@/assets/fonts/Montserrat/static/Montserrat-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('@/assets/fonts/Open_Sans/static/Open_Sans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+} */
+
+:root {
+  --pink1: #f18585;
+  --pink2: #f49c9c;
+  --pink3: #f6aeae;
+  --pink4: #f8cacf;
+  --purple1: #eed5fb;
+  --purple2: #e4bef8;
+  --purple3: #d5a8f2;
+  --purple4: #cb90f1;
+  --purple5: #c174f2;
+}

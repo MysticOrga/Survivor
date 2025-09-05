@@ -1,3 +1,4 @@
+
 # Dependency directories
 node_modules/
 jspm_packages/
@@ -82,3 +83,8 @@ dist
 .rvmrc
 .trashes
 *~
+
+frontend/incubator-app/.vscode
+frontend/incubator-app/node_modules
+~*
+#*#
