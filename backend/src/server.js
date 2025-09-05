@@ -16,4 +16,6 @@ app.use("/events", EventRoute);
 app.use("/users", UserRoute);
 
 
-module.exports = app;
+app.listen(PORT, () => {
+    clientDB.connect();
+})
