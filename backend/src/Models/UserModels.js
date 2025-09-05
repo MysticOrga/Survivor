@@ -1,4 +1,5 @@
 const MongoAPI = require("../Services/MongoService")
+const { ObjectId } = require("mongodb");
 const crypt = require('bcrypt');
 const { SALTROUND, SECRET} = require("../Config/env");
 const jwt = require("jsonwebtoken");
@@ -16,5 +17,13 @@ exports.loginUser = async (email, pwd) => {
             return null;
         }
     }
+}
+
+exports.getAllUser = async (data) => {
+    return await MongoAPI.readDocuments("user", {});
+}
+
+exports.getUserId = async (id) => {
+    return await MongoAPI.readDocuments("user", {_id: new ObjectId(id) });
 }
 
