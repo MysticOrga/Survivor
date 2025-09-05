@@ -1,12 +1,12 @@
-const { PORT } = require("./Config/env");
-const clientDB = require("./Config/db")
+const { PORT } = require("./src/Config/env");
+const clientDB = require("./src/Config/db")
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const StartupRoute = require("./Controllers/StartupController");
-const NewsRoute = require("./Controllers/NewsController");
-const EventRoute = require("./Controllers/EventsController");
-const UserRoute = require("./Controllers/UserController");
+const StartupRoute = require("./src/Controllers/StartupController");
+const NewsRoute = require("./src/Controllers/NewsController");
+const EventRoute = require("./src/Controllers/EventsController");
+const UserRoute = require("./src/Controllers/UserController");
 
 app.use(express.json());
 app.use(cors());
