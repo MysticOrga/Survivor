@@ -46,6 +46,7 @@ export default {
   },
   async created() {
     try {
+      console.log(process.env.VITE_API_URL);
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/startups`);
       this.startups = response.data.sort((a, b) => (b.views || 0) - (a.views || 0));
       this.originalStartups = [...this.startups];
