@@ -29,6 +29,7 @@ export default {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/news/` + this.$route.params.id
       );
+      console.log(response.data);
       this.newsc = response.data[0];
       console.log("News loaded: ", this.newsc);
     } catch (e) {
