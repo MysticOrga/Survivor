@@ -14,7 +14,9 @@ app.use("/startups", StartupRoute);
 app.use("/news", NewsRoute);
 app.use("/events", EventRoute);
 app.use("/users", UserRoute);
-
+app.get("/", (req, res) =>{
+    res.send("hello world!")
+})
 
 app.listen(PORT, () => {
     clientDB.connect();
