@@ -1,4 +1,5 @@
 <template>
+  <button @click="downloadJSON">Download Startup JSON</button>
   <section v-if="startup" class="project-page">
     <div class="info">
       <h2>{{ startup.name }}</h2>
@@ -29,14 +30,28 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get('http://localhost:8080/startups/' + this.$route.params.id);
-      console.log('http://localhost:8080/startups/', this.$route.params.id);
+      const response = await axios.get('http://localhost:5001/startups/' + this.$route.params.id);
+      console.log('http://localhost:5001/startups/', this.$route.params.id);
       this.startup = response.data;
       console.log('Startup loaded:', this.startup);
     } catch (e) {
       console.error('Error startup', e);
     }
+  },
+  methods: {
+    downloadJSON() {
+    console.log("test blobl");
+    const json = JSON.stringify(this.startup);
+    const blob = new Blob([json], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    document.body.appendChild(link);
+    link.href = url;
+    link.download = `startup-${this.startup.id || "data"}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
   }
+  },
 }
 </script>
 
@@ -124,4 +139,38 @@ export default {
   text-align: center;
   color: var(--pink1);
 }
+
+button {
+  background: var(--purple3);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  margin: 1rem 0;
+  box-shadow: 0 4px 10px rgba(197, 144, 241, 0.15);
+}
+
+button:hover {
+  background: var(--pink1);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(241, 133, 133, 0.25);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 600px) {
+  button {
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1.05rem;
+  }
+}
+
 </style>

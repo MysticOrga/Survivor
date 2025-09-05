@@ -27,9 +27,9 @@ export default {
   async created() {
     try {
       const response = await axios.get(
-        "http://localhost:8080/news/" + this.$route.params.id
+        "http://localhost:5001/news/" + this.$route.params.id
       );
-      console.log("http://localhost:8080/news/", this.$route.params.id);
+      console.log("http://localhost:5001/news/", this.$route.params.id);
       this.newsc = response.data[0];
       console.log("News loaded: ", this.newsc);
     } catch (e) {

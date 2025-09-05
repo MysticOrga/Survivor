@@ -51,7 +51,7 @@
 
     const getData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/startups');
+        const response = await axios.get('http://localhost:5001/startups');
         return response.data;
       } catch (e) {
         alert("Error Startup");
