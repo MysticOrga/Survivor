@@ -20,6 +20,7 @@ app.get("/", (req, res) =>{
 
 app.listen(PORT, () => {
     clientDB.connect();
+    console.log("server listeni")
 })
 
 module.exports = app;
