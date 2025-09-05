@@ -27,7 +27,7 @@ export default {
   async created() {
     try {
       const response = await axios.get(
-        `${process.env.VUE_APP_API_BASE_URL}/news/` + this.$route.params.id
+        `${VITE_API_URL}/news/` + this.$route.params.id
       );
       this.newsc = response.data[0];
       console.log("News loaded: ", this.newsc);

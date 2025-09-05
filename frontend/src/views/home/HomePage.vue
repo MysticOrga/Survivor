@@ -46,7 +46,7 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/startups`);
+      const response = await axios.get(`${VITE_API_URL}/startups`);
       this.startups = response.data.sort((a, b) => (b.views || 0) - (a.views || 0));
       this.originalStartups = [...this.startups];
       this.totalStartups = this.startups.length;

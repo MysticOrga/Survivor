@@ -27,7 +27,7 @@ export default {
   async created() {
     try {
       const response = await axios.get(
-        `${process.env.VUE_APP_API_BASE_URL}/events/` + this.$route.params.id
+        `${VITE_API_URL}/events/` + this.$route.params.id
       );
       this.event = response.data[0];
       console.log("Events loaded: ", this.event);
