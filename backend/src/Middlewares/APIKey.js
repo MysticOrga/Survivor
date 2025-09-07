@@ -4,9 +4,11 @@ function authAPI(keyType) {
     return (req, res, next) => {
         const apikey = req.headers["x-group-authorization"];
         if (apikey) {
-            if (keyType == "client" && apikey == CLIENT_API_KEY) next();
-            if (keyType == "dev" && apikey == DEV_API_KEY) next();
-            // res.status(401).json({ error: "Invalid api key" })
+            if (keyType == "client" && apikey != CLIENT_API_KEY)
+                res.status(401).json({ error: "Invalid api key" });
+            if (keyType == "dev" && apikey != DEV_API_KEY)
+                res.status(401).json({ error: "Invalid api key" });
+            next();
         } else {
             res.status(401).json({ error: "Authorization required" })
         }

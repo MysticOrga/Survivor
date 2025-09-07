@@ -11,21 +11,33 @@ router.post("/user", authAPI(keyType), (req, res) => {
     const user = req.body;
     User.registerUser(user);
     res.json({
-        msg: "user succesfully register",
-        user: user
+        msg: "user succesfully registered",
+        data: user
     });
 })
 
 router.post("/event", authAPI(keyType), (req, res) => {
     MongoAPI.createDocument("event", req.body);
+    res.json({
+        msg: "event succesfully registered",
+        data: req.body
+    });
 })
 
 router.post("/new", authAPI(keyType), (req, res) => {
     MongoAPI.createDocument("new", req.body);
+    res.json({
+        msg: "news succesfully registered",
+        data: req.body
+    });
 })
 
 router.post("/startup", authAPI(keyType), (req, res) => {
     MongoAPI.createDocument("startup", req.body);
+    res.json({
+        msg: "startup succesfully registered",
+        data: req.body
+    });
 })
 
 router.get("/users", authAPI(keyType), async (req, res) => {
@@ -81,25 +93,44 @@ router.put("/user/:id", authAPI(keyType), (req, res) => {
     console.log(data);
     const filter = { _id: new ObjectId(req.params.id)};
     MongoAPI.updateDocument("user", filter, data);
-    res.send("user succesfully modified");
+    res.json({
+        msg: "user succesfully modified",
+        id: req.params.id,
+        modified: req.body
+    });
 })
 
 router.put("/startup/:id", authAPI(keyType), (req, res) => {
     const data = req.body;
     const filter = { _id: new ObjectId(req.params.id)};
     MongoAPI.updateDocument("startup", filter, data);
+    res.json({
+        msg: "startup succesfully modified",
+        id: req.params.id,
+        modified: req.body
+    });
 })
 
 router.put("/event/:id", authAPI(keyType), (req, res) => {
     const data = req.body;
     const filter = { _id: new ObjectId(req.params.id)};
     MongoAPI.updateDocument("event", filter, data);
+    res.json({
+        msg: "event succesfully modified",
+        id: req.params.id,
+        modified: req.body
+    });
 })
 
 router.put("/new/:id", authAPI(keyType), (req, res) => {
     const data = req.body;
     const filter = { _id: new ObjectId(req.params.id)};
     MongoAPI.updateDocument("new", filter, data);
+    res.json({
+        msg: "news succesfully modified",
+        id: req.params.id,
+        modified: req.body
+    });
 })
 
 router.delete("/user/:id", authAPI(keyType), (req, res) => {
