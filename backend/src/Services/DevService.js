@@ -102,4 +102,32 @@ router.put("/new/:id", authAPI(keyType), (req, res) => {
     MongoAPI.updateDocument("new", filter, data);
 })
 
+router.delete("/user/:id", authAPI(keyType), (req, res) => {
+    const id = req.params.id;
+    const filter = { _id: new ObjectId(id)};
+
+    MongoAPI.deleteDocuments("user", filter);
+})
+
+router.delete("/startup/:id", authAPI(keyType), (req, res) => {
+    const id = req.params.id;
+    const filter = { _id: new ObjectId(id)};
+
+    MongoAPI.deleteDocuments("startup", filter);
+})
+
+router.delete("/event/:id", authAPI(keyType), (req, res) => {
+    const id = req.params.id;
+    const filter = { _id: new ObjectId(id)};
+
+    MongoAPI.deleteDocuments("event", filter);
+})
+
+router.delete("/new/:id", authAPI(keyType), (req, res) => {
+    const id = req.params.id;
+    const filter = { _id: new ObjectId(id)};
+
+    MongoAPI.deleteDocuments("new", filter);
+})
+
 module.exports = router;

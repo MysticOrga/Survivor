@@ -102,12 +102,7 @@ exports.mulDocFields = async (collection, filter, data) => {
     }
 }
 
-exports.deleteDocuments = async (collection, data) => {
+exports.deleteDocuments = async (collection, filter) => {
     const db = client.db(DB_NAME);
-
-    if (Array.isArray(data)) {
-        db.collection(collection).deleteMany(data);
-    } else {
-        db.collection(collection).deleteOne(data);
-    }
+    db.collection(collection).deleteMany(filter);
 }
