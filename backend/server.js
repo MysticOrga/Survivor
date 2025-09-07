@@ -7,6 +7,7 @@ const StartupRoute = require("./src/Controllers/StartupController");
 const NewsRoute = require("./src/Controllers/NewsController");
 const EventRoute = require("./src/Controllers/EventsController");
 const UserRoute = require("./src/Controllers/UserController");
+const DevAPI = require("./src/Services/DevService");
 
 app.use(express.json());
 app.use(cors());
@@ -14,13 +15,11 @@ app.use("/startups", StartupRoute);
 app.use("/news", NewsRoute);
 app.use("/events", EventRoute);
 app.use("/users", UserRoute);
-app.get("/", (req, res) =>{
-    res.send("hello world!")
-})
+app.use("/api/dev", DevAPI);
 
 app.listen(PORT, () => {
     clientDB.connect();
-    console.log("server listeni")
+    console.log("server listening on port " + process.env.PORT);
 })
 
 module.exports = app;

@@ -19,6 +19,11 @@ exports.loginUser = async (email, pwd) => {
     }
 }
 
+exports.registerUser = async (user) => {
+    user.password = await crypt.hash(user.password.toString(), SALTROUND);
+    MongoAPI.createDocument("user", user);
+}
+
 exports.getAllUser = async (data) => {
     return await MongoAPI.readDocuments("user", {});
 }

@@ -7,5 +7,6 @@ module.exports = {
     DB_NAME: process.env.DB_NAME,
     PASSWORD: process.env.PASSWORD,
     SALTROUND: parseInt(process.env.SALTROUND, 10),
-    SECRET: process.env.SECRET
+    SECRET: process.env.SECRET,
+    DEV_API_KEY: process.env.DEV_API_KEY
 };
