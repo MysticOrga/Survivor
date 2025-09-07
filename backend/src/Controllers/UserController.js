@@ -1,6 +1,7 @@
 const Users = require("../Models/UserModels");
 const express = require("express");
 const router = express.Router();
+const auth = require("../Middlewares/auth");
 
 router.post("/login", async (req, res) => {
     console.log(req.body);
@@ -12,7 +13,7 @@ router.post("/login", async (req, res) => {
     }
 })
 
-router.get("/", async(req, res) => {
+router.get("/", auth("investisor"), async(req, res) => {
     const data = await Users.getAllUser();
     res.json(data);
 })
