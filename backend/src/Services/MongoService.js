@@ -18,29 +18,15 @@ exports.readDocuments = async (collection, filter) => {
 
 exports.updateDocument = async (collection, filter, data) => {
     const db = client.db(DB_NAME);
-
-    if (Array.isArray(data)) {
-        db.collection(collection).updateMany(filter, data);
-    } else {
-        db.collection(collection).updateOne(filter, data);
-    }
-}
-
-exports.repDocFields = async (collection, filter, data) => {
-    const db = client.db(DB_NAME);
-
+    console.log(data);
     if (Array.isArray(data)) {
         db.collection(collection).updateMany(filter, {
-            $set: {
-                data
-            }
+            $set: data
         })
     } else {
-        db.collection(collection).updateOne(filter, {
-            $set: {
-                data
-            }
-        })
+        console.log(await db.collection(collection).updateOne(filter, {
+            $set: data
+        }));
     }
 }
 
