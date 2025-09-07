@@ -13,7 +13,7 @@ router.post("/login", async (req, res) => {
     }
 })
 
-router.get("/", auth("investisor"), async(req, res) => {
+router.get("/", async(req, res) => {
     const data = await Users.getAllUser();
     res.json(data);
 })
