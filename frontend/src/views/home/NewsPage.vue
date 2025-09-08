@@ -27,10 +27,9 @@ export default {
   async created() {
     try {
       const response = await axios.get(
-        "http://localhost:5001/news/" + this.$route.params.id
+        `${import.meta.env.VITE_API_URL}/news/` + this.$route.params.id
       );
-      console.log("http://localhost:5001/news/", this.$route.params.id);
-      this.newsc = response.data[0];
+      this.newsc = response.data;
       console.log("News loaded: ", this.newsc);
     } catch (e) {
       console.error("Error news", e);

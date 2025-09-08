@@ -23,7 +23,7 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get("http://localhost:5001/news");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/news`);
       this.news = response.data;
       console.log("News loaded:", this.news);
     } catch (e) {

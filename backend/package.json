@@ -1,7 +1,7 @@
 {
   "name": "survivor",
   "version": "1.0.0",
-  "main": "src/server.js",
+  "main": "server.js",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
@@ -12,6 +12,6 @@
     "react": "^19.1.1"
   },
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node server.js"
   }
 }
