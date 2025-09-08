@@ -51,11 +51,10 @@ export default {
   methods: {
     login() {
       if (this.input.username != "" || this.input.password != "") {
-        axios.post("http://localhost:5001/users/login", {
+        axios.post("/users/login", {
           email: this.input.username,
           password: this.input.password
         }).then((response) => {
-          console.log(response);
           if (response.status == 200) {
             axios.defaults.headers.common['Authorization'] = response.data.token;
             this.output = "Authentication complete"
@@ -65,26 +64,6 @@ export default {
           console.log(err)
           this.output = "error when authentificaton"
         })
-      //   const account = accounts.find((s) => s.user === this.input.username);
-      //   if (account === undefined) {
-      //     this.output = "Username not found";
-      //     return;
-      //   }
-      //   this.username = account.user;
-      //   this.password = account.password;
-      //   this.role = account.role;
-      //   if (this.password != this.input.password) {
-      //     this.output = "Error in the password";
-      //   } else {
-      //     if (this.role != this.picked) {
-      //       this.output = "Wrong role";
-      //       return;
-      //     }
-      //     this.output = "Authentication complete";
-      //     this.$router.push("/");
-      //   }
-      // } else {
-      //   this.output = "Username and password can not be empty";
       }
     },
   },
