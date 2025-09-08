@@ -38,6 +38,8 @@ const routes = [
   { path: "/startup/profile", name: "startup-profile", component: StartupProfile },
   { path: "/startup/messaging", name: "startup-messaging", component: Messaging },
   { path: "/startup/opportunities", name: "startup-opportunities", component: Opportunities },
+
+  {path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/views/pages/pageNotFound.vue')},
 ];
 
 const router = createRouter({
