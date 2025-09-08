@@ -1,0 +1,77 @@
+{
+    "channels": [
+        {
+            "_id": 1,
+            "startup_id": 101,
+            "investor_id": 201,
+            "messages": [
+                {
+                    "from_startup": true,
+                    "msg": "Bonjour, nous recherchons un financement pour notre solution SaaS.",
+                    "send_at": "2025-09-08T09:00:00Z"
+                },
+                {
+                    "from_startup": false,
+                    "msg": "Intéressant, quel est votre business model ?",
+                    "send_at": "2025-09-08T09:05:00Z"
+                }
+            ]
+        },
+        {
+            "_id": 2,
+            "startup_id": 101,
+            "investor_id": 202,
+            "messages": [
+                {
+                    "from_startup": false,
+                    "msg": "Bonjour, j’ai vu que vous travaillez sur l’IA. Pouvez-vous détailler votre approche ?",
+                    "send_at": "2025-09-08T10:00:00Z"
+                },
+                {
+                    "from_startup": true,
+                    "msg": "Bien sûr, nous utilisons des modèles d’apprentissage profond pour analyser les données clients.",
+                    "send_at": "2025-09-08T10:10:00Z"
+                }
+            ]
+        },
+        {
+            "_id": 3,
+            "startup_id": 101,
+            "investor_id": 203,
+            "messages": [
+                {
+                    "from_startup": true,
+                    "msg": "Bonjour, nous aimerions savoir si vous êtes intéressé par le secteur de la santé numérique.",
+                    "send_at": "2025-09-08T11:00:00Z"
+                },
+                {
+                    "from_startup": false,
+                    "msg": "Oui, je m’y intéresse beaucoup. Pouvez-vous partager vos indicateurs de traction ?",
+                    "send_at": "2025-09-08T11:05:00Z"
+                }
+            ]
+        },
+        {
+            "_id": 4,
+            "startup_id": 101,
+            "investor_id": 204,
+            "messages": [
+                {
+                    "from_startup": false,
+                    "msg": "Bonjour, j’ai entendu parler de votre levée de fonds en cours.",
+                    "send_at": "2025-09-08T12:00:00Z"
+                },
+                {
+                    "from_startup": true,
+                    "msg": "Oui, nous cherchons à lever 500k€ pour accélérer notre croissance.",
+                    "send_at": "2025-09-08T12:10:00Z"
+                },
+                {
+                    "from_startup": false,
+                    "msg": "Très bien, envoyez-moi vos documents financiers.",
+                    "send_at": "2025-09-08T12:20:00Z"
+                }
+            ]
+        }
+    ]
+}
