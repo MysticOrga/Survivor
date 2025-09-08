@@ -60,7 +60,6 @@ export default {
           if (response.status == 200) {
             axios.defaults.headers.common['Authorization'] = response.data.token;
             this.output = "Authentication complete"
-            this.$router.push("/");
             const decoded = jwtDecode(response.data.token);
             this.role = decoded.role;
             localStorage.setItem('userRole', this.picked);
@@ -69,6 +68,17 @@ export default {
             console.log("Token: " + axios.defaults.headers.common['Authorization'])
             localStorage.setItem('token', response.data.token);
             window.dispatchEvent(new Event("storage"));
+            if (this. role == "admin") {
+              this.$router.push("/admin/dashboard");
+              return;
+            } else if (this.role == "founder") {
+              this.$router.push("/startup/profile");
+              return;
+            } else if (this.role == "investor") {
+              this.$router.push("/home/catalog");
+              return;
+            }
+            this.$router.push("/");
           }
         }).catch((err) => {
           console.log(err)
