@@ -4,11 +4,14 @@ const crypt = require('bcrypt');
 const { SALTROUND, SECRET} = require("../Config/env");
 const jwt = require("jsonwebtoken");
 
-exports.loginUser = async (email, pwd) => {
+exports.loginUser = async (email, pwd, role) => {
     const filter = { email: email};
     const user = await MongoAPI.readDocuments('user', filter);
 
     if (user.length) {
+        if (user[0].role != role) {
+            return null;
+        }
         const res = await crypt.compare(pwd.toString(),user[0].password);
         if (res) {
             return await jwt.sign({ id: user[0]._id, role: user[0].role }, SECRET);

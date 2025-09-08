@@ -4,7 +4,7 @@ const router = express.Router();
 const auth = require("../Middlewares/auth");
 
 router.post("/login", async (req, res) => {
-    const token = await Users.loginUser(req.body.email, req.body.password);
+    const token = await Users.loginUser(req.body.email, req.body.password, req.body.role);
     if (!token) {
         res.status(401).json({ error: "Unauthorized"});
     } else {
