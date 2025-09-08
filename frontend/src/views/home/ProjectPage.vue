@@ -30,7 +30,10 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/startups/` + this.$route.params.id);
+      const response = await axios({
+        url: '/startups/' + this.$route.params.id,
+        method: 'get',
+      });
       console.log(`${import.meta.env.VITE_API_URL}/startups/`, this.$route.params.id);
       this.startup = response.data;
       console.log('Startup loaded:', this.startup);

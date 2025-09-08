@@ -46,7 +46,10 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/startups`);
+      const response = await axios({
+        url: '/startups',
+        method: 'get',
+      });
       this.startups = response.data.sort((a, b) => (b.views || 0) - (a.views || 0));
       this.originalStartups = [...this.startups];
       this.totalStartups = this.startups.length;

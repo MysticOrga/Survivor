@@ -26,9 +26,10 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/events/` + this.$route.params.id
-      );
+      const response = await axios ({
+        url: '/events/' + this.$route.params.id,
+        method: 'get',
+      });
       this.event = response.data[0];
       console.log("Events loaded: ", this.event);
     } catch (e) {
