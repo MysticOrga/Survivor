@@ -6,14 +6,14 @@
       <input type="radio" id="admin" value="admin" v-model="picked" />
       <label for="admin">Admin</label>
 
-      <input type="radio" id="founders" value="founders" v-model="picked" />
+      <input type="radio" id="founders" value="founder" v-model="picked" />
       <label for="founders">Founders</label>
 
-      <input type="radio" id="investors" value="investors" v-model="picked" />
+      <input type="radio" id="investors" value="investor" v-model="picked" />
       <label for="investors">Investors</label>
     </div>
     <div class="mb-3">
-      <label for="username">Username: </label>
+      <label for="username">Email: </label>
       <input type="text" id="username" v-model="input.username" />
     </div>
     <div class="mb-3">
@@ -34,6 +34,7 @@
 <script>
 import axios from "axios";
 import { ref } from "vue";
+import {jwtDecode} from "jwt-decode";
 
 export default {
   name: "Login",
@@ -53,12 +54,19 @@ export default {
       if (this.input.username != "" || this.input.password != "") {
         axios.post("/users/login", {
           email: this.input.username,
-          password: this.input.password
+          password: this.input.password,
+          role: this.picked,
         }).then((response) => {
           if (response.status == 200) {
             axios.defaults.headers.common['Authorization'] = response.data.token;
             this.output = "Authentication complete"
             this.$router.push("/");
+            const decoded = jwtDecode(response.data.token);
+            this.role = decoded.role;
+            localStorage.setItem('userRole', this.picked);
+            console.log("Role: " + this.role)
+            console.log("User: " + decoded.username)
+            console.log("Token: " + axios.defaults.headers.common['Authorization'])
           }
         }).catch((err) => {
           console.log(err)
