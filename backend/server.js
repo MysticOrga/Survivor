@@ -11,7 +11,8 @@ const UserRoute = require("./src/Controllers/UserController");
 
 const AdmEventRoute = require("./src/Controllers/Admin/AdmEventsController");
 const AdmNewRoute = require("./src/Controllers/Admin/AdmNewsController");
-const test = require("./src/Controllers/Admin/AdmNewsController")
+const AdmUserRoute = require("./src/Controllers/Admin/AdmUsersController");
+const AdmInvestisorRoute = require("./src/Controllers/Admin/AdmUsersController");
 
 app.use(express.json());
 app.use(cors());
@@ -24,7 +25,10 @@ app.get("/", (req, res) =>{
 })
 
 app.use("/admin/events", AdmEventRoute);
-app.use("/admin/new", test  );
+app.use("/admin/new", AdmNewRoute);
+app.use("/admin/user", AdmUserRoute);
+app.use("/admin/investisor", AdmInvestisorRoute);
+
 
 app.listen(PORT, () => {
     clientDB.connect();
