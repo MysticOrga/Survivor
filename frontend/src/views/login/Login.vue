@@ -65,7 +65,7 @@ export default {
             this.role = decoded.role;
             localStorage.setItem('userRole', this.picked);
             console.log("Role: " + this.role)
-            console.log("User: " + decoded.username)
+            console.log("User: " + decoded.name)
             console.log("Token: " + axios.defaults.headers.common['Authorization'])
           }
         }).catch((err) => {
