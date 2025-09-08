@@ -30,7 +30,10 @@ export default {
     },
     async created() {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/events`);
+        const response = await axios({
+          url: '/events',
+          method: 'get',
+        });
         this.events = response.data;
         console.log('Events loaded:', this.events);
       } catch (e) {

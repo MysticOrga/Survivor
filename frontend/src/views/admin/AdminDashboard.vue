@@ -50,7 +50,7 @@
   
     const getData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/startups`);
+        const response = await axios.get(`/startups`);
         return response.data;
       } catch (e) {
         alert("Error Startup");

@@ -5,6 +5,8 @@ import router from './router'
 import App from './App.vue'
 import axios from 'axios'
 
-axios.defaults.headers.common['Authorization'] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YjkzYWY5ZTM4MjgzZmRjODk3MjA5ZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1NzMxMjY0NH0.YyK5UYWZqN26Ig-vKNIKmQEGMwxz2gcGg12BHYlF3mA";
-
+const status = import.meta.env.VITE_APP_STATUS
+const url = status == 'DEV' ? 'http://localhost:5001/' : import.meta.env.VITE_API_URL
+console.log("Status: " + status + " | URL: " + url)
+axios.defaults.baseURL = url
 createApp(App).use(router).mount('#app')

@@ -6,13 +6,13 @@ const auth = require("../Middlewares/auth");
 router.post("/login", async (req, res) => {
     const token = await Users.loginUser(req.body.email, req.body.password);
     if (!token) {
-        res.send("invalid authorization")
+        res.status(401).json({ error: "Unauthorized"});
     } else {
         res.json({ token : token})
     }
 })
 
-router.get("/", auth("investisor"), async(req, res) => {
+router.get("/", async(req, res) => {
     const data = await Users.getAllUser();
     res.json(data);
 })
