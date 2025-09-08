@@ -27,7 +27,7 @@ export default {
   async created() {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/events/` + this.$route.params.id
+        `http://localhost:5001/events/` + this.$route.params.id
       );
       this.event = response.data[0];
       console.log("Events loaded: ", this.event);
