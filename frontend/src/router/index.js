@@ -31,7 +31,7 @@ const routes = [
   { path: "/login", name: "login", component: Login},
 
   { path: "/admin/dashboard", name: "dashboard", component: AdminDashboard },
-  { path: "/admin/projects", name: "admin-projects", component: ProjectManagement },
+  { path: "/admin/project/:id", name: "admin-project", component: ProjectManagement },
   { path: "/admin/users", name: "admin-users", component: UserManagement },
   { path: "/admin/content", name: "admin-content", component: ContentManagement },
 

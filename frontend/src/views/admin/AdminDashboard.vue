@@ -37,21 +37,20 @@
         return result
     })
 
-    const focus = ref(null)
-    focus.id = -1
+    const focus = ref({ id: -1 })
 
     const focused = (item) => {
         focus.value = item
     }
 
     const clearFocus = () => {
-      focus.value = ref(null)
-      focus.id = -1
+        focus.value = { id: -1 }
     }
 
+  
     const getData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}001/startups`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/startups`);
         return response.data;
       } catch (e) {
         alert("Error Startup");
@@ -77,10 +76,9 @@
   </form>
 
     <!-- Focused startup for management -->
-    <div v-if="focus">
-      <div v-if="focus .id> 0" class="focus-card">
+      <div v-if="focus.id > 0" class="focus-card">
         <button class="close-btn" @click="clearFocus">x</button>
-        <router-link to="/">
+        <router-link :to="{ name: 'admin-project', params: { id: focus._id } }">
           <h2>Focused Project</h2>
         </router-link>
 
@@ -97,7 +95,6 @@
         </div>
 
       </div>
-    </div>
 
   <!-- Table for searches -->
   <h2>Admin Search Table</h2>

@@ -1,3 +1,75 @@
+<script>
+import axios from 'axios';
+export default {
+  name: 'ProjectPage',
+  data() {
+    return {
+      startup : this.$route.state?.startup || null
+    }
+  },
+  async created() {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/startups/` + this.$route.params.id);
+      console.log(`${import.meta.env.VITE_API_URL}/startups/`, this.$route.params.id);
+      this.startup = response.data;
+      console.log('Startup loaded:', this.startup);
+    } catch (e) {
+      console.error('Error startup', e);
+    }
+  },
+  methods: {
+    downloadJSON() {
+    const json = JSON.stringify(this.startup);
+    const blob = new Blob([json], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    document.body.appendChild(link);
+    link.href = url;
+    link.download = `startup-${this.startup.id || "data"}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+  // async editStartup() {
+  //   try {
+  //     await axios.get(`${import.meta.env.VITE_API_URL}/admin/startups/` + this.$route.params.id);
+  //     alert("Startup Edited");
+  //   } catch (err) {
+  //     console.log("Error: ", err);
+  //     alert("Something went wrong.");
+  //   }
+  // }
+  },
+}
+</script>
 <template>
-    <div class="">test</div>
-</template>
+    <button @click="downloadJSON">Download Startup JSON</button>
+    <section v-if="startup" class="project-page">
+      <div class="info">
+        <h2>{{ startup.name }}</h2>
+        <label for="description"><strong>Description:</strong></label>
+          <textarea name="description" rows="4" cols="30">
+            Lorem Ipsum bbla blab bla
+          </textarea>
+        <p><strong>Email:</strong></p>
+        <input v-model="startup.email" type="text" /></input>
+        <p><strong>Phone:</strong></p>
+        <input v-model="startup.phone" type="text" /></input>
+        <p><strong>Address:</strong></p>
+        <input v-model="startup.address" type="text" /></input>
+        <p><strong>Legal status:</strong></p>
+        <input v-model="startup.legal_status" type="text" /></input>
+        <p><strong>Sector:</strong></p>
+        <input v-model="startup.sector" type="text" /></input>
+        <p><strong>Maturity:</strong></p>
+        <input v-model="startup.maturity" type="text" /></input>
+      </div>
+      <button @click="editStartup">Save changes</button>
+
+      <button>Delete this Startup</button>
+
+    </section>
+
+    <section v-else class="not-found">
+      <p>Startup not found.</p>
+    </section>
+  </template>
