@@ -1,28 +1,28 @@
 const client = require("../../Config/db");
 const { ObjectId } = require("mongodb");
 
-async function getAllNews() {
+async function getAllPartner() {
     const db = client.db("ClientDB");
-    const col = db.collection("new");
+    const col = db.collection("user");
     return await col.find().toArray();
 }
 
-async function getNewsById(id) {
+async function getPartnerById(id) {
     const db = client.db("ClientDB");
-    const col = db.collection("new");
+    const col = db.collection("user");
     return await col.findOne({ _id: new ObjectId(id) });
 }
 
-async function createNews(data) {
+async function createPartner(data) {
     const db = client.db("ClientDB");
-    const col = db.collection("new");
+    const col = db.collection("user");
     const result = await col.insertOne(data);
     return { _id: result.insertedId, ...data };
 }
 
-async function updateNews(id, data) {
+async function updatePartner(id, data) {
     const db = client.db("ClientDB");
-    const col = db.collection("new");
+    const col = db.collection("user");
     const result = await col.updateOne(
         { _id: new ObjectId(id) },
         { $set: data }
@@ -33,11 +33,11 @@ async function updateNews(id, data) {
     return await col.findOne({ _id: new ObjectId(id) });
 }
 
-async function deleteNews(id) {
+async function deletePartner(id) {
     const db = client.db("ClientDB");
-    const col = db.collection("new");
+    const col = db.collection("user");
     const result = await col.deleteOne({ _id: new ObjectId(id) });
     return result.deletedCount > 0;
 }
 
-module.exports = { getAllNews, getNewsById, createNews, updateNews, deleteNews };
+module.exports = { getAllPartner, getPartnerById, createPartner, updatePartner, deletePartner };
