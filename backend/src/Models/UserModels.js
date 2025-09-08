@@ -10,7 +10,6 @@ exports.loginUser = async (email, pwd) => {
 
     if (user.length) {
         const res = await crypt.compare(pwd.toString(),user[0].password);
-        console.log(res);
         if (res) {
             return await jwt.sign({ id: user[0]._id, role: user[0].role }, SECRET);
         } else {
