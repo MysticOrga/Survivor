@@ -1,14 +1,17 @@
 [
     {
         "user": "user01",
-        "password": "azerty123"
+        "password": "azerty123",
+        "role": "admin"
     },
     {
         "user": "user02",
-        "password": "motdepasse456"
+        "password": "motdepasse456",
+        "role": "investors"
     },
     {
         "user": "admin",
-        "password": "admin2025!"
+        "password": "admin2025!",
+        "role": "founders"
     }
 ]
