@@ -67,6 +67,8 @@ export default {
             console.log("Role: " + this.role)
             console.log("User: " + decoded.name)
             console.log("Token: " + axios.defaults.headers.common['Authorization'])
+            localStorage.setItem('token', response.data.token);
+            window.dispatchEvent(new Event("storage"));
           }
         }).catch((err) => {
           console.log(err)
