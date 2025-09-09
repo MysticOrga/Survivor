@@ -10,13 +10,13 @@ router.get("/", async (req, res) => {
 router.get("/filter", async (req, res) => {
     try {
         const filters = {};
-
-        if (req.query.sector)
-            filters.sector = req.query.sector;
-        if (req.query.country)
-            filters.country = req.query.country;
-        if (req.query.stage)
-            filters.stage = req.query.stage;
+        for (const [key, value] of Object.entries(req.query)) {
+            if (key === "country") {
+                filters["address"] = { $regex: value + "$", $options: "i" };
+            } else {
+                filters[key] = value;
+            }
+        }
         const data = await Startup.getStartupByFilter(filters);
         if (data.length > 0)
             res.json(data);
