@@ -1,5 +1,6 @@
 <template>
   <button @click="downloadJSON">Download Startup JSON</button>
+
   <section v-if="startup" class="project-page">
     <div class="info">
       <h2>{{ startup.name }}</h2>
@@ -11,55 +12,85 @@
       <p><strong>Sector:</strong> {{ startup.sector }}</p>
       <p><strong>Maturity:</strong> {{ startup.maturity }}</p>
     </div>
+  </section>
 
+  <section v-if="projects.length" class="projects-section">
+    <h3>Projects of {{ startup.name }}</h3>
+    <div class="table-wrapper">
+      <table class="projects-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Sector</th>
+            <th>Status</th>
+            <th>Needs (€)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="project in projects" :key="project._id" class="project-row" @click="goToProject(project._id)">
+            <td>{{ project.name }}</td>
+            <td>{{ project.description }}</td>
+            <td>{{ project.sector }}</td>
+            <td>{{ project.project_status }}</td>
+            <td>{{ project.needs.toLocaleString() }}</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
   </section>
 
   <section v-else class="not-found">
-    <p>Startup not found.</p>
+    <p>No projects found for this startup.</p>
   </section>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
-  name: 'ProjectPage',
+  name: "StartupPage",
   data() {
     return {
-      startup : this.$route.state?.startup || null
-    }
+      startup: this.$route.state?.startup || null,
+      projects: []
+    };
   },
   async created() {
     try {
-      const response = await axios({
-        url: '/startups/' + this.$route.params.id,
-        method: 'get',
-      });
-      console.log(`${import.meta.env.VITE_API_URL}/startups/`, this.$route.params.id);
+      const response = await axios.get(`/startups/${this.$route.params.id}`);
       this.startup = response.data;
-      console.log('Startup loaded:', this.startup);
+      const projectsRes = await axios.get(
+        `/startups/${this.$route.params.id}/projects`
+      );
+      this.projects = projectsRes.data;
+
+      console.log("Startup loaded:", this.startup);
+      console.log("Projects loaded:", this.projects);
     } catch (e) {
-      console.error('Error startup', e);
+      console.error("Error loading startup or projects", e);
     }
-  },
-  methods: {
+  }, methods: {
     downloadJSON() {
-    console.log("test blobl");
-    const json = JSON.stringify(this.startup);
-    const blob = new Blob([json], {type: "application/json"});
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    document.body.appendChild(link);
-    link.href = url;
-    link.download = `startup-${this.startup.id || "data"}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
+      const json = JSON.stringify(this.startup);
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      document.body.appendChild(link);
+      link.href = url;
+      link.download = `startup-${this.startup._id || "data"}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    },
+    goToProject(id) {
+      this.$router.push(`/home/project/${id}`);
+    }
   }
-  },
-}
+
+};
 </script>
 
 <style scoped>
-
 .project-page {
   display: flex;
   justify-content: space-between;
@@ -69,6 +100,7 @@ export default {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
 }
 
 .info {
@@ -91,50 +123,44 @@ export default {
   color: var(--pink1);
 }
 
-.links ul,
-.funders ul {
-  margin-top: 8px;
-  padding-left: 20px;
+.projects-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
-.links a {
+.projects-section h3 {
+  font-size: 22px;
+  margin-bottom: 16px;
   color: var(--purple5);
-  text-decoration: none;
-  transition: color 0.3s ease;
 }
 
-.links a:hover {
-  color: var(--pink1);
+.table-wrapper {
+  overflow-x: auto;
 }
 
-.image {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
 }
 
-.image img {
-  max-width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+.projects-table th,
+.projects-table td {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
 }
 
-@media (max-width: 900px) {
-  .project-page {
-    flex-direction: column;
-    align-items: center;
-  }
+.projects-table th {
+  background: var(--purple3);
+  color: #fff;
+  font-weight: 600;
+}
 
-  .info {
-    flex: unset;
-    width: 100%;
-  }
-
-  .image {
-    width: 100%;
-    margin-top: 20px;
-  }
+.projects-table tr:hover {
+  background: var(--purple1);
 }
 
 .not-found {
@@ -168,12 +194,39 @@ button:active {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
+@media (max-width: 900px) {
+  .project-page {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info {
+    flex: unset;
+    width: 100%;
+  }
+}
+
 @media (max-width: 600px) {
   button {
     width: 100%;
     padding: 0.9rem;
     font-size: 1.05rem;
   }
+
+  .projects-table th,
+  .projects-table td {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+.projects-table tr {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.projects-table tr:hover {
+  background: var(--purple1);
 }
 
 </style>

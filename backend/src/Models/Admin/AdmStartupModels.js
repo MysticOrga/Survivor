@@ -3,7 +3,7 @@ const { ObjectId } = require("mongodb");
 
 async function getAllStartup() {
     const db = client.db("ClientDB");
-    const col = db.collection("statup");
+    const col = db.collection("startup");
     return await col.find().toArray();
 }
 
@@ -22,7 +22,10 @@ async function createStartup(data) {
 
 async function updateStartup(id, data) {
     const db = client.db("ClientDB");
-    const col = db.collection("statup");
+    const col = db.collection("startup");
+    if (!ObjectId.isValid(id)) {
+        return res.status(400).json({ error: "Invalid ObjectId" })
+      }
     const result = await col.updateOne(
         { _id: new ObjectId(id) },
         { $set: data }

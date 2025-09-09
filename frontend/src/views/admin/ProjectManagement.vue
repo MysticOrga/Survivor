@@ -9,8 +9,8 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/startups/` + this.$route.params.id);
-      console.log(`${import.meta.env.VITE_API_URL}/startups/`, this.$route.params.id);
+      const response = await axios.get("/startups/" + this.$route.params.id);
+      console.log(`/startups/`, this.$route.params.id);
       this.startup = response.data;
       console.log('Startup loaded:', this.startup);
     } catch (e) {
@@ -28,21 +28,39 @@ export default {
     link.download = `startup-${this.startup.id || "data"}.json`;
     link.click();
     URL.revokeObjectURL(url);
+  },
+  async editStartup() {
+    try {
+      await axios.put(`/admin/startups/` + this.startup._id,
+        {
+          name: this.startup.name,
+          legal_status: this.startup.legal_status,
+          address: this.startup.address,
+          email: this.startup.email,
+          phone: this.startup.phone,
+          sector: this.startup.section,
+          maturity: this.startup.maturity,
+          views: this.startup.views,
+          description: this.startup.description
+        },
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+      alert("Startup Edited");
+    } catch (err) {
+      console.log("Error: ", err);
+      alert("Something went wrong.");
+    }
   }
-  // async editStartup() {
-  //   try {
-  //     await axios.get(`${import.meta.env.VITE_API_URL}/admin/startups/` + this.$route.params.id);
-  //     alert("Startup Edited");
-  //   } catch (err) {
-  //     console.log("Error: ", err);
-  //     alert("Something went wrong.");
-  //   }
-  // }
   },
 }
 </script>
 <template>
     <button @click="downloadJSON">Download Startup JSON</button>
+
     <section v-if="startup" class="project-page">
       <div class="info">
         <h2>{{ startup.name }}</h2>

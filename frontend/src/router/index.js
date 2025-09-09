@@ -18,11 +18,13 @@ import UserManagement from "@/views/admin/UserManagement.vue";
 import Messaging from "@/views/startup/Messaging.vue";
 import Opportunities from "@/views/startup/Opportunities.vue";
 import StartupProfile from "@/views/startup/StartupProfile.vue";
+import ProjectDetails from "@/views/home/ProjectDetails.vue";
 
 const routes = [
   { path: "/", name: "home", component: HomePage },
   { path: "/home/catalog", name: "catalog", component: ProjectCatalog },
-  { path: "/home/project/:id", name: "project", component: ProjectPage },
+  { path: "/home/startup/:id", name: "project", component: ProjectPage },
+  { path: "/home/project/:id", name: "project-details", component: ProjectDetails },
   { path: "/home/news", name: "news", component: NewsFeed },
   { path: "/home/news/:id", name: "info", component: NewsPage},
   { path: "/home/search", name: "search", component: SearchFilter },

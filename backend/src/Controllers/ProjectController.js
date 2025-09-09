@@ -13,10 +13,11 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
-    const token  = req.headers['authorization'];
-    const public = true;
+    const token  = req.headers['authorization'].split(" ")[1];
+    let public = true;
 
-    if (token) {
+    console.log(token);
+    if (token != 'null') {
         const decode = jwt.verify(token, SECRET);
         if (decode.role == "investor")
             public = false;
