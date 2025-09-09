@@ -19,6 +19,7 @@ import Messaging from "@/views/startup/Messaging.vue";
 import Opportunities from "@/views/startup/Opportunities.vue";
 import StartupProfile from "@/views/startup/StartupProfile.vue";
 import ProjectDetails from "@/views/home/ProjectDetails.vue";
+import DashboardStartup from "@/views/startup/DashboardStartup.vue";
 
 const routes = [
   { path: "/", name: "home", component: HomePage },
@@ -40,6 +41,7 @@ const routes = [
   { path: "/startup/profile", name: "startup-profile", component: StartupProfile },
   { path: "/startup/messaging", name: "startup-messaging", component: Messaging },
   { path: "/startup/opportunities", name: "startup-opportunities", component: Opportunities },
+  { path: "/startup/dashboard", name: "startup-dashboard", component: DashboardStartup},
 
   {path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/views/pages/pageNotFound.vue')},
 ];
