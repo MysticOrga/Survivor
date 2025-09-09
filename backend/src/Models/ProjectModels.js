@@ -34,3 +34,13 @@ exports.updateProject = async (filter, data) => {
 exports.deleteProject = async (filter) => {
     return MongoAPI.deleteDocuments("project", filter);
 }
+
+exports.getStartupProjects = async (filter) => {
+    try {
+        const db = client.db("ClientDB");
+        const col = db.collection("project");
+        return await col.find(filter).toArray();
+    } finally {
+        console.log("fini");
+    }
+}
