@@ -15,10 +15,15 @@
       </p>
 
       <router-link
-        :to="`/home/project/${project.startup_id}`"
+        :to="`/home/startup/${project.startup_id}`"
         class="ext-link"
       >
         View Startup
+      </router-link>
+      <router-link
+        :to="`/home/project/${project._id}`"
+        class="ext-link">
+        More Details
       </router-link>
     </div>
   </div>
@@ -141,13 +146,6 @@ export default {
   border-top: 5px solid var(--purple3);
   color: #444;
 }
-/* 
-.card:hover {
-  transform: translateY(-6px);
-  background: var(--purple3);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-  color: #fff;
-} */
 
 .card h2 {
   font-size: 20px;
@@ -166,11 +164,6 @@ export default {
   font-size: 15px;
   margin-bottom: 12px;
 }
-/* 
-.card:hover h2,
-.card:hover p {
-  color: #fff;
-} */
 
 .card-link {
   text-decoration: none;
@@ -195,10 +188,4 @@ export default {
   background: var(--purple4);
   color: #fff;
 }
-/* 
-.card:hover .ext-link {
-  background: #fff;
-  color: var(--purple5);
-} */
-
 </style>
