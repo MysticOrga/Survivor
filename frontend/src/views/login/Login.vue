@@ -1,7 +1,7 @@
 <template>
   <form class="login-form">
-      <h2>Sign In</h2>
-      <p>Enter your email adress to continue.</p>
+    <h1>Sign In</h1>
+    <p>Enter your email adress to continue.</p>
     <div>
       <input type="radio" id="admin" value="admin" v-model="picked" />
       <label for="admin">Admin</label>
@@ -27,14 +27,14 @@
     >
       Login
     </button>
+    <p style="color: red">{{ this.output }}</p>
   </form>
-  <h3>{{ this.output }}</h3>
 </template>
 
 <script>
 import axios from "axios";
 import { ref } from "vue";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 export default {
   name: "Login",
@@ -52,38 +52,45 @@ export default {
   methods: {
     login() {
       if (this.input.username != "" || this.input.password != "") {
-        axios.post("/users/login", {
-          email: this.input.username,
-          password: this.input.password,
-          role: this.picked,
-        }).then((response) => {
-          if (response.status == 200) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${ response.data.token }`;
-            this.output = "Authentication complete"
-            const decoded = jwtDecode(response.data.token);
-            this.role = decoded.role;
-            localStorage.setItem('userRole', this.picked);
-            console.log("Role: " + this.role)
-            console.log("User: " + decoded.name)
-            console.log("Token: " + axios.defaults.headers.common['Authorization'])
-            localStorage.setItem('token', response.data.token);
-            window.dispatchEvent(new Event("storage"));
-            if (this. role == "admin") {
-              this.$router.push("/admin/dashboard");
-              return;
-            } else if (this.role == "founder") {
-              this.$router.push("/startup/profile");
-              return;
-            } else if (this.role == "investor") {
-              this.$router.push("/home/catalog");
-              return;
+        axios
+          .post("/users/login", {
+            email: this.input.username,
+            password: this.input.password,
+            role: this.picked,
+          })
+          .then((response) => {
+            if (response.status == 200) {
+              axios.defaults.headers.common[
+                "Authorization"
+              ] = `Bearer ${response.data.token}`;
+              this.output = "Authentication complete";
+              const decoded = jwtDecode(response.data.token);
+              this.role = decoded.role;
+              localStorage.setItem("userRole", this.picked);
+              console.log("Role: " + this.role);
+              console.log("User: " + decoded.name);
+              console.log(
+                "Token: " + axios.defaults.headers.common["Authorization"]
+              );
+              localStorage.setItem("token", response.data.token);
+              window.dispatchEvent(new Event("storage"));
+              if (this.role == "admin") {
+                this.$router.push("/admin/dashboard");
+                return;
+              } else if (this.role == "founder") {
+                this.$router.push("/startup/profile");
+                return;
+              } else if (this.role == "investor") {
+                this.$router.push("/home/catalog");
+                return;
+              }
+              this.$router.push("/");
             }
-            this.$router.push("/");
-          }
-        }).catch((err) => {
-          console.log(err)
-          this.output = "error when authentificaton"
-        })
+          })
+          .catch((err) => {
+            console.log(err);
+            this.output = "error when authentificaton";
+          });
       }
     },
   },
@@ -99,11 +106,12 @@ export default {
   transform: translate(-50%, -50%);
   border: 5px solid #f8cacf;
   border-radius: 16px;
-  padding-top: 10rem;
-  padding-bottom: 10rem;
-  padding-left: 8rem;
-  padding-right: 8rem;
+  padding-top: 10rem !important;
+  padding-bottom: 10rem !important;
+  padding-left: 8rem !important;
+  padding-right: 8rem !important;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  gap: 1.5rem;
 }
 
 .login-form label {
@@ -122,8 +130,8 @@ export default {
   background-color: #d5a8f2;
 }
 
-.login-form h2 {
-  color:#f8cacf;
+.login-form h1 {
+  color: #f49c9c;
   left: 50%;
   top: 50%;
   transform: translate(30%, 15%);
@@ -131,6 +139,6 @@ export default {
 
 .login-form p {
   font-size: 15px;
+  text-align: center;
 }
-
 </style>
