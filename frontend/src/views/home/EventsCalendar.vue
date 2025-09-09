@@ -1,117 +1,119 @@
 <template>
-    <div class="calendar">
-        <div
-            v-for="event in events"
-            :key="event.id"
-            class="card-block"
-        >
-            <router-link :to="`/home/events/${event._id}`" class="event-link">
-                    <h2>{{ event.name }}</h2>
-                    <p>{{ event.description }}</p>
-                    <p><strong>Location: </strong>{{ event.location }}</p>
-                    <p><strong>Date:</strong> {{event.dates}}</p>
-                    <p><strong>Event type:</strong> {{ event.event_type }}</p>
-                    <p><strong>Target audience: </strong> {{ event.target_audience }}</p>
-            </router-link>
-        </div>
+  <div class="calendar">
+    <div class="filters">
+      <select v-model="selectedYear" @change="changeDate">
+        <option v-for="year in years" :key="year" :value="year">
+          {{ year }}
+        </option>
+      </select>
+
+      <select v-model="selectedMonth" @change="changeDate">
+        <option v-for="(month, index) in months" :key="index" :value="index">
+          {{ month }}
+        </option>
+      </select>
     </div>
+
+    <FullCalendar :options="calendarOptions" ref="calendar" />
+  </div>
 </template>
 
 <script>
-import events from "@/example/events.json"
-import axios from 'axios'
+import axios from "axios";
+import FullCalendar from "@fullcalendar/vue3";
+import dayGridPlugin from "@fullcalendar/daygrid";
 
 export default {
-    name: 'EventsCalendar',
-    data() {
-        return {
-            events: []
-        }
-    },
-    async created() {
+  name: "EventsCalendar",
+  components: { FullCalendar },
+  data() {
+    const today = new Date();
+    return {
+      events: [],
+      calendarOptions: {
+        plugins: [dayGridPlugin],
+        initialView: "dayGridMonth",
+        locale: "en",
+        headerToolbar: {
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,dayGridWeek",
+        },
+        events: [],
+        eventClick: (info) => {
+          this.$router.push(`/home/events/${info.event.id}`);
+        },
+      },
+      selectedYear: today.getFullYear(),
+      selectedMonth: today.getMonth(),
+      years: Array.from({ length: 10 }, (_, i) => today.getFullYear() - 5 + i),
+      months: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
+    };
+  },
+  async created() {
     try {
-        const response = await axios({
-          url: '/events',
-          method: 'get',
-        });
-        this.events = response.data;
-        console.log('Events loaded:', this.events);
-      } catch (e) {
-        console.error('Error events', e);
-      }
+      const response = await axios({
+        url: "/events",
+        method: "get",
+      });
+      this.events = response.data;
+
+      this.calendarOptions.events = this.events.map((event) => ({
+        id: event._id,
+        title: event.name,
+        start: event.dates,
+        extendedProps: {
+          description: event.description,
+          location: event.location,
+          type: event.event_type,
+          audience: event.target_audience,
+        },
+      }));
+    } catch (e) {
+      console.error("Error events", e);
     }
-}
+  },
+  methods: {
+    changeDate() {
+      const calendarApi = this.$refs.calendar.getApi();
+      const newDate = new Date(this.selectedYear, this.selectedMonth, 1);
+      calendarApi.gotoDate(newDate);
+    },
+  },
+};
 </script>
 
 <style>
 .calendar {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  max-width: 1000px;
+  margin: auto;
   padding: 20px;
 }
 
-.card-block {
-  background: #fff;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.35s ease, color 0.35s ease;
-  border-top: 5px solid var(--purple3);
-  color: #444;
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
-.card-block:hover {
-  transform: translateY(-6px);
-  background: #EED5FB;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-  color: #C174F2;
-}
-
-.card-block h2 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: var(--purple5);
-  transition: color 0.35s ease;
-}
-
-.card-block p {
-  font-size: 14px;
-  margin-bottom: 8px;
-  transition: color 0.35s ease;
-}
-
-.card-block .description {
-  font-size: 15px;
-  margin-bottom: 12px;
-}
-
-.card-block:hover h2,
-.card-block:hover p {
-  color: #C174F2;
-}
-
-.event-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
-.ext-link {
-  display: inline-block;
-  margin-top: 10px;
+.filters select {
   padding: 6px 12px;
-  background: var(--pink2);
-  color: #fff;
-  border-radius: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
   font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background 0.25s ease, color 0.25s ease;
-}
-
-.card-block:hover .ext-link {
-  background: #fff;
-  color: var(--purple5);
 }
 </style>
