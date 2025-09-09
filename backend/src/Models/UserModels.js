@@ -14,7 +14,10 @@ exports.loginUser = async (email, pwd, role) => {
         }
         const res = await crypt.compare(pwd.toString(),user[0].password);
         if (res) {
-            return await jwt.sign({ id: user[0]._id, name: user[0].name ,role: user[0].role }, SECRET);
+            if (user[0].role != "founder") {
+                return await jwt.sign({ id: user[0]._id, name: user[0].name ,role: user[0].role }, SECRET);
+            }
+            return await jwt.sign({ id: user[0]._id, name: user[0].name ,role: user[0].role, startupID: user[0].startup_id }, SECRET);
         } else {
             return null;
         }
