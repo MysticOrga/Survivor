@@ -1,5 +1,7 @@
 const Startup = require("../Models/StartupModels");
+const Project = require("../Models/ProjectModels");
 const express = require("express");
+const { ObjectId } = require("mongodb");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -14,6 +16,12 @@ router.get("/:id", async (req, res) => {
         res.json(data);
     else
         res.send("startup not find")
+})
+
+router.get("/:id/projects", async (req, res) => {
+    const filter = { startup_id: new ObjectId(req.params.id) };
+    const data = await Project.getStartupProjects(filter)
+    res.json(data);
 })
 
 router.post("/", async (req, res) => {

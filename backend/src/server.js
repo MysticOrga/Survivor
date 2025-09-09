@@ -13,6 +13,7 @@ const AdmEventRoute = require("./Controllers/Admin/AdmEventsController");
 const AdmNewRoute = require("./Controllers/Admin/AdmNewsController");
 const AdmUserRoute = require("./Controllers/Admin/AdmUsersController");
 const AdmInvestisorRoute = require("./Controllers/Admin/AdmUsersController");
+const AdmStartupRoute = require("./Controllers/Admin/AdmStartupController");
 const ProjectRouter = require("./Controllers/ProjectController");
 
 app.use(express.json());
@@ -26,8 +27,7 @@ app.use("/projects", ProjectRouter);
 app.use("/admin/events", AdmEventRoute);
 app.use("/admin/new", AdmNewRoute);
 app.use("/admin/user", AdmUserRoute);
-app.use("/admin/investisor", AdmInvestisorRoute);
-
+app.use("/admin/startups", AdmStartupRoute);
 
 app.listen(PORT, () => {
     clientDB.connect();
