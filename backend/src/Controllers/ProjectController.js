@@ -7,12 +7,15 @@ const jwt = require("jsonwebtoken");
 const { SECRET } = require("../Config/env");
 
 router.get("/filter", async (req, res) => {
+
+    //to do: Quand filter c'est addresse -> afficher tous les projet des startups de cette addresse
+    //Vérifier bien les champs
     try {
         const filters = {};
         for (const [key, value] of Object.entries(req.query)) {
             if (key === "country") {
                 filters["address"] = { $regex: value + "$", $options: "i" };
-            } else if (key === "sector" || key === "maturity") {
+            } else if (key === "sector" || key === "project_status") {
                 filters[key] = { $regex: "^" + value + "$", $options: "i" };
             } else {
                 filters[key] = value;
