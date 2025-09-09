@@ -1,14 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { jwtDecode } from "jwt-decode";
 
 import HomePage from "@/views/home/HomePage.vue";
 import ProjectCatalog from "@/views/home/ProjectCatalog.vue";
 import ProjectPage from "@/views/home/ProjectPage.vue";
+import ProjectDetails from "@/views/home/ProjectDetails.vue";
 import NewsFeed from "@/views/home/NewsFeed.vue";
-import NewsPage from "@/views/home/NewsPage.vue"
+import NewsPage from "@/views/home/NewsPage.vue";
 import SearchFilter from "@/views/home/SearchFilter.vue";
 import EventsCalendar from "@/views/home/EventsCalendar.vue";
-import EventsPage from "@/views/home/EventsPage.vue"
-import Login from "@/views/login/Login.vue"
+import EventsPage from "@/views/home/EventsPage.vue";
+import Login from "@/views/login/Login.vue";
 
 import AdminDashboard from "@/views/admin/AdminDashboard.vue";
 import ContentManagement from "@/views/admin/ContentManagement.vue";
@@ -18,7 +20,7 @@ import UserManagement from "@/views/admin/UserManagement.vue";
 import Messaging from "@/views/startup/Messaging.vue";
 import Opportunities from "@/views/startup/Opportunities.vue";
 import StartupProfile from "@/views/startup/StartupProfile.vue";
-import ProjectDetails from "@/views/home/ProjectDetails.vue";
+import InvestorMessaging from "@/views/investor/investorMessaging.vue";
 
 const routes = [
   { path: "/", name: "home", component: HomePage },
@@ -26,27 +28,94 @@ const routes = [
   { path: "/home/startup/:id", name: "project", component: ProjectPage },
   { path: "/home/project/:id", name: "project-details", component: ProjectDetails },
   { path: "/home/news", name: "news", component: NewsFeed },
-  { path: "/home/news/:id", name: "info", component: NewsPage},
+  { path: "/home/news/:id", name: "info", component: NewsPage },
   { path: "/home/search", name: "search", component: SearchFilter },
   { path: "/home/events", name: "events", component: EventsCalendar },
-  { path: "/home/events/:id", name: "event", component: EventsPage},
-  { path: "/login", name: "login", component: Login},
+  { path: "/home/events/:id", name: "event", component: EventsPage },
+  { path: "/login", name: "login", component: Login },
 
-  { path: "/admin/dashboard", name: "dashboard", component: AdminDashboard },
-  { path: "/admin/project/:id", name: "admin-project", component: ProjectManagement },
-  { path: "/admin/users", name: "admin-users", component: UserManagement },
-  { path: "/admin/content", name: "admin-content", component: ContentManagement },
+  {
+    path: "/investor/messaging",
+    name: "investor-messaging",
+    component: InvestorMessaging,
+    meta: { requiresAuth: true, roles: ["investor"] }
+  },
 
-  { path: "/startup/profile", name: "startup-profile", component: StartupProfile },
-  { path: "/startup/messaging", name: "startup-messaging", component: Messaging },
-  { path: "/startup/opportunities", name: "startup-opportunities", component: Opportunities },
+  {
+    path: "/admin/dashboard",
+    name: "dashboard",
+    component: AdminDashboard,
+    meta: { requiresAuth: true, roles: ["admin"] }
+  },
+  {
+    path: "/admin/project/:id",
+    name: "admin-project",
+    component: ProjectManagement,
+    meta: { requiresAuth: true, roles: ["admin"] }
+  },
+  {
+    path: "/admin/users",
+    name: "admin-users",
+    component: UserManagement,
+    meta: { requiresAuth: true, roles: ["admin"] }
+  },
+  {
+    path: "/admin/content",
+    name: "admin-content",
+    component: ContentManagement,
+    meta: { requiresAuth: true, roles: ["admin"] }
+  },
 
-  {path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/views/pages/pageNotFound.vue')},
+  {
+    path: "/startup/profile",
+    name: "startup-profile",
+    component: StartupProfile,
+    meta: { requiresAuth: true, roles: ["founder"] }
+  },
+  {
+    path: "/startup/messaging",
+    name: "startup-messaging",
+    component: Messaging,
+    meta: { requiresAuth: true, roles: ["founder"] }
+  },
+  {
+    path: "/startup/opportunities",
+    name: "startup-opportunities",
+    component: Opportunities,
+    meta: { requiresAuth: true, roles: ["founder"] }
+  },
+
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('@/views/pages/pageNotFound.vue')
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+function getUserRole() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  const decoded = jwtDecode(token);
+  return decoded.role;
+}
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token");
+  const userRole = getUserRole();
+
+  if (to.meta.requiresAuth) {
+    if (!token) return next({ name: "login" });
+    if (to.meta.roles && !to.meta.roles.includes(userRole)) {
+      return next({ name: "home" });
+    }
+  }
+
+  next();
 });
 
 export default router;
