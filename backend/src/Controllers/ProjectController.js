@@ -18,7 +18,7 @@ router.get("/filter", async (req, res) => {
                 filters[key] = value;
             }
         }
-        const data = await Startup.getStartupByFilter(filters);
+        const data = await Project.getStartupProjects(filters);
         if (data.length > 0)
             res.json(data);
         else
