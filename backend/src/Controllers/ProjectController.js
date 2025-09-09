@@ -3,6 +3,8 @@ const Project = require("../Models/ProjectModels");
 const expres = require("express");
 const router = expres.Router();
 const auth = require("../Middlewares/auth");
+const jwt = require("jsonwebtoken");
+const { SECRET } = require("../Config/env");
 
 router.get("/", async (req, res) => {
     const data = await Project.getProjects();
@@ -11,7 +13,15 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
-    const data = await Project.getProject(id);
+    const token  = req.headers['authorization'];
+    const public = true;
+
+    if (token) {
+        const decode = jwt.verify(token, SECRET);
+        if (decode.role == "investor")
+            public = false;
+    }
+    const data = await Project.getProject(id, public);
     res.json(data);
 })
 
