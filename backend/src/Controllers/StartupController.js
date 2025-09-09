@@ -15,6 +15,8 @@ router.get("/filter", async (req, res) => {
         for (const [key, value] of Object.entries(req.query)) {
             if (key === "country") {
                 filters["address"] = { $regex: value + "$", $options: "i" };
+            } else if (key === "sector" || key === "maturity") {
+                filters[key] = { $regex: "^" + value + "$", $options: "i" };
             } else {
                 filters[key] = value;
             }
@@ -23,11 +25,12 @@ router.get("/filter", async (req, res) => {
         if (data.length > 0)
             res.json(data);
         else
-            res.status(404).send("No startups found for given filters");
+            res.status(404).send("No startups found for this filters");
     } catch (err) {
         res.status(500).send("Server error: " + err.message);
     }
 });
+
 
 router.get("/:id", async (req, res) => {
     const data = await Startup.getStartup(req.params.id);
