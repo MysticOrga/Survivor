@@ -58,7 +58,7 @@ export default {
           role: this.picked,
         }).then((response) => {
           if (response.status == 200) {
-            axios.defaults.headers.common['Authorization'] = response.data.token;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${ response.data.token }`;
             this.output = "Authentication complete"
             const decoded = jwtDecode(response.data.token);
             this.role = decoded.role;

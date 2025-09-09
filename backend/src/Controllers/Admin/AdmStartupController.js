@@ -34,6 +34,7 @@ router.post("/", auth("admin"), async (req, res) => {
 
 router.put("/:id", auth("admin"), async (req, res) => {
     try {
+        console.log(req.header);
         const updated = await AdmEvent.updateStartup(req.params.id, req.body);
         if (!updated)
             return res.status(404).json({ error: "Event not found" });
