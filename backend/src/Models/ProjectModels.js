@@ -9,6 +9,10 @@ exports.getProjects = async () => {
     return MongoAPI.readDocuments('project', {});
 }
 
+exports.getStartupProjects = async (filter) => {
+    return MongoAPI.readDocuments("project", filter);
+}
+
 exports.getProject = async (id) => {
     const filter = { _id: new ObjectId(id) };
     return MongoAPI.readDocuments('project', filter);

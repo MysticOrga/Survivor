@@ -1,5 +1,5 @@
 const { ObjectId } = require("mongodb");
-const Project = require("../Models/ProjectModel");
+const Project = require("../Models/ProjectModels");
 const expres = require("express");
 const router = expres.Router();
 const auth = require("../Middlewares/auth");
