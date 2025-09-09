@@ -18,7 +18,6 @@
         </nav>
 
         <div class="chat-wrapper">
-            <!-- Liste des channels -->
             <aside class="channels">
                 <h3>Channels</h3>
                 <ul>
@@ -30,7 +29,6 @@
                 </ul>
             </aside>
 
-            <!-- Chat -->
             <section class="chatBox">
                 <div class="messages">
                     <div v-for="msg in messages" :key="msg.send_at"
@@ -119,126 +117,173 @@ export default {
     },
 };
 </script>
-
 <style scoped>
-:root {
-    --pink1: #f18585;
-    --pink2: #f49c9c;
-    --pink3: #f6aeae;
-    --pink4: #f8cacf;
-    --purple1: #eed5fb;
-    --purple2: #e4bef8;
-    --purple3: #d5a8f2;
-    --purple4: #cb90f1;
-    --purple5: #c174f2;
-}
-
 .chat-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: "Segoe UI", Roboto, sans-serif;
 }
 
 nav {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem;
-    background: var(--purple2);
+  background: var(--purple5);
+  padding: 0.8rem 1.5rem;
+}
+
+nav ul {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: var(--pink4);
 }
 
 .chat-wrapper {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--purple1), var(--pink3));
 }
 
 .channels {
-    width: 200px;
-    border-right: 1px solid #ccc;
-    padding: 1rem;
-    background: var(--purple1);
+  width: 220px;
+  border-right: 2px solid var(--purple3);
+  padding: 1rem;
+  background: var(--purple2);
+  display: flex;
+  flex-direction: column;
+}
+
+.channels h3 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--purple5);
 }
 
 .channels ul {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .channels li {
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-    cursor: pointer;
-    border-radius: 5px;
+  padding: 0.6rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  background: var(--purple1);
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.channels li:hover {
+  background: var(--purple3);
+  transform: translateX(4px);
 }
 
 .channels li.active {
-    background: var(--purple4);
-    color: white;
+  background: var(--purple5);
+  color: white;
+  font-weight: bold;
 }
 
 .chatBox {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    background: var(--pink1);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
 }
 
 .messages {
-    flex: 1;
-    overflow-y: auto;
-    margin-bottom: 1rem;
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
 .messages .my-message {
-    background: var(--pink4);
-    align-self: flex-end;
-    border-radius: 10px;
-    margin: 0.3rem 0;
-    padding: 0.5rem 1rem;
-    max-width: 70%;
+  background: var(--pink2);
+  color: #333;
+  align-self: flex-end;
+  border-radius: 18px 18px 0 18px;
+  padding: 0.6rem 1rem;
+  max-width: 70%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .messages .other-message {
-    background: var(--purple3);
-    align-self: flex-start;
-    border-radius: 10px;
-    margin: 0.3rem 0;
-    padding: 0.5rem 1rem;
-    max-width: 70%;
+  background: var(--purple3);
+  color: #222;
+  align-self: flex-start;
+  border-radius: 18px 18px 18px 0;
+  padding: 0.6rem 1rem;
+  max-width: 70%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .sender {
-    font-weight: bold;
+  font-weight: bold;
+  font-size: 0.85rem;
+  margin-bottom: 0.2rem;
+  opacity: 0.8;
 }
 
 .time {
-    font-size: 0.7rem;
-    text-align: right;
+  font-size: 0.7rem;
+  text-align: right;
+  margin-top: 0.3rem;
+  opacity: 0.6;
 }
 
 .input-box {
-    display: flex;
-    gap: 0.5rem;
+  display: flex;
+  gap: 0.6rem;
+  padding-top: 0.8rem;
+  border-top: 2px solid var(--purple2);
 }
 
 input[type="text"] {
-    flex: 1;
-    padding: 0.5rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+  flex: 1;
+  padding: 0.7rem 1rem;
+  border-radius: 20px;
+  border: 1px solid var(--purple3);
+  outline: none;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+input[type="text"]:focus {
+  border: 1px solid var(--purple5);
 }
 
 button {
-    padding: 0.5rem 1rem;
-    border: none;
-    background: var(--purple5);
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  background: var(--pink1);
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
 }
 
 button:hover {
-    background: var(--purple4);
+  background: var(--pink2);
+  transform: scale(1.05);
 }
 </style>
