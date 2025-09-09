@@ -3,51 +3,74 @@
     <button @click="sortAlphaAsc">A → Z</button>
     <button @click="sortAlphaDesc">Z → A</button>
   </div>
+
   <div class="catalog">
-    <div v-for="startup in startups" :key="startup.id" class="card">
-      <router-link :to="{ name: 'project', params: { id: startup._id }, state: { startup } }" class="card-link">
-        <h2>{{ startup.name }}</h2>
-        <p class="description">Description: {{ startup.description }}</p>
-        <p><strong>Secteur:</strong> {{ startup.sector }}</p>
-        <p><strong>Address:</strong> {{ startup.address }}</p>
+    <div v-for="project in projects" :key="project._id" class="card">
+      <h2>{{ project.name }}</h2>
+      <p class="description">{{ project.description }}</p>
+      <p><strong>Secteur:</strong> {{ project.sector }}</p>
+      <p>
+        <strong>Startup:</strong>
+        {{ getStartupName(project.startup_id) }}
+      </p>
+
+      <router-link
+        :to="`/home/startup/${project.startup_id}`"
+        class="ext-link"
+      >
+        View Startup
+      </router-link>
+      <router-link
+        :to="`/home/project/${project._id}`"
+        class="ext-link">
+        More Details
       </router-link>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  name: 'ProjectCatalog',
+  name: "ProjectCatalog",
   data() {
     return {
+      projects: [],
       startups: [],
-      originalStartups: []
-    }
+    };
   },
   async created() {
     try {
-      const response = await axios({
-        url: '/startups',
-        method: 'get',
-      });
-      this.startups = response.data;
-      this.originalStartups = [...response.data];
-      console.log('Startups loaded:', this.startups);
+      const projectsRes = await axios.get("/projects");
+      this.projects = projectsRes.data;
+
+      const startupsRes = await axios.get("/startups");
+      this.startups = startupsRes.data;
+
+      console.log("Projects loaded:", this.projects);
+      console.log("Startups loaded:", this.startups);
     } catch (e) {
-      console.error('Error startups', e);
+      console.error("Error loading data:", e);
     }
   },
   methods: {
+    getStartupName(startupId) {
+      const startup = this.startups.find((s) => s._id === startupId);
+      return startup ? startup.name : "Unknown Startup";
+    },
     sortAlphaAsc() {
-      this.startups = [...this.startups].sort((a, b) => a.name.localeCompare(b.name));
+      this.projects = [...this.projects].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
     },
     sortAlphaDesc() {
-      this.startups = [...this.startups].sort((a, b) => b.name.localeCompare(a.name));
-    }
-  }
-}
+      this.projects = [...this.projects].sort((a, b) =>
+        b.name.localeCompare(a.name)
+      );
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -124,13 +147,6 @@ export default {
   color: #444;
 }
 
-.card:hover {
-  transform: translateY(-6px);
-  background: var(--purple3);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-  color: #fff;
-}
-
 .card h2 {
   font-size: 20px;
   margin-bottom: 10px;
@@ -147,11 +163,6 @@ export default {
 .card .description {
   font-size: 15px;
   margin-bottom: 12px;
-}
-
-.card:hover h2,
-.card:hover p {
-  color: #fff;
 }
 
 .card-link {
@@ -173,9 +184,8 @@ export default {
   transition: background 0.25s ease, color 0.25s ease;
 }
 
-.card:hover .ext-link {
-  background: #fff;
-  color: var(--purple5);
+.ext-link:hover {
+  background: var(--purple4);
+  color: #fff;
 }
-
 </style>
