@@ -12,7 +12,7 @@ async function insertStartup(data) {
             return await col.insertMany(data);
         } else {
             // return await col.insertOne(data);
-            return await col.insertOne({ ...data, views: 0});
+            return await col.insertOne({ ...data, views: 0 });
         }
     } finally {
         console.log("fini1")
@@ -38,4 +38,14 @@ async function getAllStartups() {
     return await MongoAPI.readDocuments("startup", {});
 }
 
-module.exports = { insertStartup, getAllStartups, getStartup };
+async function getStartupByFilter(filter) {
+    try {
+        const db = client.db("ClientDB");
+        const col = db.collection("startup");
+        return await col.find(filter).toArray();
+    } finally {
+        console.log("fini");
+    }
+}
+
+module.exports = { insertStartup, getAllStartups, getStartup, getStartupByFilter };

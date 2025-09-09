@@ -6,6 +6,31 @@ const auth = require("../Middlewares/auth");
 const jwt = require("jsonwebtoken");
 const { SECRET } = require("../Config/env");
 
+router.get("/filter", async (req, res) => {
+
+    //to do: Quand filter c'est addresse -> afficher tous les projet des startups de cette addresse
+    //Vérifier bien les champs
+    try {
+        const filters = {};
+        for (const [key, value] of Object.entries(req.query)) {
+            if (key === "country") {
+                filters["address"] = { $regex: value + "$", $options: "i" };
+            } else if (key === "sector" || key === "project_status") {
+                filters[key] = { $regex: "^" + value + "$", $options: "i" };
+            } else {
+                filters[key] = value;
+            }
+        }
+        const data = await Project.getStartupProjects(filters);
+        if (data.length > 0)
+            res.json(data);
+        else
+            res.status(404).send("No startups found for this filters");
+    } catch (err) {
+        res.status(500).send("Server error: " + err.message);
+    }
+});
+
 router.get("/", async (req, res) => {
     const data = await Project.getProjects();
     res.json(data);
@@ -48,5 +73,8 @@ router.delete("/:id", auth("investor"), async (req, res) => {
     Project.deleteProject(filter);
     res.json({ msg: "project succesfully deleted"});
 })
+
+
+
 
 module.exports = router;
