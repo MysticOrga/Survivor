@@ -1,53 +1,131 @@
 <template>
   <div class="filtersResearch">
-    <button @click="sortAlphaAsc">A → Z</button>
-    <button @click="sortAlphaDesc">Z → A</button>
+    <select v-model="selectedFilter" class="filter-select">
+      <option value="" disabled selected>Filter By</option>
+      <option value="sector">Sector</option>
+      <option value="country">Location</option>
+      <option value="project_status">Maturity</option>
+    </select>
+
+    <select v-if="selectedFilter" v-model="selectedValue" class="filter-dropdown">
+      <option v-if="selectedFilter === 'sector'" value="DeepTech">DeepTech</option>
+      <option v-if="selectedFilter === 'sector'" value="EdTech">EdTech</option>
+      <option v-if="selectedFilter === 'sector'" value="FinTech">FinTech</option>
+      <option v-if="selectedFilter === 'sector'" value="HealthTech">HealthTech</option>
+      <option v-if="selectedFilter === 'sector'" value="Logistics">Logistics</option>
+      <option v-if="selectedFilter === 'sector'" value="SaaS">SaaS</option>
+      <option v-if="selectedFilter === 'sector'" value="Sustainability">Sustainability</option>
+
+      <option v-if="selectedFilter === 'country'" value="Austria">Austria</option>
+      <option v-if="selectedFilter === 'country'" value="Belgium">Belgium</option>
+      <option v-if="selectedFilter === 'country'" value="Finland">Finland</option>
+      <option v-if="selectedFilter === 'country'" value="France">France</option>
+      <option v-if="selectedFilter === 'country'" value="Germany">Germany</option>
+      <option v-if="selectedFilter === 'country'" value="Ireland">Ireland</option>
+      <option v-if="selectedFilter === 'country'" value="Italy">Italy</option>
+      <option v-if="selectedFilter === 'country'" value="Netherlands">Netherlands</option>
+      <option v-if="selectedFilter === 'country'" value="Portugal">Portugal</option>
+      <option v-if="selectedFilter === 'country'" value="Spain">Spain</option>
+      <option v-if="selectedFilter === 'country'" value="Sweden">Sweden</option>
+
+      <option v-if="selectedFilter === 'project_status'" value="Idea">Idea</option>
+      <option v-if="selectedFilter === 'project_status'" value="MVP">MVP</option>
+      <option v-if="selectedFilter === 'project_status'" value="Prototype">Prototype</option>
+      <option v-if="selectedFilter === 'project_status'" value="Product-Market Fit">Product-Market Fit</option>
+    </select>
+
+    <button @click="applyFilter">Apply Filter</button>
+    <button v-if="selectedFilter || selectedValue" @click="resetFilter"
+      style="background:var(--purple3);margin-left:10px;">Reset</button>
   </div>
+
   <div class="catalog">
-    <div v-for="startup in startups" :key="startup.id" class="card">
-      <router-link :to="{ name: 'project', params: { id: startup._id }, state: { startup } }" class="card-link">
-        <h2>{{ startup.name }}</h2>
-        <p class="description">Description: {{ startup.description }}</p>
-        <p><strong>Secteur:</strong> {{ startup.sector }}</p>
-        <p><strong>Address:</strong> {{ startup.address }}</p>
+    <div v-for="project in projects" :key="project._id" class="card">
+      <h2>{{ project.name }}</h2>
+      <p class="description">{{ project.description }}</p>
+      <p><strong>Secteur:</strong> {{ project.sector }}</p>
+      <p>
+        <strong>Startup:</strong>
+        {{ getStartupName(project.startup_id) }}
+      </p>
+
+      <router-link :to="`/home/startup/${project.startup_id}`" class="ext-link">
+        View Startup
+      </router-link>
+      <router-link :to="`/home/project/${project._id}`" class="ext-link">
+        More Details
       </router-link>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 export default {
-  name: 'ProjectCatalog',
+  name: "ProjectCatalog",
   data() {
     return {
+      projects: [],
       startups: [],
-      originalStartups: []
-    }
+      selectedFilter: "",
+      selectedValue: "",
+      userRole: null,
+    };
   },
   async created() {
-    try {
-      const response = await axios({
-        url: '/startups',
-        method: 'get',
-      });
-      this.startups = response.data;
-      this.originalStartups = [...response.data];
-      console.log('Startups loaded:', this.startups);
-    } catch (e) {
-      console.error('Error startups', e);
-    }
+    this.setUserRole();
+    await this.fetchProjects();
+    await this.fetchStartups();
   },
   methods: {
-    sortAlphaAsc() {
-      this.startups = [...this.startups].sort((a, b) => a.name.localeCompare(b.name));
+    setUserRole() {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decoded = jwtDecode(token);
+        this.userRole = decoded.role;
+      }
     },
-    sortAlphaDesc() {
-      this.startups = [...this.startups].sort((a, b) => b.name.localeCompare(a.name));
-    }
-  }
-}
+    async fetchProjects() {
+      try {
+        const res = await axios.get("/projects");
+        this.projects = res.data;
+      } catch (e) {
+        this.projects = [];
+      }
+    },
+    async fetchStartups() {
+      try {
+        const res = await axios.get("/startups");
+        this.startups = res.data;
+      } catch (e) {
+        this.startups = [];
+      }
+    },
+    getStartupName(startupId) {
+      const startup = this.startups.find((s) => s._id === startupId);
+      return startup ? startup.name : "Unknown Startup";
+    },
+    async applyFilter() {
+      if (!this.selectedFilter || !this.selectedValue) return;
+      try {
+        const res = await axios.get(
+          `/projects/filter?${this.selectedFilter}=${encodeURIComponent(this.selectedValue)}`
+        );
+        this.projects = res.data;
+        console.log(this.projects);
+      } catch (e) {
+        this.projects = [];
+      }
+    },
+    async resetFilter() {
+      this.selectedFilter = "";
+      this.selectedValue = "";
+      await this.fetchProjects();
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -114,50 +192,49 @@ export default {
   transform: translateY(0);
 }
 
+.filtersResearch select {
+  background: #fff;
+  color: #444;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  min-width: 150px;
+  padding: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filtersResearch select:focus {
+  outline: none;
+  border-color: var(--purple3);
+  box-shadow: 0 0 6px rgba(150, 90, 255, 0.2);
+}
+
 .card {
   background: #fff;
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.35s ease, color 0.35s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   border-top: 5px solid var(--purple3);
   color: #444;
-}
-
-.card:hover {
-  transform: translateY(-6px);
-  background: var(--purple3);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-  color: #fff;
 }
 
 .card h2 {
   font-size: 20px;
   margin-bottom: 10px;
   color: var(--purple5);
-  transition: color 0.35s ease;
 }
 
 .card p {
   font-size: 14px;
   margin-bottom: 8px;
-  transition: color 0.35s ease;
 }
 
 .card .description {
   font-size: 15px;
   margin-bottom: 12px;
-}
-
-.card:hover h2,
-.card:hover p {
-  color: #fff;
-}
-
-.card-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
 }
 
 .ext-link {
@@ -170,12 +247,12 @@ export default {
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
-  transition: background 0.25s ease, color 0.25s ease;
+  transition: background 0.25s ease, transform 0.2s ease;
 }
 
-.card:hover .ext-link {
-  background: #fff;
-  color: var(--purple5);
+.ext-link:hover {
+  background: var(--purple4);
+  color: #fff;
+  transform: translateY(-2px);
 }
-
 </style>

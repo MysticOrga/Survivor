@@ -1,39 +1,42 @@
 <template>
   <form class="login-form">
-      <h2>Sign In</h2>
+    <container class="contain-form">
+      <h1>Sign In</h1>
       <p>Enter your email adress to continue.</p>
-    <div>
-      <input type="radio" id="admin" value="admin" v-model="picked" />
-      <label for="admin">Admin</label>
+      <div>
+        <input type="radio" id="admin" value="admin" v-model="picked" />
+        <label for="admin">Admin</label>
 
-      <input type="radio" id="founders" value="founders" v-model="picked" />
-      <label for="founders">Founders</label>
+        <input type="radio" id="founders" value="founder" v-model="picked" />
+        <label for="founders">Founders</label>
 
-      <input type="radio" id="investors" value="investors" v-model="picked" />
-      <label for="investors">Investors</label>
-    </div>
-    <div class="mb-3">
-      <label for="username">Username: </label>
-      <input type="text" id="username" v-model="input.username" />
-    </div>
-    <div class="mb-3">
-      <label for="password">Password: </label>
-      <input type="password" id="password" v-model="input.password" />
-    </div>
-    <button
-      class="btn btn-outline-dark"
-      type="submit"
-      v-on:click.prevent="login()"
-    >
-      Login
-    </button>
+        <input type="radio" id="investors" value="investor" v-model="picked" />
+        <label for="investors">Investors</label>
+      </div>
+      <div class="mb-3">
+        <label for="username">Email: </label>
+        <input type="text" id="username" v-model="input.username" />
+      </div>
+      <div class="mb-3">
+        <label for="password">Password: </label>
+        <input type="password" id="password" v-model="input.password" />
+      </div>
+      <button
+        class="btn btn-outline-dark"
+        type="submit"
+        v-on:click.prevent="login()"
+      >
+        Login
+      </button>
+      <p style="color: red">{{ this.output }}</p>
+    </container>
   </form>
-  <h3>{{ this.output }}</h3>
 </template>
 
 <script>
 import axios from "axios";
 import { ref } from "vue";
+import { jwtDecode } from "jwt-decode";
 
 export default {
   name: "Login",
@@ -51,19 +54,45 @@ export default {
   methods: {
     login() {
       if (this.input.username != "" || this.input.password != "") {
-        axios.post("/users/login", {
-          email: this.input.username,
-          password: this.input.password
-        }).then((response) => {
-          if (response.status == 200) {
-            axios.defaults.headers.common['Authorization'] = response.data.token;
-            this.output = "Authentication complete"
-            this.$router.push("/");
-          }
-        }).catch((err) => {
-          console.log(err)
-          this.output = "error when authentificaton"
-        })
+        axios
+          .post("/users/login", {
+            email: this.input.username,
+            password: this.input.password,
+            role: this.picked,
+          })
+          .then((response) => {
+            if (response.status == 200) {
+              axios.defaults.headers.common[
+                "Authorization"
+              ] = `Bearer ${response.data.token}`;
+              this.output = "Authentication complete";
+              const decoded = jwtDecode(response.data.token);
+              this.role = decoded.role;
+              localStorage.setItem("userRole", this.picked);
+              console.log("Role: " + this.role);
+              console.log("User: " + decoded.name);
+              console.log(
+                "Token: " + axios.defaults.headers.common["Authorization"]
+              );
+              localStorage.setItem("token", response.data.token);
+              window.dispatchEvent(new Event("storage"));
+              if (this.role == "admin") {
+                this.$router.push("/admin/dashboard");
+                return;
+              } else if (this.role == "founder") {
+                this.$router.push("/startup/profile");
+                return;
+              } else if (this.role == "investor") {
+                this.$router.push("/home/catalog");
+                return;
+              }
+              this.$router.push("/");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            this.output = "error when authentificaton";
+          });
       }
     },
   },
@@ -72,18 +101,25 @@ export default {
 
 <style>
 .login-form {
-  display: grid;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   border: 5px solid #f8cacf;
   border-radius: 16px;
-  padding-top: 10rem;
-  padding-bottom: 10rem;
-  padding-left: 8rem;
-  padding-right: 8rem;
+  padding-top: 10rem !important;
+  padding-bottom: 10rem !important;
+  padding-left: 8rem !important;
+  padding-right: 8rem !important;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.login-form .contain-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 600px);
+  /* gap: 1.5rem; */
 }
 
 .login-form label {
@@ -102,8 +138,8 @@ export default {
   background-color: #d5a8f2;
 }
 
-.login-form h2 {
-  color:#f8cacf;
+.login-form h1 {
+  color: #f49c9c;
   left: 50%;
   top: 50%;
   transform: translate(30%, 15%);
@@ -111,6 +147,6 @@ export default {
 
 .login-form p {
   font-size: 15px;
+  text-align: center;
 }
-
 </style>

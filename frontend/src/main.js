@@ -7,5 +7,6 @@ import axios from 'axios'
 
 const status = import.meta.env.VITE_APP_STATUS
 const url = status == 'DEV' ? 'http://localhost:5001/' : import.meta.env.VITE_API_URL
+console.log("Status: " + status + " | URL: " + url)
 axios.defaults.baseURL = url
 createApp(App).use(router).mount('#app')
