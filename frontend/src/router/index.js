@@ -4,7 +4,6 @@ import { jwtDecode } from "jwt-decode";
 import HomePage from "@/views/home/HomePage.vue";
 import ProjectCatalog from "@/views/home/ProjectCatalog.vue";
 import ProjectPage from "@/views/home/ProjectPage.vue";
-import ProjectDetails from "@/views/home/ProjectDetails.vue";
 import NewsFeed from "@/views/home/NewsFeed.vue";
 import NewsPage from "@/views/home/NewsPage.vue";
 import SearchFilter from "@/views/home/SearchFilter.vue";
@@ -20,6 +19,8 @@ import UserManagement from "@/views/admin/UserManagement.vue";
 import Messaging from "@/views/startup/Messaging.vue";
 import Opportunities from "@/views/startup/Opportunities.vue";
 import StartupProfile from "@/views/startup/StartupProfile.vue";
+import ProjectDetails from "@/views/home/ProjectDetails.vue";
+import DashboardStartup from "@/views/startup/DashboardStartup.vue";
 import InvestorMessaging from "@/views/investor/investorMessaging.vue";
 
 const routes = [
@@ -41,6 +42,10 @@ const routes = [
     meta: { requiresAuth: true, roles: ["investor"] }
   },
 
+  { path: "/startup/profile", name: "startup-profile", component: StartupProfile },
+  { path: "/startup/messaging", name: "startup-messaging", component: Messaging },
+  { path: "/startup/opportunities", name: "startup-opportunities", component: Opportunities },
+  { path: "/startup/dashboard", name: "startup-dashboard", component: DashboardStartup},
   {
     path: "/admin/dashboard",
     name: "dashboard",
