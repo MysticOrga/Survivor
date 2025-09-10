@@ -1,33 +1,35 @@
 <template>
   <form class="login-form">
-    <h1>Sign In</h1>
-    <p>Enter your email adress to continue.</p>
-    <div>
-      <input type="radio" id="admin" value="admin" v-model="picked" />
-      <label for="admin">Admin</label>
+    <container class="contain-form">
+      <h1>Sign In</h1>
+      <p>Enter your email adress to continue.</p>
+      <div>
+        <input type="radio" id="admin" value="admin" v-model="picked" />
+        <label for="admin">Admin</label>
 
-      <input type="radio" id="founders" value="founder" v-model="picked" />
-      <label for="founders">Founders</label>
+        <input type="radio" id="founders" value="founder" v-model="picked" />
+        <label for="founders">Founders</label>
 
-      <input type="radio" id="investors" value="investor" v-model="picked" />
-      <label for="investors">Investors</label>
-    </div>
-    <div class="mb-3">
-      <label for="username">Email: </label>
-      <input type="text" id="username" v-model="input.username" />
-    </div>
-    <div class="mb-3">
-      <label for="password">Password: </label>
-      <input type="password" id="password" v-model="input.password" />
-    </div>
-    <button
-      class="btn btn-outline-dark"
-      type="submit"
-      v-on:click.prevent="login()"
-    >
-      Login
-    </button>
-    <p style="color: red">{{ this.output }}</p>
+        <input type="radio" id="investors" value="investor" v-model="picked" />
+        <label for="investors">Investors</label>
+      </div>
+      <div class="mb-3">
+        <label for="username">Email: </label>
+        <input type="text" id="username" v-model="input.username" />
+      </div>
+      <div class="mb-3">
+        <label for="password">Password: </label>
+        <input type="password" id="password" v-model="input.password" />
+      </div>
+      <button
+        class="btn btn-outline-dark"
+        type="submit"
+        v-on:click.prevent="login()"
+      >
+        Login
+      </button>
+      <p style="color: red">{{ this.output }}</p>
+    </container>
   </form>
 </template>
 
@@ -99,7 +101,6 @@ export default {
 
 <style>
 .login-form {
-  display: grid;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -111,7 +112,14 @@ export default {
   padding-left: 8rem !important;
   padding-right: 8rem !important;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  gap: 1.5rem;
+}
+
+.login-form .contain-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 600px);
+  /* gap: 1.5rem; */
 }
 
 .login-form label {
