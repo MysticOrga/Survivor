@@ -23,6 +23,8 @@ import ProjectDetails from "@/views/home/ProjectDetails.vue";
 import DashboardStartup from "@/views/startup/DashboardStartup.vue";
 import InvestorMessaging from "@/views/investor/investorMessaging.vue";
 
+import AboutPage from "@/views/about/AboutPage.vue";
+
 const routes = [
   { path: "/", name: "home", component: HomePage },
   { path: "/home/catalog", name: "catalog", component: ProjectCatalog },
@@ -45,6 +47,7 @@ const routes = [
   { path: "/startup/profile", name: "startup-profile", component: StartupProfile },
   { path: "/startup/messaging", name: "startup-messaging", component: Messaging },
   { path: "/startup/opportunities", name: "startup-opportunities", component: Opportunities },
+  {path: "/about", name: "about-page", component: AboutPage}
   { path: "/startup/dashboard", name: "startup-dashboard", component: DashboardStartup},
   {
     path: "/admin/dashboard",
