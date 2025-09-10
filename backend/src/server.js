@@ -17,6 +17,7 @@ const AdmStartupRoute = require("./Controllers/Admin/AdmStartupController");
 const ProjectRouter = require("./Controllers/ProjectController");
 const FilterRouter = require("./Controllers/FilterController");
 const ChannelRouter = require("./Controllers/ChannelController");
+const InvestorRouter =require("./Controllers/InvestorController");
 
 app.use(express.json());
 app.use(cors());
@@ -32,6 +33,7 @@ app.use("/admin/user", AdmUserRoute);
 app.use("/admin/startups", AdmStartupRoute);
 app.use("/filters", FilterRouter);
 app.use("/channels", ChannelRouter);
+app.use("/investor", InvestorRouter);
 
 app.listen(PORT, () => {
     clientDB.connect();
