@@ -12,6 +12,7 @@
             <li><router-link to="/home/catalog">Catalog</router-link></li>
             <li><router-link to="/home/news">News</router-link></li>
             <li><router-link to="/home/events">Events</router-link></li>
+            <li><router-link to="/home/about">About</router-link></li>
             <li v-if="userRole === 'investor'">
               <router-link to="/investor/messaging">Message</router-link>
             </li>

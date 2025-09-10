@@ -20,18 +20,12 @@
     <div class="carousel">
       <button @click="prev" class="carousel-btn">‹</button>
 
-      <transition name="fade" mode="out-in">
-        <div class="carousel-slide" :key="partners[current]?.id">
-          <div v-if="partners.length">
-            <h3>{{ partners[current].name }}</h3>
-            <p>{{ partners[current].email }}</p>
-            <p>{{ this.current + 1 }}/{{ this.partners.length }}</p>
-          </div>
-          <div v-else>
-            <p>Loading partners...</p>
-          </div>
+      <div class="carousel-slide">
+        <div class="partner-card" v-for="partner in visiblePartners" :key="partner.id">
+          <h3>{{ partner.name }}</h3>
+          <p>{{ partner.email }}</p>
         </div>
-      </transition>
+      </div>
 
       <button @click="next" class="carousel-btn">›</button>
     </div>
@@ -63,8 +57,19 @@ export default {
       contacts,
       partners: [],
       current: 0,
-      visibillity: 3,
+      visibleCount: 3,
     };
+  },
+  computed: {
+    visiblePartners() {
+      if (!this.partners.length) return [];
+      const result = [];
+      for (let i = 0; i < this.visibleCount; i++) {
+        const index = (this.current + i) % this.partners.length;
+        result.push(this.partners[index]);
+      }
+      return result;
+    },
   },
   async created() {
     try {
@@ -79,15 +84,11 @@ export default {
   },
   methods: {
     next() {
-      if (this.partners.length) {
-        this.current = (this.current + 1) % this.partners.length;
-      }
+      this.current = (this.current + this.visibleCount) % this.partners.length;
     },
     prev() {
-      if (this.partners.length) {
-        this.current =
-          (this.current - 1 + this.partners.length) % this.partners.length;
-      }
+      this.current =
+        (this.current - this.visibleCount + this.partners.length) % this.partners.length;
     },
   },
 };
@@ -98,15 +99,20 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 30px;
   margin: 20px 0;
 }
 
 .carousel-slide {
-  width: 300px;
-  text-align: center;
+  display: flex;
+  gap: 15px;
+}
+
+.partner-card {
   background: #fff;
   padding: 20px;
+  width: 200px;
+  text-align: center;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
 }

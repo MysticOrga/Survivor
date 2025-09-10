@@ -53,7 +53,7 @@ const routes = [
   { path: "/startup/profile", name: "startup-profile", component: StartupProfile },
   { path: "/startup/messaging", name: "startup-messaging", component: Messaging },
   { path: "/startup/opportunities", name: "startup-opportunities", component: Opportunities },
-  {path: "/about", name: "about-page", component: AboutPage},
+  {path: "/home/about", name: "about-page", component: AboutPage},
   { path: "/startup/dashboard", name: "startup-dashboard", component: DashboardStartup},
   {
     path: "/admin/dashboard",
