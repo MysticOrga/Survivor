@@ -1,22 +1,5 @@
 <template>
     <div class="chat-container">
-        <nav>
-            <ul>
-                <li>
-                    <router-link to="/startup/dashboard">Dashboard</router-link>
-                </li>
-                <li>
-                    <router-link to="/startup/profile">Profile</router-link>
-                </li>
-                <li>
-                    <router-link to="/startup/messaging">Chat</router-link>
-                </li>
-                <li>
-                    <router-link to="/startup/opportunities">Opportunities</router-link>
-                </li>
-            </ul>
-        </nav>
-
         <div class="chat-wrapper">
             <aside class="channels">
                 <h3>Channels</h3>

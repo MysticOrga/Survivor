@@ -8,30 +8,6 @@
     </select>
 
     <select v-if="selectedFilter" v-model="selectedValue" class="filter-dropdown">
-      <option v-if="selectedFilter === 'sector'" value="DeepTech">DeepTech</option>
-      <option v-if="selectedFilter === 'sector'" value="EdTech">EdTech</option>
-      <option v-if="selectedFilter === 'sector'" value="FinTech">FinTech</option>
-      <option v-if="selectedFilter === 'sector'" value="HealthTech">HealthTech</option>
-      <option v-if="selectedFilter === 'sector'" value="Logistics">Logistics</option>
-      <option v-if="selectedFilter === 'sector'" value="SaaS">SaaS</option>
-      <option v-if="selectedFilter === 'sector'" value="Sustainability">Sustainability</option>
-
-      <option v-if="selectedFilter === 'country'" value="Austria">Austria</option>
-      <option v-if="selectedFilter === 'country'" value="Belgium">Belgium</option>
-      <option v-if="selectedFilter === 'country'" value="Finland">Finland</option>
-      <option v-if="selectedFilter === 'country'" value="France">France</option>
-      <option v-if="selectedFilter === 'country'" value="Germany">Germany</option>
-      <option v-if="selectedFilter === 'country'" value="Ireland">Ireland</option>
-      <option v-if="selectedFilter === 'country'" value="Italy">Italy</option>
-      <option v-if="selectedFilter === 'country'" value="Netherlands">Netherlands</option>
-      <option v-if="selectedFilter === 'country'" value="Portugal">Portugal</option>
-      <option v-if="selectedFilter === 'country'" value="Spain">Spain</option>
-      <option v-if="selectedFilter === 'country'" value="Sweden">Sweden</option>
-
-      <option v-if="selectedFilter === 'project_status'" value="Idea">Idea</option>
-      <option v-if="selectedFilter === 'project_status'" value="MVP">MVP</option>
-      <option v-if="selectedFilter === 'project_status'" value="Prototype">Prototype</option>
-      <option v-if="selectedFilter === 'project_status'" value="Product-Market Fit">Product-Market Fit</option>
     </select>
 
     <button @click="applyFilter">Apply Filter</button>
@@ -54,12 +30,18 @@
       <router-link :to="`/home/project/${project._id}`" class="ext-link">
         More Details
       </router-link>
+      <button v-if="userRole === 'investor'"
+              class="ext-link"
+              @click="createChannel">
+        Create Channel
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 export default {
   name: "ProjectCatalog",
@@ -69,13 +51,22 @@ export default {
       startups: [],
       selectedFilter: "",
       selectedValue: "",
+      userRole: null,
     };
   },
   async created() {
+    this.setUserRole();
     await this.fetchProjects();
     await this.fetchStartups();
   },
   methods: {
+    setUserRole() {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decoded = jwtDecode(token);
+        this.userRole = decoded.role;
+      }
+    },
     async fetchProjects() {
       try {
         const res = await axios.get("/projects");
@@ -99,7 +90,9 @@ export default {
     async applyFilter() {
       if (!this.selectedFilter || !this.selectedValue) return;
       try {
-        const res = await axios.get(`/projects/filter?${this.selectedFilter}=${encodeURIComponent(this.selectedValue)}`);
+        const res = await axios.get(
+          `/projects/filter?${this.selectedFilter}=${encodeURIComponent(this.selectedValue)}`
+        );
         this.projects = res.data;
         console.log(this.projects);
       } catch (e) {
@@ -110,6 +103,9 @@ export default {
       this.selectedFilter = "";
       this.selectedValue = "";
       await this.fetchProjects();
+    },
+    createChannel() {
+      console.log("Channel created");
     },
   },
 };
