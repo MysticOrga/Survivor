@@ -1,0 +1,60 @@
+[
+    {
+    "id": "1",
+    "title": "Innovation in Renewable Energy",
+    "description": "A call for projects focused on developing innovative solutions in renewable energy and sustainability.",
+    "category": "Energy & Sustainability",
+    "status": "Open",
+    "deadline": "2025-12-31",
+    "submissionUrl": "https://example.com/submit",
+    "eligibility": [
+        "Startups",
+        "Research Institutes",
+        "Individual Innovators"
+    ],
+    "funding": {
+        "available": true,
+        "amount": "Up to $50,000",
+        "type": "Grant"
+    },
+    "location": "Global",
+    "contact": {
+        "email": "info@example.com",
+        "phone": "+1-234-567-8900"
+    },
+    "tags": ["innovation", "renewable energy", "sustainability"],
+    "attachments": [
+        {
+        "name": "Guidelines.pdf",
+        "url": "https://example.com/guidelines.pdf"
+        }
+    ]
+    },
+    {
+    "id": "2",
+    "title": "Digital Health Solutions",
+    "description": "Seeking projects that improve healthcare access and patient outcomes through digital solutions.",
+    "category": "HealthTech",
+    "status": "Open",
+    "deadline": "2026-01-15",
+    "submissionUrl": "https://example.com/submit-health",
+    "eligibility": [
+        "Startups",
+        "Healthcare Providers",
+        "Non-Profit Organizations"
+    ],
+    "funding": {
+        "available": true,
+        "amount": "Up to $100,000",
+        "type": "Grant or Investment"
+    },
+    "location": "Europe",
+    "contact": {
+        "email": "health@example.com",
+        "phone": "+44-123-456-7890"
+    },
+    "tags": ["digital health", "telemedicine", "AI"],
+    "attachments": []
+    }
+]
+  
