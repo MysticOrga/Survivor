@@ -117,6 +117,7 @@ export default {
     },
 };
 </script>
+
 <style scoped>
 .chat-container {
   display: flex;
