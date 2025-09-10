@@ -13,6 +13,7 @@ import Login from "@/views/login/Login.vue"
 import AdminDashboard from "@/views/admin/AdminDashboard.vue";
 import ContentManagement from "@/views/admin/ContentManagement.vue";
 import ProjectManagement from "@/views/admin/ProjectManagement.vue";
+import StartupManagement from "@/views/admin/StartupManagement.vue";
 import UserManagement from "@/views/admin/UserManagement.vue";
 
 import Messaging from "@/views/startup/Messaging.vue";
@@ -32,8 +33,9 @@ const routes = [
 
   { path: "/admin/dashboard", name: "dashboard", component: AdminDashboard },
   { path: "/admin/project/:id", name: "admin-project", component: ProjectManagement },
-  { path: "/admin/users", name: "admin-users", component: UserManagement },
-  { path: "/admin/content", name: "admin-content", component: ContentManagement },
+  { path: "/admin/content/:id", name: "admin-content", component: StartupManagement },
+  { path: "/admin/users/:id", name: "admin-users", component: UserManagement },
+  // { path: "/admin/content", name: "admin-content", component: ContentManagement },
 
   { path: "/startup/profile", name: "startup-profile", component: StartupProfile },
   { path: "/startup/messaging", name: "startup-messaging", component: Messaging },

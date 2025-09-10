@@ -15,7 +15,7 @@ router.get("/:id", async (req, res) => {
     res.json(data);
 })
 
-router.post("/", auth("investor"), async (req, res) => {
+router.post("/", auth("admin"), async (req, res) => {
     Project.createProject(req.body);
     res.json({
         msg: "project succesfully created",
@@ -23,7 +23,7 @@ router.post("/", auth("investor"), async (req, res) => {
     });
 })
 
-router.put("/:id", auth("investor"), async (req, res) => {
+router.put("/:id", auth("admin"), async (req, res) => {
     const filter = { _id: new ObjectId(req.params.id) };
     const data = req.body;
     Project.updateProject(filter, data);
@@ -32,7 +32,7 @@ router.put("/:id", auth("investor"), async (req, res) => {
     })
 })
 
-router.delete("/:id", auth("investor"), async (req, res) => {
+router.delete("/:id", auth("admin"), async (req, res) => {
     const filter = { _id: new ObjectId(req.params.id)};
     Project.deleteProject(filter);
     res.json({ msg: "project succesfully deleted"});
