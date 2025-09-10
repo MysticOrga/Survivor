@@ -30,11 +30,6 @@
       <router-link :to="`/home/project/${project._id}`" class="ext-link">
         More Details
       </router-link>
-      <button v-if="userRole === 'investor'"
-              class="ext-link"
-              @click="createChannel">
-        Create Channel
-      </button>
     </div>
   </div>
 </template>
@@ -103,9 +98,6 @@ export default {
       this.selectedFilter = "";
       this.selectedValue = "";
       await this.fetchProjects();
-    },
-    createChannel() {
-      console.log("Channel created");
     },
   },
 };

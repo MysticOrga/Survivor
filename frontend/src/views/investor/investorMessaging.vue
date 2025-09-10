@@ -1,35 +1,33 @@
 <template>
-    <div class="chat-container">
-        <div class="chat-wrapper">
-            <aside class="channels">
-                <h3>Channels</h3>
-                <ul>
-                    <li v-for="channel in channels" :key="channel.channel_id"
-                        :class="{ active: currentChannel?.channel_id === channel.channel_id }"
-                        @click="selectChannel(channel)">
-                        {{ channel.channel_name }}
-                    </li>
-                </ul>
-            </aside>
+  <div class="chat-container">
+    <div class="chat-wrapper">
+      <aside class="channels">
+        <h3>Channels</h3>
+        <ul>
+          <li v-for="channel in channels" :key="channel.channel_id"
+            :class="{ active: currentChannel?.channel_id === channel.channel_id }" @click="selectChannel(channel)">
+            {{ channel.channel_name }}
+          </li>
+        </ul>
+      </aside>
 
-            <section class="chatBox">
-                <div class="messages">
-                    <div v-for="msg in messages" :key="msg.send_at"
-                        :class="{ 'my-message': isMyMessage(msg), 'other-message': !isMyMessage(msg) }">
-                        <p class="sender">{{ msg.sender_name }}</p>
-                        <p class="content">{{ msg.message }}</p>
-                        <p class="time">{{ new Date(msg.send_at).toLocaleTimeString() }}</p>
-                    </div>
-                </div>
-
-                <div class="input-box">
-                    <input type="text" v-model="messageInput" @keyup.enter="sendMessage"
-                        placeholder="Type your message..." />
-                    <button @click="sendMessage">Send</button>
-                </div>
-            </section>
+      <section class="chatBox">
+        <div class="messages">
+          <div v-for="msg in messages" :key="msg.send_at"
+            :class="{ 'my-message': isMyMessage(msg), 'other-message': !isMyMessage(msg) }">
+            <p class="sender">{{ msg.sender_name }}</p>
+            <p class="content">{{ msg.message }}</p>
+            <p class="time">{{ new Date(msg.send_at).toLocaleTimeString() }}</p>
+          </div>
         </div>
+
+        <div class="input-box">
+          <input type="text" v-model="messageInput" @keyup.enter="sendMessage" placeholder="Type your message..." />
+          <button @click="sendMessage">Send</button>
+        </div>
+      </section>
     </div>
+  </div>
 </template>
 
 <script>
@@ -37,67 +35,67 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 export default {
-    data() {
-        return {
-            decoded: null,
-            channels: [],
-            currentChannel: null,
-            messages: [],
-            messageInput: "",
-        };
+  data() {
+    return {
+      decoded: null,
+      channels: [],
+      currentChannel: null,
+      messages: [],
+      messageInput: "",
+    };
+  },
+  mounted() {
+    const token = localStorage.getItem("token");
+    if (token) {
+      this.decoded = jwtDecode(token);
+      this.fetchChannels();
+    }
+  },
+  methods: {
+    async fetchChannels() {
+      try {
+        const res = await axios.get(`/investors/${this.decoded.id}/channels`);
+        this.channels = res.data;
+      } catch (err) {
+        console.error("Error fetching channels:", err);
+      }
     },
-    mounted() {
-        const token = localStorage.getItem("token");
-        if (token) {
-            this.decoded = jwtDecode(token);
-            this.fetchChannels();
-        }
+    async selectChannel(channel) {
+      this.currentChannel = channel;
+      await this.fetchMessages(channel.channel_id);
     },
-    methods: {
-        async fetchChannels() {
-            try {
-                const res = await axios.get(`/startups/${this.decoded.startupID}/channels`);
-                this.channels = res.data;
-            } catch (err) {
-                console.error("Error fetching channels:", err);
-            }
-        },
-        async selectChannel(channel) {
-            this.currentChannel = channel;
-            await this.fetchMessages(channel.channel_id);
-        },
-        async fetchMessages(channel_id) {
-            try {
-                const res = await axios.get(`/channels/${channel_id}/chats`);
-                this.messages = res.data;
-            } catch (err) {
-                console.error("Error fetching messages:", err);
-            }
-        },
-        isMyMessage(msg) {
-            return msg.sender_name !== this.currentChannel.channel_name;
-        },
-        async sendMessage() {
-            if (!this.messageInput || !this.currentChannel) return;
+    async fetchMessages(channel_id) {
+      try {
+        const res = await axios.get(`/channels/${channel_id}/chats`);
+        this.messages = res.data;
+      } catch (err) {
+        console.error("Error fetching messages:", err);
+      }
+    },
+    isMyMessage(msg) {
+      return msg.sender_name === this.decoded.name;
+    },
+    async sendMessage() {
+      if (!this.messageInput || !this.currentChannel) return;
 
-            const newMessage = {
-                sender_name: this.decoded.name,
-                sender_id: this.decoded.id,
-                message: this.messageInput,
-                send_at: new Date().toISOString(),
-            };
+      const newMessage = {
+        sender_name: this.decoded.name,
+        sender_id: this.decoded.id,
+        message: this.messageInput,
+        send_at: new Date().toISOString(),
+      };
 
-            console.log("Decoded" + this.decoded);
-            console.log("Message: " + newMessage);
-            try {
-                await axios.put(`/channels/${this.currentChannel.channel_id}/chat`, {chat :newMessage});
-                this.messages.push(newMessage);
-                this.messageInput = "";
-            } catch (err) {
-                console.error("Error sending message:", err);
-            }
-        },
+      console.log("Decoded" + this.decoded);
+      console.log("Message: " + newMessage);
+      try {
+        await axios.put(`/channels/${this.currentChannel.channel_id}/chat`, { chat: newMessage });
+        this.messages.push(newMessage);
+        this.messageInput = "";
+      } catch (err) {
+        console.error("Error sending message:", err);
+      }
     },
+  },
 };
 </script>
 

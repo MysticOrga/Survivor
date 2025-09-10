@@ -5,7 +5,9 @@ const { ObjectId } = require("mongodb");
 exports.createChannels = async (channel) => {
     channel.startup_id = new ObjectId(channel.startup_id);
     channel.investor_id = new ObjectId(channel.investor_id);
-    channel.chats[0].sender_id = new ObjectId(channel.chats[0].sender_id);
+    if (channel.chats.length) {
+        channel.chats[0].sender_id = new ObjectId(channel.chats[0].sender_id);
+    }
     return MongoAPI.createDocument('channel', channel);
 }
 exports.postChat = async (filter, chat) => {

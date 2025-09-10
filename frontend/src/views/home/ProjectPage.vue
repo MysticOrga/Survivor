@@ -1,6 +1,8 @@
 <template>
   <button @click="downloadJSON">Download Startup JSON</button>
-
+  <button v-if="userRole === 'investor'" @click="createChannel">
+    Contact Startup
+  </button>
   <section v-if="startup" class="project-page">
     <div class="info">
       <h2>{{ startup.name }}</h2>
@@ -45,21 +47,25 @@
     <p>No projects found for this startup.</p>
   </section>
 </template>
-
 <script>
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+
 export default {
   name: "StartupPage",
   data() {
     return {
       startup: this.$route.state?.startup || null,
-      projects: []
+      projects: [],
+      userRole: null,
     };
   },
   async created() {
     try {
+      this.setUserRole();
       const response = await axios.get(`/startups/${this.$route.params.id}`);
       this.startup = response.data;
+
       const projectsRes = await axios.get(
         `/startups/${this.$route.params.id}/projects`
       );
@@ -70,7 +76,8 @@ export default {
     } catch (e) {
       console.error("Error loading startup or projects", e);
     }
-  }, methods: {
+  },
+  methods: {
     downloadJSON() {
       const json = JSON.stringify(this.startup);
       const blob = new Blob([json], { type: "application/json" });
@@ -84,11 +91,40 @@ export default {
     },
     goToProject(id) {
       this.$router.push(`/home/project/${id}`);
-    }
-  }
-
+    },
+    setUserRole() {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decoded = jwtDecode(token);
+        this.userRole = decoded.role;
+      }
+    },
+    async createChannel() {
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
+      const decoded = jwtDecode(token);
+      if (!token) {
+        alert("You must be logged in to create a channel.");
+        return;
+      }
+      const newChannel = {
+        startup_name: this.startup.name,
+        startup_id: this.startup._id,
+        investor_name: decoded.name,
+        investor_id: decoded.id,
+        chats: []
+      }
+      try {
+        await axios.post(`/channels/`, newChannel );
+        this.$router.push('/investor/messaging');
+      } catch (err) {
+        console.error("Error sending message:", err);
+      }
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 .project-page {
@@ -228,5 +264,4 @@ button:active {
 .projects-table tr:hover {
   background: var(--purple1);
 }
-
 </style>
