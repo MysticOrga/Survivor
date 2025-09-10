@@ -1,5 +1,6 @@
 <script>
 import axios from 'axios';
+import router from '@/router';
 export default {
   name: 'ProjectPage',
   data() {
@@ -38,7 +39,7 @@ export default {
           address: this.startup.address,
           email: this.startup.email,
           phone: this.startup.phone,
-          sector: this.startup.section,
+          sector: this.startup.sector,
           maturity: this.startup.maturity,
           views: this.startup.views,
           description: this.startup.description
@@ -50,6 +51,22 @@ export default {
         }
       );
       alert("Startup Edited");
+    } catch (err) {
+      console.log("Error: ", err);
+      alert("Something went wrong.");
+    }
+  },
+  async deleteStartup() {
+    try {
+      await axios.delete(`/admin/startups/` + this.startup._id,
+        // {},
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+      router.push("/admin/dashboard/")
     } catch (err) {
       console.log("Error: ", err);
       alert("Something went wrong.");
@@ -83,7 +100,7 @@ export default {
       </div>
       <button @click="editStartup">Save changes</button>
 
-      <button>Delete this Startup</button>
+      <button @click="deleteStartup" >Delete this Startup</button>
 
     </section>
 

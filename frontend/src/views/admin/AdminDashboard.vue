@@ -5,13 +5,24 @@
 
     const data = ref([])
 
+    const Addbool = ref(false)
+    const AddValue = ref({
+      name:"",
+      description:"",
+      address:"",
+      email:"",
+      phone:"",
+      sector:"",
+      status:"",
+      role:"",
+      project_status:"",
+      needs: 0
+    })
+
     const search = ref("")
     const sortKey = ref(null)
     const sortAsc = ref(true)
 
-    const startup = ref({
-      sector: "Startups"
-    })
 
     const filter = ref("")
 
@@ -25,59 +36,62 @@
     }
 
     const filteredData = computed(() => {
-        let term = search.value.toLowerCase()
-        let result = [];
+      let term = search.value.toLowerCase()
+      let result = []
 
-        if (filter.value == "Startups") {
-            result = data.value.filter(item =>
-            item.name.toLowerCase().includes(term) ||
-            item.sector.toLowerCase().includes(term) ||
-            item.maturity.toLowerCase().includes(term) ||
-            String(item.founders).toLowerCase().includes(term)
-          )
-        }
+      if (filter.value == "Startups") {
+        result = data.value.filter(item =>
+          (item.name?.toLowerCase() || "").includes(term) ||
+          (item.sector?.toLowerCase() || "").includes(term) ||
+          (item.maturity?.toLowerCase() || "").includes(term) ||
+          String(item.founders || "").toLowerCase().includes(term)
+        )
+      }
 
-        if (filter.value == "Users") {
-            result = data.value.filter(item =>
-            item.name.toLowerCase().includes(term) ||
-            item.email.toLowerCase().includes(term) ||
-            item.role.toLowerCase().includes(term) ||
-            String(item.founders).toLowerCase().includes(term)
-          )
-        }
+      if (filter.value == "Users") {
+        result = data.value.filter(item =>
+          (item.name?.toLowerCase() || "").includes(term) ||
+          (item.email?.toLowerCase() || "").includes(term) ||
+          (item.role?.toLowerCase() || "").includes(term) ||
+          String(item.founders || "").toLowerCase().includes(term)
+        )
+      }
 
-        if (filter.value == "Projects") {
-            result = data.value.filter(item =>
-            item.name.toLowerCase().includes(term) ||
-            item.project_status.toLowerCase().includes(term) ||
-            item.needs.toLowerCase().includes(term) ||
-            item.sector.toLowerCase().includes(term) ||
-            String(item.founders).toLowerCase().includes(term)
-          )
-        }
+      if (filter.value == "Projects") {
+        result = data.value.filter(item =>
+          (item.name?.toLowerCase() || "").includes(term) ||
+          (item.project_status?.toLowerCase() || "").includes(term) ||
+          (item.sector?.toLowerCase() || "").includes(term) ||
+          String(item.founders || "").toLowerCase().includes(term)
+        )
+      }
 
-        if (sortKey.value) {
+      if (sortKey.value) {
         result.sort((a, b) => {
-            if (a[sortKey.value] < b[sortKey.value]) return sortAsc.value ? -1 : 1
-            if (a[sortKey.value] > b[sortKey.value]) return sortAsc.value ? 1 : -1
-            return 0
+          if ((a[sortKey.value] || "") < (b[sortKey.value] || "")) return sortAsc.value ? -1 : 1
+          if ((a[sortKey.value] || "") > (b[sortKey.value] || "")) return sortAsc.value ? 1 : -1
+          return 0
         })
-        }
-        return result
+      }
+      return result
     })
+
 
     const focus = ref({ name: "" })
 
     const focused = (item) => {
         focus.value = item
+        Addbool.value = false;
     }
 
     const clearFocus = () => {
         focus.value = { name: "" }
+        Addbool.value = false;
     }
 
     const getData = async (option) => {
       try {
+        data.value = []
         if (option == "Startups") {
           const response = await axios.get(`/startups`);
           return response.data;
@@ -99,8 +113,79 @@
     }
 
     const refreshData = async () => {
-      data.value = await getData(filter.value)
       clearFocus();
+      data.value = await getData(filter.value)
+    }
+
+    const addNewValue = () => {
+      clearFocus();
+      Addbool.value = true
+      console.log("AddBool: ", Addbool.value);
+    }
+
+    const sendNewValue = async () => {
+
+      console.log(AddValue.value);
+      console.log("test value: ", localStorage.getItem(`token`));
+      try {
+        const header =  {
+          headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        };
+
+        const payloadStartups = {
+            name: AddValue.value.name,
+            legal_status: AddValue.value.legal_status,
+            address: AddValue.value.address,
+            email: AddValue.value.email,
+            phone: AddValue.value.phone,
+            sector: AddValue.value.sector,
+            maturity: "Idea",
+            views: 0,
+            status: AddValue.value.status,
+            description: AddValue.value.description
+        };
+
+        const payloadUsers = {
+            name: AddValue.value.name,
+            email: AddValue.value.email,
+            role: AddValue.value.role
+        };
+
+        const payloadProject = {
+            name: AddValue.value.name,
+            description: AddValue.value.description,
+            project_status: "Idea",
+            needs: AddValue.value.needs,
+            sector: AddValue.value.sector,
+            private_views: 0,
+            public_views: 0,
+        };
+
+        if (filter.value == "Startups") {
+          const response = await axios.post(`/admin/startups`, payloadStartups, header);
+          alert("Startup Created");
+          console.log(response);
+        } else if (filter.value == "Users") {
+          const response = await axios.post(`/admin/user`, payloadUsers, header);
+          alert("User created");
+          console.log(response);
+        } else if (filter.value == "Projects") {
+          const response = await axios.post(`/projects`, payloadProject, header);
+          alert("Project created");
+          console.log(response);
+        } else {
+          alert("Please choose an option");
+          return;
+        }
+
+        Addbool.value = false;
+        refreshData();
+      } catch (err) {
+        console.log("Error: ", err);
+        alert("Something went wrong.");
+      }
     }
 
     onMounted( async () => {
@@ -112,32 +197,183 @@
 
 <template>
 
-  <div>
-    <select id="filter" v-model="filter" @change="refreshData">
-      <option disabled value="">-- Select an option --</option>
-      <option value="Startups">Startups</option>
-      <option value="Users">Users</option>
-      <option value="Projects">Projects</option>
-    </select>
+    <div>
+        <select id="filter" v-model="filter" @change="refreshData">
+            <option disabled value="">-- Select an option --</option>
+            <option value="Startups">Startups</option>
+            <option value="Users">Users</option>
+            <option value="Projects">Projects</option>
+        </select>
 
-    <p>Selected value: {{ filter }}</p>
-  </div>
-
-  <form>
-    <div class="fx fx-gap">
-      <div>
-        <input v-model="search" type="text" placeholder="Search" required />
-      </div>
+        <p>Selected value: {{ filter }}</p>
     </div>
-  </form>
+    <!-- <<router-link :to="{ name: ''}"></router-link> -->
+    <button class="add-btn" @click="addNewValue">+</button>
+
+    <form>
+        <div class="fx fx-gap">
+            <div>
+                <input v-model="search" type="text" placeholder="Search" required />
+            </div>
+        </div>
+    </form>
 
 
+    <!-- Creting new ebject area -->
+      <div v-if="Addbool === true" class="focus-card">
+        <button class="close-btn" @click="clearFocus">x</button>
+
+        <div v-if="filter == `Startups`" class="focus-info" >
+            <label for="AddName"><strong>Name : </strong></label>
+            <input
+              name="AddName"
+              v-model="AddValue.name"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddDescription"><strong>Description : </strong></label>
+            <input
+              name="AddDescription"
+              v-model="AddValue.description"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddAddress"><strong>Address : </strong></label>
+            <input
+              name="AddAddress"
+              v-model="AddValue.address"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddEmail"><strong>Email : </strong></label>
+            <input
+              name="AddEmail"
+              v-model="AddValue.email"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddPhone"><strong>Phone : </strong></label>
+            <input
+              name="AddPhone"
+              v-model="AddValue.phone"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddSector"><strong>Sector : </strong></label>
+            <input
+              name="AddSector"
+              v-model="AddValue.sector"
+              placeholder="Here..."
+              type="text"
+            />
+        </div>
+
+        <div v-if="filter == `Users`" class="focus-info" >
+            <label for="AddName"><strong>Name : </strong></label>
+            <input
+              name="AddName"
+              v-model="AddValue.name"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddDescription"><strong>Description : </strong></label>
+            <input
+              name="AddDescription"
+              v-model="AddValue.description"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddAddress"><strong>Address : </strong></label>
+            <input
+              name="AddAddress"
+              v-model="AddValue.address"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddEmail"><strong>Email : </strong></label>
+            <input
+              name="AddEmail"
+              v-model="AddValue.email"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddPhone"><strong>Phone : </strong></label>
+            <input
+              name="AddPhone"
+              v-model="AddValue.phone"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddSector"><strong>Sector : </strong></label>
+            <input
+              name="AddSector"
+              v-model="AddValue.sector"
+              placeholder="Here..."
+              type="text"
+            />
+        </div>
+
+        <div v-if="filter == `Projects`" class="focus-info" >
+            <label for="AddName"><strong>Name : </strong></label>
+            <input
+              name="AddName"
+              v-model="AddValue.name"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddDescription"><strong>Description : </strong></label>
+            <input
+              name="AddDescription"
+              v-model="AddValue.description"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="Addproject_status"><strong>project_status : </strong></label>
+            <input
+              name="Addproject_status"
+              v-model="AddValue.project_status"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="Addsector"><strong>sector : </strong></label>
+            <input
+              name="Addsector"
+              v-model="AddValue.sector"
+              placeholder="Here..."
+              type="text"
+            />
+
+        </div>
+
+        <button @click="sendNewValue" class="btn-edit">Create</button>
+      </div>
 
     <!-- Focused startup for management -->
       <div v-if="focus.name" class="focus-card">
         <button class="close-btn" @click="clearFocus">x</button>
 
         <router-link v-if="filter == `Startups`" :to="{ name: 'admin-project', params: { id: focus._id } }"
+                    class="btn-edit">
+          Edit
+        </router-link>
+        <router-link v-if="filter == `Users`" :to="{ name: 'admin-users', params: { id: focus._id } }"
+                    class="btn-edit">
+          Edit
+        </router-link>
+        <router-link v-if="filter == `Projects`" :to="{ name: 'admin-content', params: { id: focus._id } }"
                     class="btn-edit">
           Edit
         </router-link>
@@ -174,7 +410,7 @@
         <div v-if="filter == `Projects`" class="focus-info">
           <p><strong>Name :</strong> {{ focus.name }}</p>
           <p><strong>Description :</strong> {{ focus.description }}</p>
-          <p><strong>Status :</strong> {{ focus.legal_status }}</p>
+          <p><strong>Status :</strong> {{ focus.project_status }}</p>
           <p><strong>Needs :</strong> {{ focus.needs }}</p>
           <p><strong>Sector :</strong> {{ focus.sector }}</p>
         </div>
@@ -288,11 +524,41 @@ input[type="text"] {
   height: 3rem;
   font-size: 1.2rem;
   line-height: 1;
+  color: #000;
 }
 
 input[type="text"]::placeholder {
   color: var(--pink1);
 }
+
+.add-btn {
+  position: fixed;       /* stays fixed on screen */
+  bottom: 2rem;          /* place at bottom for mobile style */
+  right: 2rem;           /* 2rem from the right edge */
+
+  width: 60px;           /* circle size */
+  height: 60px;
+  border-radius: 50%;    /* makes it a circle */
+
+  background-color: var(--pink1);
+  color: #fff;
+  font-size: 2rem;       /* size of "+" */
+  font-weight: bold;
+  line-height: 60px;     /* centers "+" vertically */
+  text-align: center;    /* centers "+" horizontally */
+
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  transition: background 0.2s ease, transform 0.2s ease;
+  z-index: 1000;         /* stays on top of other content */
+}
+
+.add-btn:hover {
+  background-color: var(--pink2);
+  transform: scale(1.1);
+}
+
 
 .table-wrapper {
   margin: 10px auto;

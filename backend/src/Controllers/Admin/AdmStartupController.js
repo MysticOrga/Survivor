@@ -25,6 +25,7 @@ router.get("/:id", auth("admin"), async (req, res) => {
 
 router.post("/", auth("admin"), async (req, res) => {
     try {
+        console.log(req.body);
         const newEvent = await AdmEvent.createStartup(req.body);
         res.status(201).json(newEvent);
     } catch (err) {

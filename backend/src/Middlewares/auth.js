@@ -7,13 +7,14 @@ function auth(requiredRole) {
 
         const authHeader = req.headers["authorization"];
         const token = authHeader && authHeader.split(" ")[1];
+        console.log("token :" + token)
         if (!token) {
             return res.status(401).json({ error: "Token required" });
         }
         try {
             const decoded = jwt.verify(token, SECRET);
-            req.user = decoded;
-            if (requiredRole && req.user.role !== requiredRole) {
+            // req.user = decoded;
+            if (requiredRole && decoded.role !== requiredRole) {
                 return res.status(403).json({ error: "Forbidden: insufficient rights" });
             }
             next();
