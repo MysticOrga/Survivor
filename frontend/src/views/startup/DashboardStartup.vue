@@ -1,13 +1,13 @@
 <template>
   <div class="stats">
-    <div class="stats-1">
+    <!-- <div class="stats-1">
       <p>{{ totalStartup }}</p>
       <span>Total Startup</span>
     </div>
     <div class="stats-2">
       <p>{{ totalProjects }}</p>
       <span>Total Project</span>
-    </div>
+    </div> -->
     <div class="stats-3">
       <p>{{ projectViewprv }}</p>
       <span>Project's Views (private)</span>
