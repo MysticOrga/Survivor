@@ -16,4 +16,10 @@ router.put('/:id/chat', async (req, res) => {
     res.json()
 })
 
+router.post('/', async (req, res) => {
+    console.log(req.body);
+    await Channel.createChannels(req.body);
+    res.json({ msg: "channel succesfully created" })
+})
+
 module.exports = router;
