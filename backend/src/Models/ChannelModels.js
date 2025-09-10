@@ -8,7 +8,12 @@ exports.createChannels = async (channel) => {
     if (channel.chats.length) {
         channel.chats[0].sender_id = new ObjectId(channel.chats[0].sender_id);
     }
-    return MongoAPI.createDocument('channel', channel);
+    const exist = await MongoAPI.readDocuments('channel', {
+        startup_id: channel.startup_id,
+        investor_id: channel.investor_id
+    });
+    if (!exist.length)
+        return MongoAPI.createDocument('channel', channel);
 }
 exports.postChat = async (filter, chat) => {
     const db = client.db("ClientDB");
