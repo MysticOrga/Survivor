@@ -33,7 +33,7 @@ app.use("/admin/user", AdmUserRoute);
 app.use("/admin/startups", AdmStartupRoute);
 app.use("/filters", FilterRouter);
 app.use("/channels", ChannelRouter);
-app.use("/investor", InvestorRouter);
+app.use("/investors", InvestorRouter);
 
 app.listen(PORT, () => {
     clientDB.connect();
