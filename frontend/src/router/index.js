@@ -4,7 +4,6 @@ import { jwtDecode } from "jwt-decode";
 import HomePage from "@/views/home/HomePage.vue";
 import ProjectCatalog from "@/views/home/ProjectCatalog.vue";
 import ProjectPage from "@/views/home/ProjectPage.vue";
-import ProjectDetails from "@/views/home/ProjectDetails.vue";
 import NewsFeed from "@/views/home/NewsFeed.vue";
 import NewsPage from "@/views/home/NewsPage.vue";
 import SearchFilter from "@/views/home/SearchFilter.vue";
