@@ -12,6 +12,9 @@
             <li><router-link to="/home/catalog">Catalog</router-link></li>
             <li><router-link to="/home/news">News</router-link></li>
             <li><router-link to="/home/events">Events</router-link></li>
+            <li v-if="userRole === 'investor'">
+              <router-link to="/investor/messaging">Message</router-link>
+            </li>
           </ul>
         </nav>
         <div class="tools">
@@ -34,8 +37,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-// import jwtDecode from "jwt-decode";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
