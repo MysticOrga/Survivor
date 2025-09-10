@@ -8,10 +8,35 @@
     </select>
 
     <select v-if="selectedFilter" v-model="selectedValue" class="filter-dropdown">
+      <option v-if="selectedFilter === 'sector'" value="DeepTech">DeepTech</option>
+      <option v-if="selectedFilter === 'sector'" value="EdTech">EdTech</option>
+      <option v-if="selectedFilter === 'sector'" value="FinTech">FinTech</option>
+      <option v-if="selectedFilter === 'sector'" value="HealthTech">HealthTech</option>
+      <option v-if="selectedFilter === 'sector'" value="Logistics">Logistics</option>
+      <option v-if="selectedFilter === 'sector'" value="SaaS">SaaS</option>
+      <option v-if="selectedFilter === 'sector'" value="Sustainability">Sustainability</option>
+
+      <option v-if="selectedFilter === 'country'" value="Austria">Austria</option>
+      <option v-if="selectedFilter === 'country'" value="Belgium">Belgium</option>
+      <option v-if="selectedFilter === 'country'" value="Finland">Finland</option>
+      <option v-if="selectedFilter === 'country'" value="France">France</option>
+      <option v-if="selectedFilter === 'country'" value="Germany">Germany</option>
+      <option v-if="selectedFilter === 'country'" value="Ireland">Ireland</option>
+      <option v-if="selectedFilter === 'country'" value="Italy">Italy</option>
+      <option v-if="selectedFilter === 'country'" value="Netherlands">Netherlands</option>
+      <option v-if="selectedFilter === 'country'" value="Portugal">Portugal</option>
+      <option v-if="selectedFilter === 'country'" value="Spain">Spain</option>
+      <option v-if="selectedFilter === 'country'" value="Sweden">Sweden</option>
+
+      <option v-if="selectedFilter === 'project_status'" value="Idea">Idea</option>
+      <option v-if="selectedFilter === 'project_status'" value="MVP">MVP</option>
+      <option v-if="selectedFilter === 'project_status'" value="Prototype">Prototype</option>
+      <option v-if="selectedFilter === 'project_status'" value="Product-Market Fit">Product-Market Fit</option>
     </select>
 
     <button @click="applyFilter">Apply Filter</button>
-    <button v-if="selectedFilter || selectedValue" @click="resetFilter" style="background:var(--purple3);margin-left:10px;">Reset</button>
+    <button v-if="selectedFilter || selectedValue" @click="resetFilter"
+      style="background:var(--purple3);margin-left:10px;">Reset</button>
   </div>
 
   <div class="catalog">
@@ -36,7 +61,7 @@
 
 <script>
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 export default {
   name: "ProjectCatalog",
