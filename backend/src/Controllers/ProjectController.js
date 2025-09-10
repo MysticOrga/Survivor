@@ -5,6 +5,43 @@ const router = expres.Router();
 const auth = require("../Middlewares/auth");
 const jwt = require("jsonwebtoken");
 const { SECRET } = require("../Config/env");
+const client = require("../Config/db");
+
+router.get("/filter", async (req, res) => {
+    try {
+        const filters = {};
+        if (req.query.address || req.query.country) {
+            const db = client.db("ClientDB");
+            const startupCol = db.collection("startup");
+            const searchValue = req.query.address || req.query.country;
+            const startups = await startupCol.find({
+                address: { $regex: searchValue, $options: "i" }
+            }).toArray();
+            if (startups.length === 0) {
+                return res.status(404).send("No startups found for this address/country");
+            }
+            const startupIds = startups.map(s => s._id);
+            filters.startup_id = { $in: startupIds };
+        }
+        if (req.query.sector) {
+            filters.sector = { $regex: "^" + req.query.sector + "$", $options: "i" };
+        }
+        if (req.query.project_status) {
+            filters.project_status = {
+                $regex: "^" + req.query.project_status + "$",
+                $options: "i"
+            };
+        }
+        const projects = await Project.getStartupProjects(filters);
+        if (projects.length > 0) {
+            res.json(projects);
+        } else {
+            res.status(404).send("No projects found for this filter");
+        }
+    } catch (err) {
+        res.status(500).send("Server error: " + err.message);
+    }
+});
 
 router.get("/filter", async (req, res) => {
     try {
