@@ -5,6 +5,7 @@ const router = expres.Router();
 const auth = require("../Middlewares/auth");
 const jwt = require("jsonwebtoken");
 const { SECRET } = require("../Config/env");
+const client = require("../Config/db");
 
 router.get("/filter", async (req, res) => {
     try {
@@ -46,7 +47,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
-    const token  = req.headers['authorization'].split(" ")[1];
+    const token = req.headers['authorization'].split(" ")[1];
     let public = true;
 
     console.log(token);
@@ -77,9 +78,9 @@ router.put("/:id", auth("investor"), async (req, res) => {
 })
 
 router.delete("/:id", auth("investor"), async (req, res) => {
-    const filter = { _id: new ObjectId(req.params.id)};
+    const filter = { _id: new ObjectId(req.params.id) };
     Project.deleteProject(filter);
-    res.json({ msg: "project succesfully deleted"});
+    res.json({ msg: "project succesfully deleted" });
 })
 
 
