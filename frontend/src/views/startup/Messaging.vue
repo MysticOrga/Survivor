@@ -89,7 +89,11 @@ export default {
         },
         async fetchMessages(channel_id) {
             try {
-                const res = await axios.get(`/channels/${channel_id}/chats`);
+                const res = await axios.get(`/channels/${channel_id}/chats`, {
+                    headers: {
+                         Authorization: "Bearer " + localStorage.getItem('token')
+                    }
+                });
                 this.messages = res.data;
             } catch (err) {
                 console.error("Error fetching messages:", err);

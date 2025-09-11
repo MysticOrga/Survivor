@@ -54,7 +54,11 @@ export default {
   methods: {
     async fetchChannels() {
       try {
-        const res = await axios.get(`/investors/${this.decoded.id}/channels`);
+        const res = await axios.get(`/investors/${this.decoded.id}/channels`, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+          }
+        });
         this.channels = res.data;
       } catch (err) {
         console.error("Error fetching channels:", err);
@@ -66,7 +70,11 @@ export default {
     },
     async fetchMessages(channel_id) {
       try {
-        const res = await axios.get(`/channels/${channel_id}/chats`);
+        const res = await axios.get(`/channels/${channel_id}/chats`, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+          }
+        });
         this.messages = res.data;
       } catch (err) {
         console.error("Error fetching messages:", err);
