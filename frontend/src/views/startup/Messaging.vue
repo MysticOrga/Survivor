@@ -73,7 +73,11 @@ export default {
     methods: {
         async fetchChannels() {
             try {
-                const res = await axios.get(`/startups/${this.decoded.startupID}/channels`);
+                const res = await axios.get(`/startups/${this.decoded.startupID}/channels`, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                  }
+                });
                 this.channels = res.data;
             } catch (err) {
                 console.error("Error fetching channels:", err);
