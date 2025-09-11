@@ -97,7 +97,12 @@
           return response.data;
         }
         if (option == "Users") {
-          const response = await axios.get(`/users`);
+          const response = await axios.get(`/users`,
+          {
+          headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
           return response.data;
         }
         if (option == "Projects") {
