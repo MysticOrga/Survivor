@@ -97,8 +97,7 @@
           return response.data;
         }
         if (option == "Users") {
-          const response = await axios.get(`/users`,
-          {
+          const response = await axios.get(`/users`, {
           headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -120,6 +119,8 @@
     const refreshData = async () => {
       clearFocus();
       data.value = await getData(filter.value)
+      if (filter.value == "Startups")
+        totalViews();
     }
 
     const addNewValue = () => {
@@ -193,9 +194,16 @@
       }
     }
 
+    const totalView = ref(0)
+
+    const totalViews = () => {
+      totalView.value = data.value.reduce((sum, item) => sum + (item.views || 0), 0);
+    }
+
     onMounted( async () => {
       filter.value = "Startups";
       data.value = await getData(filter.value);
+      totalViews();
     });
 
 </script>
@@ -212,6 +220,8 @@
 
         <p>Selected value: {{ filter }}</p>
     </div>
+
+
     <!-- <<router-link :to="{ name: ''}"></router-link> -->
     <button class="add-btn" @click="addNewValue">+</button>
 
@@ -222,6 +232,18 @@
             </div>
         </div>
     </form>
+
+
+    <div class="stats-container">
+        <div class="stats-card">
+        <div class="title">Number of {{ filter }}:</div>
+        <div class="value">{{ filteredData.length }}</div>
+        </div>
+        <div v-if="filter == `Startups`" class="stats-card">
+        <div class="title">Number of views:</div>
+        <div class="value">{{ totalView }}</div>
+        </div>
+    </div>
 
 
     <!-- Creting new ebject area -->
@@ -421,7 +443,6 @@
         </div>
 
       </div>
-
 
 
   <!-- Table for searches -->
@@ -752,6 +773,44 @@ input[type="text"]::placeholder {
 
 .btn-edit:hover {
   background-color: var(--purple4);
+}
+
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.stats-card {
+  background: linear-gradient(135deg, var(--purple2), var(--pink2));
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.stats-card .title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: #fff;
+}
+
+.stats-card .value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
 }
 
 </style>
