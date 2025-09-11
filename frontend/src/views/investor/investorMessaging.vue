@@ -42,6 +42,7 @@ export default {
       currentChannel: null,
       messages: [],
       messageInput: "",
+      refreshInterval: null,
     };
   },
   mounted() {
@@ -50,6 +51,20 @@ export default {
       this.decoded = jwtDecode(token);
       this.fetchChannels();
     }
+  },
+  watch: {
+    currentChannel(newChannel, oldChannel) {
+      if (this.refreshInterval) clearInterval(this.refreshInterval);
+      if (newChannel) {
+        this.fetchMessages(newChannel.channel_id);
+        this.refreshInterval = setInterval(() => {
+          this.fetchMessages(newChannel.channel_id);
+        }, 2000);
+      }
+    },
+  },
+  beforeUnmount() {
+    if (this.refreshInterval) clearInterval(this.refreshInterval);
   },
   methods: {
     async fetchChannels() {
@@ -66,7 +81,6 @@ export default {
     },
     async selectChannel(channel) {
       this.currentChannel = channel;
-      await this.fetchMessages(channel.channel_id);
     },
     async fetchMessages(channel_id) {
       try {
@@ -93,12 +107,11 @@ export default {
         send_at: new Date().toISOString(),
       };
 
-      console.log("Decoded" + this.decoded);
-      console.log("Message: " + newMessage);
       try {
         await axios.put(`/channels/${this.currentChannel.channel_id}/chat`, { chat: newMessage });
-        this.messages.push(newMessage);
         this.messageInput = "";
+        // Recharge les messages immédiatement après envoi
+        await this.fetchMessages(this.currentChannel.channel_id);
       } catch (err) {
         console.error("Error sending message:", err);
       }
