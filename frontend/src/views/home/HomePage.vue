@@ -3,6 +3,14 @@
     <h2>Welcome to JEB Incubator,</h2><h2>Where Innovation Meets Opportunity</h2>
     <div class="content">
       <section class="dashboard-startups">
+        <div class="dashboard-container">
+          <div class="info">
+            <p><strong>Total Startups:</strong> {{ totalStartups }}</p>
+            <p><strong>Total Views:</strong> {{ totalViews.toLocaleString() }}</p>
+            <p><strong>Average Views per Startup:</strong> {{ (totalViews / totalStartups).toFixed(2) }}</p>
+            <p><strong>Number of projects:</strong> {{ totalProjects  }}</p>
+          </div>
+        </div>
         <h3>Most Viewed Startups</h3>
         <ul class="bestStartups">
           <li v-for="startup in startups.slice(0, 3)" :key="startup.id">
@@ -31,7 +39,8 @@ export default {
       startups: [],
       originalStartups: [],
       totalViews: 0,
-      totalStartups: 0
+      totalStartups: 0,
+      totalProjects: 0,
     }
   },
   async created() {
@@ -40,9 +49,14 @@ export default {
         url: '/startups',
         method: 'get',
       });
+      const responseProjects = await axios({
+        url: '/projects',
+        method: 'get',
+      });
       this.startups = response.data.sort((a, b) => (b.views || 0) - (a.views || 0));
       this.originalStartups = [...this.startups];
       this.totalStartups = this.startups.length;
+      this.totalProjects = responseProjects.data.length;
       this.totalViews = this.startups.reduce((sum, s) => sum + (s.views || 0), 0);
       console.log('Startups loaded:', this.startups);
     } catch (e) {

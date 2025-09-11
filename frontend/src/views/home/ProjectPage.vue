@@ -1,5 +1,4 @@
 <template>
-  <button @click="downloadJSON">Download Startup JSON</button>
   <button @click="exportPDF">Export Pitch Deck PDF</button>
   <button v-if="userRole === 'investor'" @click="createChannel">
     Contact Startup
