@@ -1,28 +1,22 @@
 <template>
-  <div class="stats">
-    <!-- <div class="stats-1">
-      <p>{{ totalStartup }}</p>
-      <span>Total Startup</span>
+  <div class="stats-container">
+    <div class="stats-card">
+      <div class="title">Project's Views (private)</div>
+      <div class="value">{{ projectViewprv }}</div>
     </div>
-    <div class="stats-2">
-      <p>{{ totalProjects }}</p>
-      <span>Total Project</span>
-    </div> -->
-    <div class="stats-3">
-      <p>{{ projectViewprv }}</p>
-      <span>Project's Views (private)</span>
+    <div class="stats-card">
+      <div class="title">Project's Views (public)</div>
+      <div class="value">{{ projectViewpblc }}</div>
+
     </div>
-    <div class="stats-4">
-      <p>{{ projectViewpblc }}</p>
-      <span>Project's Views (public)</span>
+    <div class="stats-card">
+      <div class="title">Startup's Views</div>
+      <div class="value">{{ startupView }}</div>
+
     </div>
-    <div class="stats-5">
-      <p>{{ startupView }}</p>
-      <span>Startup's Views</span>
-    </div>
-    <div class="stats-6">
-      <p>{{ totalView }}</p>
-      <span>Total View</span>
+    <div class="stats-card">
+      <div class="title">Total View</div>
+      <div class="value">{{ totalView }}</div>
     </div>
   </div>
 </template>
@@ -91,53 +85,40 @@ export default {
 </script>
 
 <style>
-.stats .stats-1 {
+.stats-container {
   display: grid;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
 }
 
-.stats .stats-2 {
-  display: grid;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+.stats-card {
+  background: linear-gradient(135deg, var(--purple2), var(--pink2));
+  border-radius: 1.5rem;
   padding: 1.5rem;
-}
-
-.stats .stats-3 {
-  display: grid;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
-}
-
-.stats .stats-4 {
-  display: grid;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
-}
-
-.stats .stats-5 {
-  display: grid;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
-}
-
-.stats .stats-6 {
-  display: grid;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
-}
-
-.stats p {
-  color: #c174f2;
-  text-decoration: solid;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  color: #fff;
   text-align: center;
-  height: 40px;
-  font-size: 4rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.stats span {
-  display: block;
-  text-align: center;
-  color: #d5a8f2;
+
+.stats-card .title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: #fff;
+}
+
+.stats-card .value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
