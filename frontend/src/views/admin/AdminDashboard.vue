@@ -263,7 +263,7 @@
         <div class="value">{{ totalInvestors }}</div>
         </div>
         <div v-if="filter == `Users`" class="stats-card">
-        <div class="title">Number of investors:</div>
+        <div class="title">Number of founders:</div>
         <div class="value">{{ totalFounders }}</div>
         </div>
         <div v-if="filter == `Users`" class="stats-card">
