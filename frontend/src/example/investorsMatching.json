@@ -1,0 +1,77 @@
+[
+    {
+    "id": "1",
+    "name": "GreenTech Ventures",
+    "description": "Invests in early-stage startups focusing on renewable energy and sustainable technologies.",
+    "investmentStage": ["Seed", "Series A"],
+    "sectors": ["Energy", "Environment", "Sustainability"],
+    "location": "Global",
+    "fundingCapacity": "Up to $5M",
+    "contact": {
+        "email": "contact@greentechventures.com",
+        "phone": "+1-555-123-4567"
+    },
+    "website": "https://greentechventures.com",
+    "tags": ["green tech", "sustainability", "clean energy"]
+    },
+    {
+    "id": "2",
+    "name": "HealthTech Capital",
+    "description": "Provides funding and mentorship to startups in digital health and medical technologies.",
+    "investmentStage": ["Seed", "Series A", "Series B"],
+    "sectors": ["HealthTech", "MedTech", "Digital Health"],
+    "location": "Europe",
+    "fundingCapacity": "Up to $10M",
+    "contact": {
+        "email": "info@healthtechcapital.eu",
+        "phone": "+44-123-456-7890"
+    },
+    "website": "https://healthtechcapital.eu",
+    "tags": ["healthtech", "digital health", "telemedicine"]
+    },
+    {
+    "id": "3",
+    "name": "AI Innovation Partners",
+    "description": "Focuses on AI and machine learning startups with scalable solutions and high impact potential.",
+    "investmentStage": ["Seed", "Series A", "Series B", "Series C"],
+    "sectors": ["Artificial Intelligence", "Machine Learning", "Data Science"],
+    "location": "Global",
+    "fundingCapacity": "Up to $15M",
+    "contact": {
+        "email": "partners@aiinnovation.com",
+        "phone": "+1-222-333-4444"
+    },
+    "website": "https://aiinnovation.com",
+    "tags": ["AI", "ML", "data"]
+    },
+    {
+    "id": "4",
+    "name": "Creative Capital Fund",
+    "description": "Supports startups and projects in arts, media, and creative industries with funding and mentorship.",
+    "investmentStage": ["Seed", "Series A"],
+    "sectors": ["Arts", "Media", "Entertainment", "Creative Industries"],
+    "location": "Global",
+    "fundingCapacity": "Up to $2M",
+    "contact": {
+        "email": "contact@creativefund.com",
+        "phone": "+1-777-888-9999"
+    },
+    "website": "https://creativefund.com",
+    "tags": ["arts", "media", "creative"]
+    },
+    {
+    "id": "5",
+    "name": "SME Growth Investors",
+    "description": "Invests in small and medium enterprises (SMEs) aiming to scale their business internationally.",
+    "investmentStage": ["Series A", "Series B", "Growth"],
+    "sectors": ["Business", "Technology", "Manufacturing"],
+    "location": "Global",
+    "fundingCapacity": "Up to $20M",
+    "contact": {
+        "email": "info@smegrowth.com",
+        "phone": "+1-888-555-1234"
+    },
+    "website": "https://smegrowth.com",
+    "tags": ["SME", "growth", "scale-up"]
+    }
+]

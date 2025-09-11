@@ -19,6 +19,9 @@ import UserManagement from "@/views/admin/UserManagement.vue";
 
 import Messaging from "@/views/startup/Messaging.vue";
 import Opportunities from "@/views/startup/Opportunities.vue";
+import OpportunitiesProject from "@/views/startup/OpportunitiesProject.vue";
+import OpportunitiesFundings from "@/views/startup/OpportunitiesFundings.vue";
+import OpportunitiesMatchings from "@/views/startup/OpportunitiesMatchings.vue";
 import StartupProfile from "@/views/startup/StartupProfile.vue";
 import ProjectDetails from "@/views/home/ProjectDetails.vue";
 import DashboardStartup from "@/views/startup/DashboardStartup.vue";
@@ -97,6 +100,24 @@ const routes = [
     name: "startup-opportunities",
     component: Opportunities,
     meta: { requiresAuth: true, roles: ["founder"] }
+  },
+  {
+    path: "/startup/opportunities/:id",
+    name: "opportunities-project",
+    component: OpportunitiesProject,
+    meta: { requiresAuth: true, roles: ["founder"]}
+  },
+  {
+    path: "/startup/opportunities/fundings/:id",
+    name: "opportunities-fundings",
+    component: OpportunitiesFundings,
+    meta: { requiresAuth: true, roles: ["founder"]}
+  },
+  {
+    path: "/startup/opportunities/matchings/:id",
+    name: "opportunities-matchings",
+    component: OpportunitiesMatchings,
+    meta: { requiresAuth: true, roles: ["founder"]}
   },
 
   {
