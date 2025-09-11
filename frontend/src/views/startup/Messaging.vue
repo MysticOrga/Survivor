@@ -192,7 +192,6 @@ nav a:hover {
 
 .channels li:hover {
   background: var(--purple3);
-  transform: translateX(4px);
 }
 
 .channels li.active {
