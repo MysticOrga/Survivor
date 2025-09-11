@@ -1,5 +1,6 @@
 <template>
   <button @click="downloadJSON">Download Startup JSON</button>
+  <button @click="exportPDF">Export Pitch Deck PDF</button>
   <button v-if="userRole === 'investor'" @click="createChannel">
     Contact Startup
   </button>
@@ -50,6 +51,8 @@
 <script>
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export default {
   name: "StartupPage",
@@ -63,6 +66,7 @@ export default {
   async created() {
     try {
       this.setUserRole();
+
       const response = await axios.get(`/startups/${this.$route.params.id}`);
       this.startup = response.data;
 
@@ -78,6 +82,13 @@ export default {
     }
   },
   methods: {
+    setUserRole() {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decoded = jwtDecode(token);
+        this.userRole = decoded.role;
+      }
+    },
     downloadJSON() {
       const json = JSON.stringify(this.startup);
       const blob = new Blob([json], { type: "application/json" });
@@ -92,39 +103,107 @@ export default {
     goToProject(id) {
       this.$router.push(`/home/project/${id}`);
     },
-    setUserRole() {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const decoded = jwtDecode(token);
-        this.userRole = decoded.role;
-      }
-    },
     async createChannel() {
       const token = localStorage.getItem("token");
       console.log("Token:", token);
-      const decoded = jwtDecode(token);
       if (!token) {
         alert("You must be logged in to create a channel.");
         return;
       }
+      const decoded = jwtDecode(token);
       const newChannel = {
         startup_name: this.startup.name,
         startup_id: this.startup._id,
         investor_name: decoded.name,
         investor_id: decoded.id,
-        chats: []
-      }
+        chats: [],
+      };
       try {
-        await axios.post(`/channels/`, newChannel );
-        this.$router.push('/investor/messaging');
+        await axios.post(`/channels/`, newChannel);
+        this.$router.push("/investor/messaging");
       } catch (err) {
-        console.error("Error sending message:", err);
+        console.error("Error creating channel:", err);
       }
+    },
+    exportPDF() {
+      if (!this.startup) return;
+
+      const doc = new jsPDF();
+
+      doc.setFontSize(24);
+      doc.text(this.startup.name, 105, 50, { align: "center" });
+      doc.setFontSize(14);
+      doc.text("Pitch Deck", 105, 65, { align: "center" });
+      doc.setFontSize(12);
+      doc.text(`Sector: ${this.startup.sector || "N/A"}`, 105, 80, { align: "center" });
+      doc.text(`Maturity: ${this.startup.maturity || "N/A"}`, 105, 90, { align: "center" });
+      doc.text(`Views: ${this.startup.views || 0}`, 105, 100, { align: "center" });
+      doc.addPage();
+
+      doc.setFontSize(16);
+      doc.text("Startup Information", 14, 20);
+
+      const startupInfo = [
+        ["Description", this.startup.Description || "N/A"],
+        ["Email", this.startup.email || "N/A"],
+        ["Phone", this.startup.phone || "N/A"],
+        ["Address", this.startup.address || "N/A"],
+        ["Legal Status", this.startup.legal_status || "N/A"],
+        ["Sector", this.startup.sector || "N/A"],
+        ["Maturity", this.startup.maturity || "N/A"],
+        ["Total Views", this.startup.views || 0],
+      ];
+
+      autoTable(doc, {
+        startY: 30,
+        head: [["Field", "Value"]],
+        body: startupInfo,
+        theme: "grid",
+        styles: { fontSize: 10 },
+        headStyles: { fillColor: [117, 63, 131] },
+      });
+
+      if (this.projects.length > 0) {
+        doc.addPage();
+        doc.setFontSize(16);
+        doc.text(`Projects of ${this.startup.name}`, 14, 20);
+
+        const projectData = this.projects.map((p) => [
+          p.name,
+          p.description,
+          p.sector,
+          p.project_status,
+          p.private_views || 0,
+          p.public_views || 0,
+          p.created_at ? new Date(p.created_at).toLocaleDateString() : "N/A",
+          `${p.needs?.toLocaleString() || 0} €`,
+        ]);
+
+        autoTable(doc, {
+          startY: 30,
+          head: [
+            [
+              "Name",
+              "Description",
+              "Sector",
+              "Status",
+              "Private Views",
+              "Public Views",
+              "Created At",
+              "Needs (€)",
+            ],
+          ],
+          body: projectData,
+          theme: "grid",
+          styles: { fontSize: 9 },
+          headStyles: { fillColor: [197, 144, 241] },
+        });
+      }
+      doc.save(`pitchdeck-${this.startup.name}.pdf`);
     },
   },
 };
 </script>
-
 
 <style scoped>
 .project-page {
