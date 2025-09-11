@@ -12,12 +12,12 @@ router.post("/login", async (req, res) => {
     }
 })
 
-router.get("/", async(req, res) => {
+router.get("/", auth('admin'), async(req, res) => {
     const data = await Users.getAllUser();
     res.json(data);
 })
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth('admin'), async (req, res) => {
     const data = await Users.getUserId(req.params.id);
 
     if (data.lenght != 0)
