@@ -16,6 +16,9 @@
             <li v-if="userRole === 'investor'">
               <router-link to="/investor/messaging">Message</router-link>
             </li>
+            <li v-if="userRole === 'founder'">
+              <router-link to="/startup/profile">My Profile</router-link>
+            </li>
           </ul>
         </nav>
         <div class="tools">

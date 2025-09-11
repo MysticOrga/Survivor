@@ -103,7 +103,7 @@ export default {
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(100vh - 100px);
   font-family: "Segoe UI", Roboto, sans-serif;
 }
 

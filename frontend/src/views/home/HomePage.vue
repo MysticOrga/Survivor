@@ -1,18 +1,8 @@
 <template>
   <section class="homeSect">
-    <h2>Welcome to JEB Incubator,</h2>
+    <h2>Welcome to JEB Incubator,</h2><h2>Where Innovation Meets Opportunity</h2>
     <div class="content">
-      <div class="intro">
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quis, harum? Ad consequuntur delectus qui
-          inventore eius! Laudantium delectus quia dignissimos. Eum beatae sunt voluptatum eaque ducimus illum
-          aperiam eius nam.</p>
-      </div>
-
       <section class="dashboard-startups">
-        <div class="info">
-          <p><strong>Total Startups:</strong> {{ totalStartups }}</p>
-          <p><strong>Total Views:</strong> {{ totalViews }}</p>
-        </div>
         <h3>Most Viewed Startups</h3>
         <ul class="bestStartups">
           <li v-for="startup in startups.slice(0, 3)" :key="startup.id">
