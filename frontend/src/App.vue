@@ -233,10 +233,10 @@ onMounted(() => {
     flex-direction: column;
     gap: 15px;
   }
-
+/* 
   .tools {
     display: none;
-  }
+  } */
 
   .burger {
     display: block;
