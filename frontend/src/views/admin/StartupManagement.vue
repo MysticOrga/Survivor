@@ -30,6 +30,7 @@ export default {
       await axios.put(`projects/` + this.project._id,
         {
           name: this.project.name,
+          description: this.project.description,
           project_status: this.project.project_status,
           role: this.project.needs,
           sector: this.project.sector
