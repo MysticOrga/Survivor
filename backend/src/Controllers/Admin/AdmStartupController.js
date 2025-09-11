@@ -33,7 +33,7 @@ router.post("/", auth("admin"), async (req, res) => {
     }
 });
 
-router.put("/:id", auth("admin"), async (req, res) => {
+router.put("/:id", auth("admin", "founder"), async (req, res) => {
     try {
         console.log(req.header);
         const updated = await AdmEvent.updateStartup(req.params.id, req.body);
