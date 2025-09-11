@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "Javier Barrera",
+        "job": "Head Project Manager at JEB Incubator",
+        "contact": "javier.barrera@jeb-incubator.com"
+    },
+    {
+        "id": 2,
+        "name": "Elena Enka",
+        "job": "JEB Special Manager of your Joy",
+        "contact": "elena.enka@jeb-incubator.com"
+    },
+    {
+        "id": 3,
+        "name": "Bylel Jourdin",
+        "job": "Lead Developper",
+        "contact": "bylel.jourdin@jeb-incubator.com"
+    }
+]

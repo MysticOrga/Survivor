@@ -12,11 +12,22 @@
             <li><router-link to="/home/catalog">Catalog</router-link></li>
             <li><router-link to="/home/news">News</router-link></li>
             <li><router-link to="/home/events">Events</router-link></li>
+            <li><router-link to="/home/about">About</router-link></li>
+            <li v-if="userRole === 'investor'">
+              <router-link to="/investor/messaging">Message</router-link>
+            </li>
+            <li v-if="userRole === 'founder'">
+              <router-link to="/startup/profile">My Profile</router-link>
+            </li>
           </ul>
         </nav>
         <div class="tools">
           <ul>
-            <li><router-link to="/login">Login</router-link></li>
+            <li v-if="!isLoggedIn"><router-link to="/login">Login</router-link></li>
+            <li v-else>
+              <span>Welcome {{ userName }} : {{ userRole }}</span>
+              <button class="logout-btn" @click="logout">Logout</button>
+            </li>
           </ul>
         </div>
         <button class="burger" @click="isMenuOpen = !isMenuOpen">☰</button>
@@ -29,9 +40,53 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+import { useRouter } from "vue-router";
+
 const isMenuOpen = ref(false);
+const isLoggedIn = ref(false);
+const userName = ref("");
+const userRole = ref("");
+const router = useRouter();
+
+function checkAuth() {
+  const token = localStorage.getItem("token");
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      userName.value = decoded.name || decoded.username || "";
+      userRole.value = decoded.role || "";
+      isLoggedIn.value = true;
+    } catch (e) {
+      isLoggedIn.value = false;
+      userName.value = "";
+      userRole.value = "";
+    }
+  } else {
+    isLoggedIn.value = false;
+    userName.value = "";
+    userRole.value = "";
+  }
+}
+
+function logout() {
+  axios.defaults.headers.common['Authorization'] = "";
+  localStorage.removeItem("token");
+  localStorage.removeItem("userRole");
+  isLoggedIn.value = false;
+  userName.value = "";
+  userRole.value = "";
+  router.push("/login");
+}
+
+onMounted(() => {
+  checkAuth();
+  window.addEventListener("storage", checkAuth);
+});
 </script>
+
 <style scoped>
 * {
   box-sizing: border-box;
@@ -140,6 +195,23 @@ const isMenuOpen = ref(false);
   cursor: pointer;
 }
 
+.logout-btn {
+  margin-left: 12px;
+  background: #fff;
+  color: #d500f9;
+  border: 1px solid #d500f9;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+
+.logout-btn:hover {
+  background: #d500f9;
+  color: #fff;
+}
+
 @media (max-width: 900px) {
   .nav {
     position: absolute;
@@ -161,10 +233,10 @@ const isMenuOpen = ref(false);
     flex-direction: column;
     gap: 15px;
   }
-
+/* 
   .tools {
     display: none;
-  }
+  } */
 
   .burger {
     display: block;

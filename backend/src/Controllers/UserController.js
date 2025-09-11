@@ -4,20 +4,20 @@ const router = express.Router();
 const auth = require("../Middlewares/auth");
 
 router.post("/login", async (req, res) => {
-    const token = await Users.loginUser(req.body.email, req.body.password);
+    const token = await Users.loginUser(req.body.email, req.body.password, req.body.role);
     if (!token) {
-        res.send("invalid authorization")
+        res.status(401).json({ error: "Unauthorized"});
     } else {
         res.json({ token : token})
     }
 })
 
-router.get("/", auth("investisor"), async(req, res) => {
+router.get("/", auth('admin'), async(req, res) => {
     const data = await Users.getAllUser();
     res.json(data);
 })
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth('admin'), async (req, res) => {
     const data = await Users.getUserId(req.params.id);
 
     if (data.lenght != 0)

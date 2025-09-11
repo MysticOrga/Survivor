@@ -6,6 +6,7 @@ const router = express.Router();
 const keyType = "dev";
 const User = require("../Models/UserModels");
 const { ObjectId } = require("mongodb");
+const client = require("../Config/db");
 
 router.post("/user", authAPI(keyType), (req, res) => {
     const user = req.body;
@@ -86,6 +87,54 @@ router.get("/event/:id", authAPI(keyType), async (req, res) => {
     const filter = { _id: new ObjectId(id)};
     const data = await MongoAPI.readDocuments("event", filter);
     res.json(data);
+})
+
+router.put("/users", authAPI(keyType), (req, res) => {
+    const data = req.body.data;
+    const filter = req.body.filter;
+    const db = client.db("ClientDB");
+    db.collection("user").updateMany(filter, {
+        $set: data
+    });
+    res.json({
+        msg: "succesfully modified"
+    })
+})
+
+router.put("/startups", authAPI(keyType), (req, res) => {
+    const data = req.body.data;
+    const filter = req.body.filter;
+    const db = client.db("ClientDB");
+    db.collection("startup").updateMany(filter, {
+        $set: data
+    });
+    res.json({
+        msg: "succesfully modified"
+    })
+})
+
+router.put("/events", authAPI(keyType), (req, res) => {
+    const data = req.body.data;
+    const filter = req.body.filter;
+    const db = client.db("ClientDB");
+    db.collection("event").updateMany(filter, {
+        $set: data
+    });
+    res.json({
+        msg: "succesfully modified"
+    })
+})
+
+router.put("/news", authAPI(keyType), (req, res) => {
+    const data = req.body.data;
+    const filter = req.body.filter;
+    const db = client.db("ClientDB");
+    db.collection("new").updateMany(filter, {
+        $set: data
+    });
+    res.json({
+        msg: "succesfully modified"
+    })
 })
 
 router.put("/user/:id", authAPI(keyType), (req, res) => {

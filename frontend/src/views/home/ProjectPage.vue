@@ -1,5 +1,8 @@
 <template>
-  <button @click="downloadJSON">Download Startup JSON</button>
+  <button @click="exportPDF">Export Pitch Deck PDF</button>
+  <button v-if="userRole === 'investor'" @click="createChannel">
+    Contact Startup
+  </button>
   <section v-if="startup" class="project-page">
     <div class="info">
       <h2>{{ startup.name }}</h2>
@@ -11,52 +14,197 @@
       <p><strong>Sector:</strong> {{ startup.sector }}</p>
       <p><strong>Maturity:</strong> {{ startup.maturity }}</p>
     </div>
+  </section>
 
+  <section v-if="projects.length" class="projects-section">
+    <h3>Projects of {{ startup.name }}</h3>
+    <div class="table-wrapper">
+      <table class="projects-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Sector</th>
+            <th>Status</th>
+            <th>Needs (€)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="project in projects" :key="project._id" class="project-row" @click="goToProject(project._id)">
+            <td>{{ project.name }}</td>
+            <td>{{ project.description }}</td>
+            <td>{{ project.sector }}</td>
+            <td>{{ project.project_status }}</td>
+            <td>{{ project.needs.toLocaleString() }}</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
   </section>
 
   <section v-else class="not-found">
-    <p>Startup not found.</p>
+    <p>No projects found for this startup.</p>
   </section>
 </template>
-
 <script>
-import axios from 'axios';
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 export default {
-  name: 'ProjectPage',
+  name: "StartupPage",
   data() {
     return {
-      startup : this.$route.state?.startup || null
-    }
+      startup: this.$route.state?.startup || null,
+      projects: [],
+      userRole: null,
+    };
   },
   async created() {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/startups/` + this.$route.params.id);
-      console.log(`${import.meta.env.VITE_API_URL}/startups/`, this.$route.params.id);
+      this.setUserRole();
+
+      const response = await axios.get(`/startups/${this.$route.params.id}`);
       this.startup = response.data;
-      console.log('Startup loaded:', this.startup);
+
+      const projectsRes = await axios.get(
+        `/startups/${this.$route.params.id}/projects`
+      );
+      this.projects = projectsRes.data;
+
+      console.log("Startup loaded:", this.startup);
+      console.log("Projects loaded:", this.projects);
     } catch (e) {
-      console.error('Error startup', e);
+      console.error("Error loading startup or projects", e);
     }
   },
   methods: {
+    setUserRole() {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decoded = jwtDecode(token);
+        this.userRole = decoded.role;
+      }
+    },
     downloadJSON() {
-    console.log("test blobl");
-    const json = JSON.stringify(this.startup);
-    const blob = new Blob([json], {type: "application/json"});
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    document.body.appendChild(link);
-    link.href = url;
-    link.download = `startup-${this.startup.id || "data"}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
-  }
+      const json = JSON.stringify(this.startup);
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      document.body.appendChild(link);
+      link.href = url;
+      link.download = `startup-${this.startup._id || "data"}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    },
+    goToProject(id) {
+      this.$router.push(`/home/project/${id}`);
+    },
+    async createChannel() {
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
+      if (!token) {
+        alert("You must be logged in to create a channel.");
+        return;
+      }
+      const decoded = jwtDecode(token);
+      const newChannel = {
+        startup_name: this.startup.name,
+        startup_id: this.startup._id,
+        investor_name: decoded.name,
+        investor_id: decoded.id,
+        chats: [],
+      };
+      try {
+        await axios.post(`/channels/`, newChannel);
+        this.$router.push("/investor/messaging");
+      } catch (err) {
+        console.error("Error creating channel:", err);
+      }
+    },
+    exportPDF() {
+      if (!this.startup) return;
+
+      const doc = new jsPDF();
+
+      doc.setFontSize(24);
+      doc.text(this.startup.name, 105, 50, { align: "center" });
+      doc.setFontSize(14);
+      doc.text("Pitch Deck", 105, 65, { align: "center" });
+      doc.setFontSize(12);
+      doc.text(`Sector: ${this.startup.sector || "N/A"}`, 105, 80, { align: "center" });
+      doc.text(`Maturity: ${this.startup.maturity || "N/A"}`, 105, 90, { align: "center" });
+      doc.text(`Views: ${this.startup.views || 0}`, 105, 100, { align: "center" });
+      doc.addPage();
+
+      doc.setFontSize(16);
+      doc.text("Startup Information", 14, 20);
+
+      const startupInfo = [
+        ["Description", this.startup.Description || "N/A"],
+        ["Email", this.startup.email || "N/A"],
+        ["Phone", this.startup.phone || "N/A"],
+        ["Address", this.startup.address || "N/A"],
+        ["Legal Status", this.startup.legal_status || "N/A"],
+        ["Sector", this.startup.sector || "N/A"],
+        ["Maturity", this.startup.maturity || "N/A"],
+        ["Total Views", this.startup.views || 0],
+      ];
+
+      autoTable(doc, {
+        startY: 30,
+        head: [["Field", "Value"]],
+        body: startupInfo,
+        theme: "grid",
+        styles: { fontSize: 10 },
+        headStyles: { fillColor: [117, 63, 131] },
+      });
+
+      if (this.projects.length > 0) {
+        doc.addPage();
+        doc.setFontSize(16);
+        doc.text(`Projects of ${this.startup.name}`, 14, 20);
+
+        const projectData = this.projects.map((p) => [
+          p.name,
+          p.description,
+          p.sector,
+          p.project_status,
+          p.private_views || 0,
+          p.public_views || 0,
+          p.created_at ? new Date(p.created_at).toLocaleDateString() : "N/A",
+          `${p.needs?.toLocaleString() || 0} €`,
+        ]);
+
+        autoTable(doc, {
+          startY: 30,
+          head: [
+            [
+              "Name",
+              "Description",
+              "Sector",
+              "Status",
+              "Private Views",
+              "Public Views",
+              "Created At",
+              "Needs (€)",
+            ],
+          ],
+          body: projectData,
+          theme: "grid",
+          styles: { fontSize: 9 },
+          headStyles: { fillColor: [197, 144, 241] },
+        });
+      }
+      doc.save(`pitchdeck-${this.startup.name}.pdf`);
+    },
   },
-}
+};
 </script>
 
 <style scoped>
-
 .project-page {
   display: flex;
   justify-content: space-between;
@@ -66,6 +214,7 @@ export default {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
 }
 
 .info {
@@ -88,50 +237,44 @@ export default {
   color: var(--pink1);
 }
 
-.links ul,
-.funders ul {
-  margin-top: 8px;
-  padding-left: 20px;
+.projects-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
-.links a {
+.projects-section h3 {
+  font-size: 22px;
+  margin-bottom: 16px;
   color: var(--purple5);
-  text-decoration: none;
-  transition: color 0.3s ease;
 }
 
-.links a:hover {
-  color: var(--pink1);
+.table-wrapper {
+  overflow-x: auto;
 }
 
-.image {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
 }
 
-.image img {
-  max-width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+.projects-table th,
+.projects-table td {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
 }
 
-@media (max-width: 900px) {
-  .project-page {
-    flex-direction: column;
-    align-items: center;
-  }
+.projects-table th {
+  background: var(--purple3);
+  color: #fff;
+  font-weight: 600;
+}
 
-  .info {
-    flex: unset;
-    width: 100%;
-  }
-
-  .image {
-    width: 100%;
-    margin-top: 20px;
-  }
+.projects-table tr:hover {
+  background: var(--purple1);
 }
 
 .not-found {
@@ -165,12 +308,38 @@ button:active {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
+@media (max-width: 900px) {
+  .project-page {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info {
+    flex: unset;
+    width: 100%;
+  }
+}
+
 @media (max-width: 600px) {
   button {
     width: 100%;
     padding: 0.9rem;
     font-size: 1.05rem;
   }
+
+  .projects-table th,
+  .projects-table td {
+    padding: 10px;
+    font-size: 14px;
+  }
 }
 
+.projects-table tr {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.projects-table tr:hover {
+  background: var(--purple1);
+}
 </style>

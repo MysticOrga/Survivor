@@ -5,9 +5,26 @@
 
     const data = ref([])
 
+    const Addbool = ref(false)
+    const AddValue = ref({
+      name:"",
+      description:"",
+      address:"",
+      email:"",
+      phone:"",
+      sector:"",
+      status:"",
+      role:"",
+      project_status:"",
+      needs: 0
+    })
+
     const search = ref("")
     const sortKey = ref(null)
     const sortAsc = ref(true)
+
+
+    const filter = ref("")
 
     const sortBy = (key) => {
         if (sortKey.value === key) {
@@ -19,70 +36,413 @@
     }
 
     const filteredData = computed(() => {
-        let term = search.value.toLowerCase()
-        let result = data.value.filter(item =>
-            item.name.toLowerCase().includes(term) ||
-            item.sector.toLowerCase().includes(term) ||
-            item.maturity.toLowerCase().includes(term) ||
-            String(item.founders).toLowerCase().includes(term)
-        )
+      let term = search.value.toLowerCase()
+      let result = []
 
-        if (sortKey.value) {
+      if (filter.value == "Startups") {
+        result = data.value.filter(item =>
+          (item.name?.toLowerCase() || "").includes(term) ||
+          (item.sector?.toLowerCase() || "").includes(term) ||
+          (item.maturity?.toLowerCase() || "").includes(term) ||
+          String(item.founders || "").toLowerCase().includes(term)
+        )
+      }
+
+      if (filter.value == "Users") {
+        result = data.value.filter(item =>
+          (item.name?.toLowerCase() || "").includes(term) ||
+          (item.email?.toLowerCase() || "").includes(term) ||
+          (item.role?.toLowerCase() || "").includes(term) ||
+          String(item.founders || "").toLowerCase().includes(term)
+        )
+      }
+
+      if (filter.value == "Projects") {
+        result = data.value.filter(item =>
+          (item.name?.toLowerCase() || "").includes(term) ||
+          (item.project_status?.toLowerCase() || "").includes(term) ||
+          (item.sector?.toLowerCase() || "").includes(term) ||
+          String(item.founders || "").toLowerCase().includes(term)
+        )
+      }
+
+      if (sortKey.value) {
         result.sort((a, b) => {
-            if (a[sortKey.value] < b[sortKey.value]) return sortAsc.value ? -1 : 1
-            if (a[sortKey.value] > b[sortKey.value]) return sortAsc.value ? 1 : -1
-            return 0
+          if ((a[sortKey.value] || "") < (b[sortKey.value] || "")) return sortAsc.value ? -1 : 1
+          if ((a[sortKey.value] || "") > (b[sortKey.value] || "")) return sortAsc.value ? 1 : -1
+          return 0
         })
-        }
-        return result
+      }
+      return result
     })
 
-    const focus = ref({ id: -1 })
+
+    const focus = ref({ name: "" })
 
     const focused = (item) => {
-        focus.value = item
+      focus.value = item;
+      console.log(focus.value);
+        Addbool.value = false;
     }
 
     const clearFocus = () => {
-        focus.value = { id: -1 }
+        focus.value = { name: "" }
+        Addbool.value = false;
     }
 
-  
-    const getData = async () => {
+    const getData = async (option) => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/startups`);
-        return response.data;
+        data.value = []
+        if (option == "Startups") {
+          const response = await axios.get(`/startups`);
+          return response.data;
+        }
+        if (option == "Users") {
+          const response = await axios.get(`/users`, {
+          headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+          return response.data;
+        }
+        if (option == "Projects") {
+          const response = await axios.get(`/projects`);
+          return response.data;
+        }
+        return [];
       } catch (e) {
         alert("Error Startup");
-        console.log("Error loading Startups");
+        console.log("Error loading Startups:", e);
         return [];
       }
     }
 
+    const refreshData = async () => {
+      clearFocus();
+      data.value = await getData(filter.value)
+      if (filter.value == "Startups")
+        totalViews();
+    }
+
+    const addNewValue = () => {
+      clearFocus();
+      Addbool.value = true
+      console.log("AddBool: ", Addbool.value);
+    }
+
+    const sendNewValue = async () => {
+
+      console.log(AddValue.value);
+      console.log("test value: ", localStorage.getItem(`token`));
+      try {
+        const header =  {
+          headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        };
+
+        const payloadStartups = {
+            name: AddValue.value.name,
+            legal_status: AddValue.value.legal_status,
+            address: AddValue.value.address,
+            email: AddValue.value.email,
+            phone: AddValue.value.phone,
+            sector: AddValue.value.sector,
+            maturity: "Idea",
+            views: 0,
+            status: AddValue.value.status,
+            description: AddValue.value.description
+        };
+
+        const payloadUsers = {
+            name: AddValue.value.name,
+            email: AddValue.value.email,
+            role: AddValue.value.role
+        };
+
+        const payloadProject = {
+            name: AddValue.value.name,
+            description: AddValue.value.description,
+            project_status: "Idea",
+            needs: AddValue.value.needs,
+            sector: AddValue.value.sector,
+            private_views: 0,
+            public_views: 0,
+        };
+
+        if (filter.value == "Startups") {
+          const response = await axios.post(`/admin/startups`, payloadStartups, header);
+          alert("Startup Created");
+          console.log(response);
+        } else if (filter.value == "Users") {
+          const response = await axios.post(`/admin/user`, payloadUsers, header);
+          alert("User created");
+          console.log(response);
+        } else if (filter.value == "Projects") {
+          const response = await axios.post(`/projects`, payloadProject, header);
+          alert("Project created");
+          console.log(response);
+        } else {
+          alert("Please choose an option");
+          return;
+        }
+
+        Addbool.value = false;
+        refreshData();
+      } catch (err) {
+        console.log("Error: ", err);
+        alert("Something went wrong.");
+      }
+    }
+
+    const totalView = ref(0);
+    const totalInvestor = ref(0);
+
+    const totalViews = () => {
+      totalView.value = data.value.reduce((sum, item) => sum + (item.views || 0), 0);
+    }
+
+    const totalInvestors = computed(() => {
+      totalInvestor.value = data.value.filter(item => item.role === "investor").length;
+      return totalInvestor.value;
+    });
+
+    const totalFounders = computed(() => {
+      return data.value.filter(item => item.role === "founder").length;
+    });
+
+    const totalAdmins = computed(() => {
+      return data.value.filter(item => item.role === "admin").length;
+    });
+
     onMounted( async () => {
-      data.value = await getData();
+      filter.value = "Startups";
+      data.value = await getData(filter.value);
+      totalViews();
     });
 
 </script>
 
 <template>
 
-  <form>
-    <div class="fx fx-gap">
-      <div>
-        <input v-model="search" type="text" placeholder="Search" required />
-      </div>
+    <div class="filter-wrapper">
+        <select class="filter-select" id="filter" v-model="filter" @change="refreshData">
+            <option disabled value="">-- Select an option --</option>
+            <option value="Startups">Startups</option>
+            <option value="Users">Users</option>
+            <option value="Projects">Projects</option>
+        </select>
+
+        <!-- <p>Selected value: {{ filter }}</p> -->
     </div>
-  </form>
+
+
+    <!-- <<router-link :to="{ name: ''}"></router-link> -->
+    <button class="add-btn" @click="addNewValue">+</button>
+
+    <form>
+        <div class="fx fx-gap">
+            <div>
+                <input v-model="search" type="text" placeholder="Search" required />
+            </div>
+        </div>
+    </form>
+
+
+    <div class="stats-container">
+        <div class="stats-card">
+        <div class="title">Number of {{ filter }}:</div>
+        <div class="value">{{ filteredData.length }}</div>
+        </div>
+        <div v-if="filter == `Startups`" class="stats-card">
+        <div class="title">Number of views:</div>
+        <div class="value">{{ totalView }}</div>
+        </div>
+        <div v-if="filter == `Users`" class="stats-card">
+        <div class="title">Number of investors:</div>
+        <div class="value">{{ totalInvestors }}</div>
+        </div>
+        <div v-if="filter == `Users`" class="stats-card">
+        <div class="title">Number of founders:</div>
+        <div class="value">{{ totalFounders }}</div>
+        </div>
+        <div v-if="filter == `Users`" class="stats-card">
+        <div class="title">Number of admins:</div>
+        <div class="value">{{ totalAdmins }}</div>
+        </div>
+    </div>
+
+
+    <!-- Creting new ebject area -->
+      <div v-if="Addbool === true" class="focus-card">
+        <button class="close-btn" @click="clearFocus">x</button>
+
+        <div v-if="filter == `Startups`" class="focus-info" >
+            <label for="AddName"><strong>Name : </strong></label>
+            <input
+              name="AddName"
+              v-model="AddValue.name"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddDescription"><strong>Description : </strong></label>
+            <input
+              name="AddDescription"
+              v-model="AddValue.description"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddAddress"><strong>Address : </strong></label>
+            <input
+              name="AddAddress"
+              v-model="AddValue.address"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddEmail"><strong>Email : </strong></label>
+            <input
+              name="AddEmail"
+              v-model="AddValue.email"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddPhone"><strong>Phone : </strong></label>
+            <input
+              name="AddPhone"
+              v-model="AddValue.phone"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddSector"><strong>Sector : </strong></label>
+            <input
+              name="AddSector"
+              v-model="AddValue.sector"
+              placeholder="Here..."
+              type="text"
+            />
+        </div>
+
+        <div v-if="filter == `Users`" class="focus-info" >
+            <label for="AddName"><strong>Name : </strong></label>
+            <input
+              name="AddName"
+              v-model="AddValue.name"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddDescription"><strong>Description : </strong></label>
+            <input
+              name="AddDescription"
+              v-model="AddValue.description"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddAddress"><strong>Address : </strong></label>
+            <input
+              name="AddAddress"
+              v-model="AddValue.address"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddEmail"><strong>Email : </strong></label>
+            <input
+              name="AddEmail"
+              v-model="AddValue.email"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddPhone"><strong>Phone : </strong></label>
+            <input
+              name="AddPhone"
+              v-model="AddValue.phone"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddSector"><strong>Sector : </strong></label>
+            <input
+              name="AddSector"
+              v-model="AddValue.sector"
+              placeholder="Here..."
+              type="text"
+            />
+        </div>
+
+        <div v-if="filter == `Projects`" class="focus-info" >
+            <label for="AddName"><strong>Name : </strong></label>
+            <input
+              name="AddName"
+              v-model="AddValue.name"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="AddDescription"><strong>Description : </strong></label>
+            <input
+              name="AddDescription"
+              v-model="AddValue.description"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="Addproject_status"><strong>project_status : </strong></label>
+            <input
+              name="Addproject_status"
+              v-model="AddValue.project_status"
+              placeholder="Here..."
+              type="text"
+            />
+
+            <label for="Addsector"><strong>sector : </strong></label>
+            <input
+              name="Addsector"
+              v-model="AddValue.sector"
+              placeholder="Here..."
+              type="text"
+            />
+
+        </div>
+
+        <button @click="sendNewValue" class="btn-edit">Create</button>
+      </div>
 
     <!-- Focused startup for management -->
-      <div v-if="focus.id > 0" class="focus-card">
+      <div v-if="focus.name" class="focus-card">
         <button class="close-btn" @click="clearFocus">x</button>
-        <router-link :to="{ name: 'admin-project', params: { id: focus._id } }">
-          <h2>Focused Project</h2>
+
+        <router-link v-if="filter == `Startups`" :to="{ name: 'admin-project', params: { id: focus._id } }"
+                    class="btn-edit">
+          Edit
+        </router-link>
+        <router-link v-if="filter == `Users`" :to="{ name: 'admin-users', params: { id: focus._id } }"
+                    class="btn-edit">
+          Edit
+        </router-link>
+        <router-link v-if="filter == `Projects`" :to="{ name: 'admin-content', params: { id: focus._id } }"
+                    class="btn-edit">
+          Edit
         </router-link>
 
-        <div class="focus-info">
+        <!-- <router-link v-if="filter == `Users`" :to="{ name: 'admin-user', params: { id: focus._id } }"
+                    class="btn-edit">
+          Edit
+        </router-link> -->
+
+        <!-- <router-link v-if="filter == `Projects`" :to="{ name: 'admin-project', params: { id: focus._id } }"
+                    class="btn-edit">
+          Edit
+        </router-link> -->
+
+        <div v-if="filter == `Startups`" class="focus-info">
           <p><strong>ID :</strong> {{ focus.id }}</p>
           <p><strong>Name :</strong> {{ focus.name }}</p>
           <p><strong>Sector :</strong> {{ focus.sector }}</p>
@@ -94,12 +454,29 @@
           <p><strong>Views :</strong> {{ focus.views }}</p>
         </div>
 
+        <div v-if="filter == `Users`" class="focus-info">
+          <p><strong>ID :</strong> {{ focus.id }}</p>
+          <p><strong>Name :</strong> {{ focus.name }}</p>
+          <p><strong>Role :</strong> {{ focus.role }}</p>
+          <p><strong>Email :</strong> {{ focus.email }}</p>
+        </div>
+
+        <div v-if="filter == `Projects`" class="focus-info">
+          <p><strong>Name :</strong> {{ focus.name }}</p>
+          <p><strong>Description :</strong> {{ focus.description }}</p>
+          <p><strong>Status :</strong> {{ focus.project_status }}</p>
+          <p><strong>Needs :</strong> {{ focus.needs }}</p>
+          <p><strong>Sector :</strong> {{ focus.sector }}</p>
+        </div>
+
       </div>
+
 
   <!-- Table for searches -->
   <h2>Admin Search Table</h2>
   <div class="table-wrapper">
-    <table class="fl-table">
+
+    <table v-if="filter == `Startups`" class="fl-table">
         <thead>
         <tr>
           <th @click="sortBy('id')">#</th>
@@ -119,29 +496,46 @@
           </tr>
       </tbody>
     </table>
-  </div>
 
-    <!-- <div>
-        <table>
-            <thead>
-                <tr>
-                    <th @click="sortBy('id')">#</th>
-                    <th @click="sortBy('startup')">Start-up</th>
-                    <th @click="sortBy('project')">Project Name</th>
-                    <th @click="sortBy('founders')">Number of founders</th>
-                    <th @click="sortBy('views')">Views</th>
-                    <th @click="sortBy('objective')">Objective</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(item, index) in filteredData" :key="index">
-                    <td @click=focused(item) >{{ item.id }}</td>
-                    <td @click=focused(item) >{{ item.startup }}</td>
-                    <td @click=focused(item) >{{ item.project }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div> -->
+    <table v-if="filter == `Users`" class="fl-table">
+        <thead>
+        <tr>
+          <th @click="sortBy('id')">#</th>
+          <th @click="sortBy('name')">Nom</th>
+          <th @click="sortBy('email')">Email</th>
+          <th @click="sortBy('role')">Role</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in filteredData" :key="index">
+            <td @click=focused(item) >{{ item.id }}</td>
+            <td @click=focused(item) >{{ item.name }}</td>
+            <td @click=focused(item) >{{ item.email }}</td>
+            <td @click=focused(item) >{{ item.role }}</td>
+          </tr>
+      </tbody>
+    </table>
+
+    <table v-if="filter == `Projects`" class="fl-table">
+        <thead>
+        <tr>
+          <th @click="sortBy('name')">Name</th>
+          <th @click="sortBy('project_status')">Status</th>
+          <th @click="sortBy('needs')">Needs</th>
+          <th @click="sortBy('sector')">Sector</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in filteredData" :key="index">
+            <td @click=focused(item) >{{ item.name }}</td>
+            <td @click=focused(item) >{{ item.project_status }}</td>
+            <td @click=focused(item) >{{ item.needs }}</td>
+            <td @click=focused(item) >{{ item.sector }}</td>
+          </tr>
+      </tbody>
+    </table>
+
+  </div>
 
 </template>
 
@@ -175,7 +569,6 @@ form {
   margin: 1rem auto;
   background-color: var(--pink3);
   border-radius: 20px;
-  box-shadow: 0 10px 40px var(--pink1), 0 0 0 10px #ffffffeb;
 }
 
 
@@ -184,16 +577,46 @@ input[type="text"] {
   height: 3rem;
   font-size: 1.2rem;
   line-height: 1;
+  color: #000;
 }
 
 input[type="text"]::placeholder {
   color: var(--pink1);
 }
 
+.add-btn {
+  position: fixed;       /* stays fixed on screen */
+  bottom: 2rem;          /* place at bottom for mobile style */
+  right: 2rem;           /* 2rem from the right edge */
+
+  width: 60px;           /* circle size */
+  height: 60px;
+  border-radius: 50%;    /* makes it a circle */
+
+  background-color: var(--pink1);
+  color: #fff;
+  font-size: 2rem;       /* size of "+" */
+  font-weight: bold;
+  line-height: 60px;     /* centers "+" vertically */
+  text-align: center;    /* centers "+" horizontally */
+
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  transition: background 0.2s ease, transform 0.2s ease;
+  z-index: 1000;         /* stays on top of other content */
+}
+
+.add-btn:hover {
+  background-color: var(--pink2);
+  transform: scale(1.1);
+}
+
+
 .table-wrapper {
   margin: 10px auto;
   padding: 0 1rem;
-  box-shadow: 0px 35px 50px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 15px 50px rgba(0, 0, 0, 0.2);
   overflow-x: auto; /* ✅ allows scroll on small screens */
 }
 
@@ -277,7 +700,7 @@ input[type="text"]::placeholder {
   padding: 1.5rem;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
 .focus-card h2 {
@@ -300,7 +723,7 @@ input[type="text"]::placeholder {
   height: 28px;
   border: none;
   border-radius: 50%;
-  background: #e91e63;
+  background: var(--pink1);
   color: #fff;
   font-size: 18px;
   font-weight: bold;
@@ -360,4 +783,93 @@ input[type="text"]::placeholder {
     font-size: 0.9rem;
   }
 }
+
+.btn-edit {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background-color: var(--pink1);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-edit:hover {
+  background-color: var(--purple4);
+}
+
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.stats-card {
+  background: linear-gradient(135deg, var(--purple2), var(--pink2));
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.stats-card .title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: #fff;
+}
+
+.stats-card .value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.filter-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.filter-select {
+  /* === Variables for easy theming === */
+  --radius: 8px;
+  --spacing: 0.5rem;
+
+  padding: var(--spacing) 2.5rem var(--spacing) var(--spacing);
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: var(--purple2);
+  border: 1px solid var(--purple4);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+.filter-select:focus {
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.2);
+}
+
+.filter-select option[disabled] {
+  color: #888;
+}
+
 </style>

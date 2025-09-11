@@ -1,0 +1,93 @@
+[
+    {
+    "id": "1",
+    "title": "GreenTech Innovation Fund",
+    "description": "Funding for startups developing sustainable technologies in energy and environment sectors.",
+    "category": "Environment & Energy",
+    "status": "Open",
+    "deadline": "2025-12-15",
+    "fundingAmount": "Up to $75,000",
+    "fundingType": "Grant",
+    "eligibility": ["Startups", "Research Institutes"],
+    "location": "Global",
+    "contact": {
+        "email": "greentech@example.com",
+        "phone": "+1-555-101-2020"
+    },
+    "submissionUrl": "https://example.com/submit-greentech",
+    "tags": ["sustainability", "clean energy", "innovation"]
+    },
+    {
+    "id": "2",
+    "title": "Digital Health Accelerator Fund",
+    "description": "Support for digital health projects improving healthcare delivery through technology.",
+    "category": "HealthTech",
+    "status": "Open",
+    "deadline": "2026-01-10",
+    "fundingAmount": "Up to $100,000",
+    "fundingType": "Grant or Investment",
+    "eligibility": ["Startups", "Healthcare Providers", "Non-Profits"],
+    "location": "Europe",
+    "contact": {
+        "email": "digitalhealth@example.com",
+        "phone": "+44-123-456-7890"
+    },
+    "submissionUrl": "https://example.com/submit-health",
+    "tags": ["telemedicine", "AI", "digital health"]
+    },
+    {
+    "id": "3",
+    "title": "AI Research Funding",
+    "description": "Funding to support cutting-edge AI research projects with high societal impact.",
+    "category": "Artificial Intelligence",
+    "status": "Open",
+    "deadline": "2025-11-30",
+    "fundingAmount": "Up to $50,000",
+    "fundingType": "Grant",
+    "eligibility": ["Universities", "Research Institutes", "Startups"],
+    "location": "Global",
+    "contact": {
+        "email": "ai-research@example.com",
+        "phone": "+1-222-333-4444"
+    },
+    "submissionUrl": "https://example.com/submit-ai",
+    "tags": ["AI", "machine learning", "research"]
+    },
+    {
+    "id": "4",
+    "title": "Creative Arts Support Fund",
+    "description": "Funding for individual artists and collectives to develop creative projects in arts and culture.",
+    "category": "Arts & Culture",
+    "status": "Open",
+    "deadline": "2026-02-01",
+    "fundingAmount": "Up to $20,000",
+    "fundingType": "Grant",
+    "eligibility": ["Artists", "Non-Profits", "Cultural Organizations"],
+    "location": "Global",
+    "contact": {
+        "email": "artsfund@example.com",
+        "phone": "+1-777-888-9999"
+    },
+    "submissionUrl": "https://example.com/submit-arts",
+    "tags": ["arts", "culture", "creative projects"]
+    },
+    {
+    "id": "5",
+    "title": "SME Growth Fund",
+    "description": "Financial support for small and medium enterprises (SMEs) aiming to scale operations and enter new markets.",
+    "category": "Business & Entrepreneurship",
+    "status": "Open",
+    "deadline": "2025-12-31",
+    "fundingAmount": "Up to $150,000",
+    "fundingType": "Investment or Grant",
+    "eligibility": ["SMEs", "Startups"],
+    "location": "Global",
+    "contact": {
+        "email": "smefund@example.com",
+        "phone": "+1-888-555-1234"
+    },
+    "submissionUrl": "https://example.com/submit-sme",
+    "tags": ["SME", "business growth", "entrepreneurship"]
+    }
+]
+  

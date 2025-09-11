@@ -1,54 +1,152 @@
 <template>
-    <form name="login-form">
+  <form class="login-form">
+    <container class="contain-form">
+      <h1>Sign In</h1>
+      <p>Enter your email adress to continue.</p>
+      <div>
+        <input type="radio" id="admin" value="admin" v-model="picked" />
+        <label for="admin">Admin</label>
+
+        <input type="radio" id="founders" value="founder" v-model="picked" />
+        <label for="founders">Founders</label>
+
+        <input type="radio" id="investors" value="investor" v-model="picked" />
+        <label for="investors">Investors</label>
+      </div>
       <div class="mb-3">
-        <label for="username">Username: </label>
+        <label for="username">Email: </label>
         <input type="text" id="username" v-model="input.username" />
       </div>
       <div class="mb-3">
         <label for="password">Password: </label>
         <input type="password" id="password" v-model="input.password" />
       </div>
-      <button class="btn btn-outline-dark" type="submit" v-on:click.prevent="login()">
+      <button
+        class="btn btn-outline-dark"
+        type="submit"
+        v-on:click.prevent="login()"
+      >
         Login
       </button>
-    </form>
-    <h3>{{ this.output }}</h3> 
+      <p style="color: red">{{ this.output }}</p>
+    </container>
+  </form>
 </template>
-  
+
 <script>
-import accounts from "../../example/account.json"
+import axios from "axios";
+import { ref } from "vue";
+import { jwtDecode } from "jwt-decode";
 
 export default {
-    name: 'Login',
-    data() {
-      return {
-        input: {
-          username: "",
-          password: ""
-        },
-        output: "",
+  name: "Login",
+  data() {
+    return {
+      input: {
+        username: "",
+        password: "",
+      },
+      output: "",
+      role: "",
+      picked: ref("admin"),
+    };
+  },
+  methods: {
+    login() {
+      if (this.input.username != "" || this.input.password != "") {
+        axios
+          .post("/users/login", {
+            email: this.input.username,
+            password: this.input.password,
+            role: this.picked,
+          })
+          .then((response) => {
+            if (response.status == 200) {
+              axios.defaults.headers.common[
+                "Authorization"
+              ] = `Bearer ${response.data.token}`;
+              this.output = "Authentication complete";
+              const decoded = jwtDecode(response.data.token);
+              this.role = decoded.role;
+              localStorage.setItem("userRole", this.picked);
+              console.log("Role: " + this.role);
+              console.log("User: " + decoded.name);
+              console.log(
+                "Token: " + axios.defaults.headers.common["Authorization"]
+              );
+              localStorage.setItem("token", response.data.token);
+              window.dispatchEvent(new Event("storage"));
+              if (this.role == "admin") {
+                this.$router.push("/admin/dashboard");
+                return;
+              } else if (this.role == "founder") {
+                this.$router.push("/startup/profile");
+                return;
+              } else if (this.role == "investor") {
+                this.$router.push("/home/catalog");
+                return;
+              }
+              this.$router.push("/");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            this.output = "error when authentificaton";
+          });
       }
     },
-    methods: {
-      login() {
-        if (this.input.username != "" || this.input.password != "") {
-            const account = accounts.find(s => s.user === this.input.username);
-            if (account === undefined) {
-                this.output = "Username not found";
-                return
-            }
-            this.username = account.user;
-            this.password = account.password;
-            if (this.password != this.input.password) {
-                this.output = "Error in the password"
-            } else {
-                this.output = "Authentication complete";
-                this.$router.push("/");
-            }
-        } else {
-            this.output = "Username and password can not be empty"
-        }
-      },
-    },
-  }
-  </script>
+  },
+};
+</script>
+
+<style>
+.login-form {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 5px solid #f8cacf;
+  border-radius: 16px;
+  padding-top: 10rem !important;
+  padding-bottom: 10rem !important;
+  padding-left: 8rem !important;
+  padding-right: 8rem !important;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.login-form .contain-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 600px);
+  /* gap: 1.5rem; */
+}
+
+.login-form label {
+  padding: 2px;
+}
+
+.login-form input {
+  padding: 2px;
+}
+
+.login-form button {
+  padding: 1.5px;
+  border-radius: 16px;
+  border-color: #fff;
+  color: #fff;
+  background-color: #d5a8f2;
+}
+
+.login-form h1 {
+  color: #f49c9c;
+  left: 50%;
+  top: 50%;
+  transform: translate(30%, 15%);
+}
+
+.login-form p {
+  font-size: 15px;
+  text-align: center;
+}
+</style>

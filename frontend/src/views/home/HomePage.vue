@@ -1,17 +1,15 @@
 <template>
   <section class="homeSect">
-    <h2>Welcome to JEB Incubator,</h2>
+    <h2>Welcome to JEB Incubator,</h2><h2>Where Innovation Meets Opportunity</h2>
     <div class="content">
-      <div class="intro">
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quis, harum? Ad consequuntur delectus qui
-          inventore eius! Laudantium delectus quia dignissimos. Eum beatae sunt voluptatum eaque ducimus illum
-          aperiam eius nam.</p>
-      </div>
-
       <section class="dashboard-startups">
-        <div class="info">
-          <p><strong>Total Startups:</strong> {{ totalStartups }}</p>
-          <p><strong>Total Views:</strong> {{ totalViews }}</p>
+        <div class="dashboard-container">
+          <div class="info">
+            <p><strong>Total Startups:</strong> {{ totalStartups }}</p>
+            <p><strong>Total Views:</strong> {{ totalViews.toLocaleString() }}</p>
+            <p><strong>Average Views per Startup:</strong> {{ (totalViews / totalStartups).toFixed(2) }}</p>
+            <p><strong>Number of projects:</strong> {{ totalProjects  }}</p>
+          </div>
         </div>
         <h3>Most Viewed Startups</h3>
         <ul class="bestStartups">
@@ -41,15 +39,24 @@ export default {
       startups: [],
       originalStartups: [],
       totalViews: 0,
-      totalStartups: 0
+      totalStartups: 0,
+      totalProjects: 0,
     }
   },
   async created() {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/startups`);
+      const response = await axios({
+        url: '/startups',
+        method: 'get',
+      });
+      const responseProjects = await axios({
+        url: '/projects',
+        method: 'get',
+      });
       this.startups = response.data.sort((a, b) => (b.views || 0) - (a.views || 0));
       this.originalStartups = [...this.startups];
       this.totalStartups = this.startups.length;
+      this.totalProjects = responseProjects.data.length;
       this.totalViews = this.startups.reduce((sum, s) => sum + (s.views || 0), 0);
       console.log('Startups loaded:', this.startups);
     } catch (e) {
