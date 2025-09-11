@@ -8,5 +8,6 @@ module.exports = {
     PASSWORD: process.env.PASSWORD,
     SALTROUND: parseInt(process.env.SALTROUND, 10),
     SECRET: process.env.SECRET,
-    DEV_API_KEY: process.env.DEV_API_KEY
+    DEV_API_KEY: process.env.DEV_API_KEY,
+    CLIENT_BASE_API_URL: process.env.CLIENT_BASE_API_URL
 };

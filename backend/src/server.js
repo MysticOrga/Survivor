@@ -19,6 +19,7 @@ const FilterRouter = require("./Controllers/FilterController");
 const ChannelRouter = require("./Controllers/ChannelController");
 const InvestorRouter =require("./Controllers/InvestorController");
 const PartnerController = require("./Controllers/PartnerControllers");
+const ClientAPI = require("./Services/ClientService");
 
 app.use(express.json());
 app.use(cors());
@@ -36,6 +37,7 @@ app.use("/filters", FilterRouter);
 app.use("/channels", ChannelRouter);
 app.use("/investors", InvestorRouter);
 app.use("/partners", PartnerController);
+app.use("/api/client", ClientAPI);
 
 app.listen(PORT, () => {
     clientDB.connect();
