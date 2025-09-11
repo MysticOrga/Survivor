@@ -1,4 +1,20 @@
 <template>
+  <nav>
+    <ul>
+      <li>
+        <router-link to="/startup/dashboard">Dashboard</router-link>
+      </li>
+      <li>
+        <router-link to="/startup/profile">Profile</router-link>
+      </li>
+      <li>
+        <router-link to="/startup/messaging">Chat</router-link>
+      </li>
+      <li>
+        <router-link to="/startup/opportunities">Opportunities</router-link>
+      </li>
+    </ul>
+  </nav>
   <div class="stats-container">
     <div class="stats-card">
       <div class="title">Project's Views (private)</div>
@@ -84,7 +100,31 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+nav {
+  background: var(--purple5);
+  padding: 0.8rem 1.5rem;
+}
+
+nav ul {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: var(--pink4);
+}
+
 .stats-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -96,7 +136,7 @@ export default {
   background: linear-gradient(135deg, var(--purple2), var(--pink2));
   border-radius: 1.5rem;
   padding: 1.5rem;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   color: #fff;
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;

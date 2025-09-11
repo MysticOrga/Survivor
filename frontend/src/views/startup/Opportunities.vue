@@ -1,17 +1,25 @@
 <template>
   <nav>
-    <router-link to="/startup/profile">Profile</router-link> |
-    <router-link to="/startup/messaging">Chat</router-link> |
-    <router-link to="/startup/opportunities">Opportunities</router-link>
+    <ul>
+      <li>
+        <router-link to="/startup/dashboard">Dashboard</router-link>
+      </li>
+      <li>
+        <router-link to="/startup/profile">Profile</router-link>
+      </li>
+      <li>
+        <router-link to="/startup/messaging">Chat</router-link>
+      </li>
+      <li>
+        <router-link to="/startup/opportunities">Opportunities</router-link>
+      </li>
+    </ul>
   </nav>
   <div class="opportunities-css">
     <h1>Calls for project</h1>
     <div class="calls">
       <div v-for="calling in calls" :key="calling.id" class="call-item">
-        <router-link
-          :to="`/startup/opportunities/${calling.id}`"
-          class="section"
-        >
+        <router-link :to="`/startup/opportunities/${calling.id}`" class="section">
           <h3>{{ calling.title }}</h3>
           <p>{{ calling.description }}</p>
           <p><strong>Deadline: </strong> {{ calling.deadline }}</p>
@@ -21,10 +29,7 @@
     <h1>Funding opportunities</h1>
     <div class="fundings">
       <div v-for="funding in fundings" :key="funding.id" class="fundings-item">
-        <router-link
-          :to="`/startup/opportunities/fundings/${funding.id}`"
-          class="section"
-        >
+        <router-link :to="`/startup/opportunities/fundings/${funding.id}`" class="section">
           <h3>{{ funding.title }}</h3>
           <p>{{ funding.description }}</p>
           <p><strong>Deadline: </strong>{{ funding.deadline }}</p>
@@ -33,15 +38,8 @@
     </div>
     <h1>Investors matches</h1>
     <div class="matchings">
-      <div
-        v-for="matching in matchings"
-        :key="matching.id"
-        class="matchings-item"
-      >
-        <router-link
-          :to="`/startup/opportunities/matchings/${matching.id}`"
-          class="section"
-        >
+      <div v-for="matching in matchings" :key="matching.id" class="matchings-item">
+        <router-link :to="`/startup/opportunities/matchings/${matching.id}`" class="section">
           <h3>{{ matching.name }}</h3>
           <p>{{ matching.description }}</p>
           <p>
@@ -70,7 +68,32 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+nav {
+  background: var(--purple5);
+  padding: 0.8rem 1.5rem;
+}
+
+nav ul {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: var(--pink4);
+}
+
+
 .opportunities-css h1 {
   color: #cb90f1;
   text-align: center;
