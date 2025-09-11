@@ -71,13 +71,13 @@ const routes = [
     meta: { requiresAuth: true, roles: ["admin"] }
   },
   {
-    path: "/admin/users",
+    path: "/admin/users/:id",
     name: "admin-users",
     component: UserManagement,
     meta: { requiresAuth: true, roles: ["admin"] }
   },
   {
-    path: "/admin/content",
+    path: "/admin/content/:id",
     name: "admin-content",
     component: ContentManagement,
     meta: { requiresAuth: true, roles: ["admin"] }

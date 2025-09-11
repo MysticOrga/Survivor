@@ -80,7 +80,8 @@
     const focus = ref({ name: "" })
 
     const focused = (item) => {
-        focus.value = item
+      focus.value = item;
+      console.log(focus.value);
         Addbool.value = false;
     }
 
@@ -194,11 +195,25 @@
       }
     }
 
-    const totalView = ref(0)
+    const totalView = ref(0);
+    const totalInvestor = ref(0);
 
     const totalViews = () => {
       totalView.value = data.value.reduce((sum, item) => sum + (item.views || 0), 0);
     }
+
+    const totalInvestors = computed(() => {
+      totalInvestor.value = data.value.filter(item => item.role === "investor").length;
+      return totalInvestor.value;
+    });
+
+    const totalFounders = computed(() => {
+      return data.value.filter(item => item.role === "founder").length;
+    });
+
+    const totalAdmins = computed(() => {
+      return data.value.filter(item => item.role === "admin").length;
+    });
 
     onMounted( async () => {
       filter.value = "Startups";
@@ -210,15 +225,15 @@
 
 <template>
 
-    <div>
-        <select id="filter" v-model="filter" @change="refreshData">
+    <div class="filter-wrapper">
+        <select class="filter-select" id="filter" v-model="filter" @change="refreshData">
             <option disabled value="">-- Select an option --</option>
             <option value="Startups">Startups</option>
             <option value="Users">Users</option>
             <option value="Projects">Projects</option>
         </select>
 
-        <p>Selected value: {{ filter }}</p>
+        <!-- <p>Selected value: {{ filter }}</p> -->
     </div>
 
 
@@ -242,6 +257,18 @@
         <div v-if="filter == `Startups`" class="stats-card">
         <div class="title">Number of views:</div>
         <div class="value">{{ totalView }}</div>
+        </div>
+        <div v-if="filter == `Users`" class="stats-card">
+        <div class="title">Number of investors:</div>
+        <div class="value">{{ totalInvestors }}</div>
+        </div>
+        <div v-if="filter == `Users`" class="stats-card">
+        <div class="title">Number of investors:</div>
+        <div class="value">{{ totalFounders }}</div>
+        </div>
+        <div v-if="filter == `Users`" class="stats-card">
+        <div class="title">Number of admins:</div>
+        <div class="value">{{ totalAdmins }}</div>
         </div>
     </div>
 
@@ -811,6 +838,38 @@ input[type="text"]::placeholder {
   .stats-container {
     grid-template-columns: 1fr;
   }
+}
+
+.filter-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.filter-select {
+  /* === Variables for easy theming === */
+  --radius: 8px;
+  --spacing: 0.5rem;
+
+  padding: var(--spacing) 2.5rem var(--spacing) var(--spacing);
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: var(--purple2);
+  border: 1px solid var(--purple4);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+.filter-select:focus {
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.2);
+}
+
+.filter-select option[disabled] {
+  color: #888;
 }
 
 </style>

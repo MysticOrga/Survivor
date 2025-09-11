@@ -76,7 +76,7 @@ export default {
 }
 </script>
 <template>
-    <button @click="downloadJSON">Download Startup JSON</button>
+    <!-- <button @click="downloadJSON">Download Startup JSON</button> -->
 
     <section v-if="startup" class="project-page">
       <div class="info">
@@ -108,3 +108,71 @@ export default {
       <p>Startup not found.</p>
     </section>
   </template>
+
+<style>
+
+
+.project-page {
+  max-width: 600px;
+  margin: 2rem auto;              /* center on page */
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-family: system-ui, sans-serif;
+}
+
+.project-page input,
+.project-page textarea {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-page input:focus,
+.project-page textarea:focus {
+  border-color: var(--purple5);          /* purple accent */
+  box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.2);
+  outline: none;
+}
+
+.project-page button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s ease;
+}
+
+.project-page button:first-of-type {
+  background-color: var(--purple5);      /* save button purple */
+  color: white;
+}
+
+.project-page button:first-of-type:hover {
+  background-color: var(--purple3);
+}
+
+.project-page button:last-of-type {
+  background-color: var(--pink1);      /* delete button red */
+  color: white;
+}
+
+.project-page button:last-of-type:hover {
+  background-color: var(--pink3);
+}
+
+.not-found {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 1.2rem;
+  color: #888;
+}
+</style>
